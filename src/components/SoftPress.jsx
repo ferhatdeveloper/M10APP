@@ -1,6 +1,6 @@
 import { Pressable } from 'react-native'
 
-/** Light press feedback without heavy animation libs. */
+/** Light press feedback — touch-first (pressed), not hover-only. */
 export default function SoftPress({ style, children, disabled, ...rest }) {
   return (
     <Pressable

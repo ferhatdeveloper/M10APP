@@ -12,7 +12,6 @@ import {
   TextInput,
   View,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import {
   LayoutDashboard,
   Layers,
@@ -28,9 +27,11 @@ import {
   Lock,
   Sparkles,
 } from 'lucide-react-native'
-import TopBar from '../components/TopBar'
+import AdminChrome, { AdminGateLayout } from '../components/AdminChrome'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
+import { useShell } from '../context/ShellContext'
+import { useWebLayout } from '../layout/web'
 import {
   ADMIN_PIN,
   DEFAULT_STORE_ID,
@@ -138,7 +139,7 @@ function Field({ label, value, onChangeText, isRTL, keyboardType, multiline, pla
         style={{
           borderWidth: 1,
           borderColor: colors.line,
-          borderRadius: 12,
+          borderRadius: 10,
           padding: 12,
           backgroundColor: '#fff',
           textAlign: isRTL ? 'right' : 'left',
@@ -149,15 +150,16 @@ function Field({ label, value, onChangeText, isRTL, keyboardType, multiline, pla
   )
 }
 
-function StatCard({ label, value, isRTL }) {
+function StatCard({ label, value, isRTL, desktop }) {
   return (
     <View
       style={{
         flex: 1,
-        minWidth: '45%',
+        minWidth: desktop ? 180 : '45%',
+        maxWidth: desktop ? 280 : undefined,
         backgroundColor: '#fff',
         borderRadius: 14,
-        padding: 14,
+        padding: desktop ? 18 : 14,
         borderLeftWidth: 3,
         borderLeftColor: colors.red,
         ...shadow.soft,
@@ -171,7 +173,7 @@ function StatCard({ label, value, isRTL }) {
   )
 }
 
-export default function AdminScreen({ navigation }) {
+export default function AdminScreen() {
   const {
     orders,
     accounts,
@@ -180,7 +182,6 @@ export default function AdminScreen({ navigation }) {
     liveAisles,
     liveCampaigns,
     liveStores,
-    getLiveProducts,
     storeOverrides,
     adminSetOrderStatus,
     adminToggleStock,
@@ -200,6 +201,8 @@ export default function AdminScreen({ navigation }) {
     demoMode,
   } = useApp()
   const { t, lang, isRTL } = useI18n()
+  const { openStorefront } = useShell()
+  const { desktop } = useWebLayout()
   const [section, setSection] = useState('overview')
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState(false)
@@ -392,105 +395,76 @@ export default function AdminScreen({ navigation }) {
     setCampaignForm(null)
   }
 
+  const navSections = SECTIONS.map((s) => ({ ...s, label: t(`adminNav.${s.id}`) }))
+  const leaveToShop = () => openStorefront('Tabs')
+
   if (!isAdminAccess) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={[]}>
-        <TopBar title={t('adminTitle')} onBack={() => navigation.goBack()} />
-        <View style={{ flex: 1, padding: 20, justifyContent: 'center' }}>
-          <View style={{ backgroundColor: colors.ink, borderRadius: 18, padding: 20, ...shadow.card }}>
-            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 10 }}>
-              <Lock size={22} color={colors.yellow} />
-              <Text style={{ color: colors.yellow, fontWeight: '900', fontSize: 16 }}>{t('adminPinTitle')}</Text>
-            </View>
-            <Text style={{ color: 'rgba(255,255,255,0.75)', marginTop: 10, textAlign: isRTL ? 'right' : 'left' }}>
-              {t('adminPinHint', { pin: ADMIN_PIN })}
-            </Text>
-            <TextInput
-              value={pin}
-              onChangeText={(v) => {
-                setPin(v)
-                setPinError(false)
-              }}
-              keyboardType="number-pad"
-              secureTextEntry
-              placeholder="••••"
-              placeholderTextColor="#888"
-              style={{
-                marginTop: 16,
-                backgroundColor: '#fff',
-                borderRadius: 12,
-                padding: 14,
-                fontSize: 20,
-                fontWeight: '800',
-                letterSpacing: 8,
-                textAlign: 'center',
-              }}
-            />
-            {pinError ? (
-              <Text style={{ color: colors.red, marginTop: 8, fontWeight: '700', textAlign: 'center' }}>
-                {t('adminPinWrong')}
-              </Text>
-            ) : null}
-            <Pressable
-              onPress={tryUnlock}
-              style={{ backgroundColor: colors.red, borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 14 }}
-            >
-              <Text style={{ color: '#fff', fontWeight: '900' }}>{t('adminUnlock')}</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => setAppDemoMode('admin')}
-              style={{ marginTop: 12, alignItems: 'center' }}
-            >
-              <Text style={{ color: colors.yellow, fontWeight: '700', fontSize: 12 }}>{t('adminSetRole')}</Text>
-            </Pressable>
+      <AdminGateLayout onLeave={leaveToShop}>
+        <View style={{ backgroundColor: '#1C1C1C', borderRadius: 18, padding: 22, borderWidth: 1, borderColor: '#2A2A2A' }}>
+          <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 10 }}>
+            <Lock size={22} color={colors.yellow} />
+            <Text style={{ color: colors.yellow, fontWeight: '900', fontSize: 16 }}>{t('adminPinTitle')}</Text>
           </View>
+          <Text style={{ color: 'rgba(255,255,255,0.75)', marginTop: 10, textAlign: isRTL ? 'right' : 'left' }}>
+            {t('adminPinHint', { pin: ADMIN_PIN })}
+          </Text>
+          <TextInput
+            value={pin}
+            onChangeText={(v) => {
+              setPin(v)
+              setPinError(false)
+            }}
+            keyboardType="number-pad"
+            secureTextEntry
+            placeholder="••••"
+            placeholderTextColor="#888"
+            style={{
+              marginTop: 16,
+              backgroundColor: '#fff',
+              borderRadius: 12,
+              padding: 14,
+              fontSize: 20,
+              fontWeight: '800',
+              letterSpacing: 8,
+              textAlign: 'center',
+            }}
+          />
+          {pinError ? (
+            <Text style={{ color: colors.red, marginTop: 8, fontWeight: '700', textAlign: 'center' }}>
+              {t('adminPinWrong')}
+            </Text>
+          ) : null}
+          <Pressable
+            onPress={tryUnlock}
+            style={{ backgroundColor: colors.red, borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 14 }}
+          >
+            <Text style={{ color: '#fff', fontWeight: '900' }}>{t('adminUnlock')}</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setAppDemoMode('admin')}
+            style={{ marginTop: 12, alignItems: 'center' }}
+          >
+            <Text style={{ color: colors.yellow, fontWeight: '700', fontSize: 12 }}>{t('adminSetRole')}</Text>
+          </Pressable>
         </View>
-      </SafeAreaView>
+      </AdminGateLayout>
     )
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={[]}>
-      <TopBar title={t('adminTitle')} onBack={() => navigation.goBack()} />
-
+    <AdminChrome section={section} onSection={setSection} sections={navSections} onLeave={leaveToShop}>
       <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          paddingHorizontal: 12,
-          paddingVertical: 10,
-          gap: 8,
-          flexDirection: isRTL ? 'row-reverse' : 'row',
+          padding: desktop ? 24 : 16,
+          gap: 12,
+          paddingBottom: 40,
+          maxWidth: desktop ? 1080 : undefined,
+          width: '100%',
+          alignSelf: desktop ? 'center' : undefined,
         }}
-        style={{ maxHeight: 58, borderBottomWidth: 1, borderBottomColor: colors.line, backgroundColor: '#fff' }}
+        style={{ flex: 1 }}
       >
-        {SECTIONS.map((s) => {
-          const Icon = s.icon
-          const on = section === s.id
-          return (
-            <Pressable
-              key={s.id}
-              onPress={() => setSection(s.id)}
-              style={{
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-                alignItems: 'center',
-                gap: 6,
-                paddingHorizontal: 12,
-                paddingVertical: 8,
-                borderRadius: 999,
-                backgroundColor: on ? colors.red : colors.bg,
-              }}
-            >
-              <Icon size={14} color={on ? '#fff' : colors.muted} />
-              <Text style={{ fontWeight: '800', fontSize: 12, color: on ? '#fff' : colors.ink }}>
-                {t(`adminNav.${s.id}`)}
-              </Text>
-            </Pressable>
-          )
-        })}
-      </ScrollView>
-
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 40 }}>
         {section === 'overview' ? (
           <>
             <View style={{ backgroundColor: colors.ink, borderRadius: 16, padding: 14 }}>
@@ -502,7 +476,14 @@ export default function AdminScreen({ navigation }) {
                   return (
                     <Pressable
                       key={m}
-                      onPress={() => setAppDemoMode(m)}
+                      onPress={() => {
+                        setAppDemoMode(m)
+                        if (m === 'customer') leaveToShop()
+                        if (m === 'courier') {
+                          setAppDemoMode('courier')
+                          openStorefront('CourierHome')
+                        }
+                      }}
                       style={{
                         flex: 1,
                         backgroundColor: on ? colors.yellow : 'rgba(255,255,255,0.12)',
@@ -521,10 +502,10 @@ export default function AdminScreen({ navigation }) {
             </View>
 
             <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 10 }}>
-              <StatCard label={t('adminStatOrdersToday')} value={ordersToday} isRTL={isRTL} />
-              <StatCard label={t('adminStatProducts')} value={enabledProducts} isRTL={isRTL} />
-              <StatCard label={t('adminStatCustomers')} value={customers.length} isRTL={isRTL} />
-              <StatCard label={t('adminStatCampaigns')} value={activeCampaigns} isRTL={isRTL} />
+              <StatCard label={t('adminStatOrdersToday')} value={ordersToday} isRTL={isRTL} desktop={desktop} />
+              <StatCard label={t('adminStatProducts')} value={enabledProducts} isRTL={isRTL} desktop={desktop} />
+              <StatCard label={t('adminStatCustomers')} value={customers.length} isRTL={isRTL} desktop={desktop} />
+              <StatCard label={t('adminStatCampaigns')} value={activeCampaigns} isRTL={isRTL} desktop={desktop} />
             </View>
 
             <View
@@ -548,7 +529,10 @@ export default function AdminScreen({ navigation }) {
             </View>
 
             <Pressable
-              onPress={() => navigation.navigate('Courier')}
+              onPress={() => {
+                setAppDemoMode('courier')
+                openStorefront('CourierHome')
+              }}
               style={{ backgroundColor: colors.red, borderRadius: 14, padding: 14, alignItems: 'center' }}
             >
               <Text style={{ color: '#fff', fontWeight: '800' }}>{t('openCourier')}</Text>
@@ -636,51 +620,132 @@ export default function AdminScreen({ navigation }) {
               <Plus size={16} color="#fff" />
               <Text style={{ color: '#fff', fontWeight: '800' }}>{t('adminAddProduct')}</Text>
             </Pressable>
-            {filteredProducts.map((p) => {
-              const key = `${storeId}:${p.id}`
-              const stock = storeOverrides[key]?.stock != null ? storeOverrides[key].stock : p.stock
-              const out = (stock ?? 0) <= 0 || p.disabled
-              return (
-                <Pressable
-                  key={p.id}
-                  onPress={() => openProductEdit(p)}
+            {desktop ? (
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                  borderRadius: 12,
+                  overflow: 'hidden',
+                  borderWidth: 1,
+                  borderColor: colors.line,
+                }}
+              >
+                <View
                   style={{
-                    backgroundColor: '#fff',
-                    borderRadius: 14,
-                    padding: 12,
                     flexDirection: isRTL ? 'row-reverse' : 'row',
+                    paddingHorizontal: 14,
+                    paddingVertical: 10,
+                    backgroundColor: '#F7F7F8',
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.line,
                     gap: 10,
                     alignItems: 'center',
-                    opacity: p.disabled ? 0.55 : 1,
                   }}
                 >
-                  {p.image ? (
-                    <Image source={{ uri: p.image }} style={{ width: 48, height: 48, borderRadius: 10 }} />
-                  ) : (
-                    <View style={{ width: 48, height: 48, borderRadius: 10, backgroundColor: colors.bg }} />
-                  )}
-                  <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
-                    <Text style={{ fontWeight: '800' }}>{productName(p, lang)}</Text>
-                    <Text style={{ color: colors.muted, fontSize: 12 }}>
-                      {formatIQD(p.price, lang)} · {p.aisle} · {p.id}
-                    </Text>
-                  </View>
+                  <View style={{ width: 48 }} />
+                  <Text style={{ flex: 2, fontWeight: '800', fontSize: 11, color: colors.muted }}>{t('adminName')}</Text>
+                  <Text style={{ flex: 1, fontWeight: '800', fontSize: 11, color: colors.muted }}>{t('adminPrice')}</Text>
+                  <Text style={{ width: 88, fontWeight: '800', fontSize: 11, color: colors.muted }}>{t('adminAisle')}</Text>
+                  <Text style={{ width: 100, fontWeight: '800', fontSize: 11, color: colors.muted }}>{t('adminStock')}</Text>
+                </View>
+                {filteredProducts.map((p) => {
+                  const key = `${storeId}:${p.id}`
+                  const stock = storeOverrides[key]?.stock != null ? storeOverrides[key].stock : p.stock
+                  const out = (stock ?? 0) <= 0 || p.disabled
+                  return (
+                    <Pressable
+                      key={p.id}
+                      onPress={() => openProductEdit(p)}
+                      style={{
+                        flexDirection: isRTL ? 'row-reverse' : 'row',
+                        paddingHorizontal: 14,
+                        paddingVertical: 10,
+                        gap: 10,
+                        alignItems: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: colors.line,
+                        opacity: p.disabled ? 0.55 : 1,
+                      }}
+                    >
+                      {p.image ? (
+                        <Image source={{ uri: p.image }} style={{ width: 40, height: 40, borderRadius: 8 }} />
+                      ) : (
+                        <View style={{ width: 40, height: 40, borderRadius: 8, backgroundColor: colors.bg }} />
+                      )}
+                      <View style={{ flex: 2 }}>
+                        <Text style={{ fontWeight: '800' }} numberOfLines={1}>
+                          {productName(p, lang)}
+                        </Text>
+                        <Text style={{ color: colors.muted, fontSize: 11 }}>{p.id}</Text>
+                      </View>
+                      <Text style={{ flex: 1, fontWeight: '700' }}>{formatIQD(p.price, lang)}</Text>
+                      <Text style={{ width: 88, color: colors.muted, fontSize: 12 }}>{p.aisle}</Text>
+                      <Pressable
+                        onPress={() => adminToggleStock(storeId, p.id)}
+                        style={{
+                          width: 100,
+                          backgroundColor: out ? colors.redSoft : colors.openBg,
+                          borderRadius: 999,
+                          paddingHorizontal: 10,
+                          paddingVertical: 6,
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Text style={{ fontWeight: '800', fontSize: 11, color: out ? colors.red : colors.open }}>
+                          {p.disabled ? t('adminDisabled') : out ? t('outOfStock') : t('inStockAdmin')}
+                        </Text>
+                      </Pressable>
+                    </Pressable>
+                  )
+                })}
+              </View>
+            ) : (
+              filteredProducts.map((p) => {
+                const key = `${storeId}:${p.id}`
+                const stock = storeOverrides[key]?.stock != null ? storeOverrides[key].stock : p.stock
+                const out = (stock ?? 0) <= 0 || p.disabled
+                return (
                   <Pressable
-                    onPress={() => adminToggleStock(storeId, p.id)}
+                    key={p.id}
+                    onPress={() => openProductEdit(p)}
                     style={{
-                      backgroundColor: out ? colors.redSoft : colors.openBg,
-                      borderRadius: 999,
-                      paddingHorizontal: 10,
-                      paddingVertical: 6,
+                      backgroundColor: '#fff',
+                      borderRadius: 14,
+                      padding: 12,
+                      flexDirection: isRTL ? 'row-reverse' : 'row',
+                      gap: 10,
+                      alignItems: 'center',
+                      opacity: p.disabled ? 0.55 : 1,
                     }}
                   >
-                    <Text style={{ fontWeight: '800', fontSize: 11, color: out ? colors.red : colors.open }}>
-                      {p.disabled ? t('adminDisabled') : out ? t('outOfStock') : t('inStockAdmin')}
-                    </Text>
+                    {p.image ? (
+                      <Image source={{ uri: p.image }} style={{ width: 48, height: 48, borderRadius: 10 }} />
+                    ) : (
+                      <View style={{ width: 48, height: 48, borderRadius: 10, backgroundColor: colors.bg }} />
+                    )}
+                    <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
+                      <Text style={{ fontWeight: '800' }}>{productName(p, lang)}</Text>
+                      <Text style={{ color: colors.muted, fontSize: 12 }}>
+                        {formatIQD(p.price, lang)} · {p.aisle} · {p.id}
+                      </Text>
+                    </View>
+                    <Pressable
+                      onPress={() => adminToggleStock(storeId, p.id)}
+                      style={{
+                        backgroundColor: out ? colors.redSoft : colors.openBg,
+                        borderRadius: 999,
+                        paddingHorizontal: 10,
+                        paddingVertical: 6,
+                      }}
+                    >
+                      <Text style={{ fontWeight: '800', fontSize: 11, color: out ? colors.red : colors.open }}>
+                        {p.disabled ? t('adminDisabled') : out ? t('outOfStock') : t('inStockAdmin')}
+                      </Text>
+                    </Pressable>
                   </Pressable>
-                </Pressable>
-              )
-            })}
+                )
+              })
+            )}
           </>
         ) : null}
 
@@ -845,10 +910,29 @@ export default function AdminScreen({ navigation }) {
         ) : null}
       </ScrollView>
 
-      <Modal visible={!!productForm} animationType="slide" transparent>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
-          <View style={{ backgroundColor: colors.bg, borderTopLeftRadius: 20, borderTopRightRadius: 20, maxHeight: '92%' }}>
-            <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: colors.line, backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
+      <Modal visible={!!productForm} animationType="fade" transparent>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            justifyContent: desktop ? 'center' : 'flex-end',
+            alignItems: desktop ? 'center' : undefined,
+            padding: desktop ? 24 : 0,
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: colors.bg,
+              width: desktop ? '100%' : undefined,
+              maxWidth: desktop ? 560 : undefined,
+              maxHeight: desktop ? '88%' : '92%',
+              borderTopLeftRadius: desktop ? 16 : 20,
+              borderTopRightRadius: desktop ? 16 : 20,
+              borderRadius: desktop ? 16 : undefined,
+              overflow: 'hidden',
+            }}
+          >
+            <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: colors.line, backgroundColor: '#fff' }}>
               <Text style={{ fontWeight: '900', fontSize: 18, textAlign: isRTL ? 'right' : 'left' }}>
                 {productForm?.id ? t('adminEditProduct') : t('adminAddProduct')}
               </Text>
@@ -931,9 +1015,27 @@ export default function AdminScreen({ navigation }) {
         </View>
       </Modal>
 
-      <Modal visible={!!aisleForm} animationType="slide" transparent>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
-          <View style={{ backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 16 }}>
+      <Modal visible={!!aisleForm} animationType="fade" transparent>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            justifyContent: desktop ? 'center' : 'flex-end',
+            alignItems: desktop ? 'center' : undefined,
+            padding: desktop ? 24 : 0,
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: '#fff',
+              padding: 16,
+              width: desktop ? '100%' : undefined,
+              maxWidth: desktop ? 520 : undefined,
+              borderTopLeftRadius: desktop ? 16 : 20,
+              borderTopRightRadius: desktop ? 16 : 20,
+              borderRadius: desktop ? 16 : undefined,
+            }}
+          >
             <Text style={{ fontWeight: '900', fontSize: 18, marginBottom: 12, textAlign: isRTL ? 'right' : 'left' }}>
               {t('adminEditAisle')}
             </Text>
@@ -951,9 +1053,28 @@ export default function AdminScreen({ navigation }) {
         </View>
       </Modal>
 
-      <Modal visible={!!campaignForm} animationType="slide" transparent>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
-          <View style={{ backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 16, maxHeight: '90%' }}>
+      <Modal visible={!!campaignForm} animationType="fade" transparent>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            justifyContent: desktop ? 'center' : 'flex-end',
+            alignItems: desktop ? 'center' : undefined,
+            padding: desktop ? 24 : 0,
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: '#fff',
+              padding: 16,
+              maxHeight: desktop ? '88%' : '90%',
+              width: desktop ? '100%' : undefined,
+              maxWidth: desktop ? 560 : undefined,
+              borderTopLeftRadius: desktop ? 16 : 20,
+              borderTopRightRadius: desktop ? 16 : 20,
+              borderRadius: desktop ? 16 : undefined,
+            }}
+          >
             <ScrollView>
               <Text style={{ fontWeight: '900', fontSize: 18, marginBottom: 12, textAlign: isRTL ? 'right' : 'left' }}>
                 {t('adminEditCampaign')}
@@ -988,7 +1109,7 @@ export default function AdminScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </AdminChrome>
   )
 }
 

@@ -10,10 +10,13 @@ import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
 import { collections, formatIQD, getNearestStore, productName, searchCatalog } from '../data/mock'
 import { colors } from '../theme'
+import { productCardWidth, useWebLayout } from '../layout/web'
 
 export default function SearchScreen({ navigation }) {
   const { t, lang, isRTL } = useI18n()
   const { user, liveCatalog, liveStores, getLiveProducts } = useApp()
+  const { isWeb, storefrontW, productCols } = useWebLayout()
+  const colW = isWeb ? productCardWidth({ cols: Math.min(productCols, 4), storefrontW }) : '48%'
   const nearestId = getNearestStore(user?.address)?.id
   const [q, setQ] = useState('')
   const query = q.trim().toLowerCase()
@@ -89,12 +92,12 @@ export default function SearchScreen({ navigation }) {
         {!query ? (
           <>
             <Text style={{ fontWeight: '800', fontSize: 17, marginTop: 18, marginBottom: 10 }}>{t('collections')}</Text>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: isWeb ? 'flex-start' : 'space-between', gap: isWeb ? 12 : 0 }}>
               {collections.map((c) => (
                 <Pressable
                   key={c.id}
                   onPress={() => navigation.navigate('Store', { id: nearestId, aisle: c.aisle })}
-                  style={{ width: '48%', marginBottom: 12 }}
+                  style={{ width: colW, marginBottom: 12 }}
                 >
                   <ProductImage
                     uri={c.image}

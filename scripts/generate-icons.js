@@ -68,6 +68,8 @@ async function main() {
     ['assets/icon.png', iconSvg, 1024],
     ['assets/adaptive-icon.png', adaptiveSvg, 1024],
     ['public/favicon.png', iconSvg, 512],
+    // iOS Safari / PWA home-screen icon (nginx also aliases this path)
+    ['public/apple-touch-icon.png', iconSvg, 180],
     ['src/assets/icon.png', iconSvg, 1024],
     ['assets/m10-logo.png', logoSvg, 1024],
     ['public/m10-logo.png', logoSvg, 1024],

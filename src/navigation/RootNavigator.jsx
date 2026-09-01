@@ -1,9 +1,12 @@
+import { useEffect, useRef } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Bike, Home, Receipt, Search, User } from 'lucide-react-native'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
+import { useShell } from '../context/ShellContext'
 import { colors } from '../theme'
 import LanguageScreen from '../screens/Language'
 import HomeScreen from '../screens/Home'
@@ -34,7 +37,6 @@ import ButlerTrackScreen from '../screens/ButlerTrack'
 import ReferralScreen from '../screens/Referral'
 import WalletScreen from '../screens/Wallet'
 import ReturnRequestScreen from '../screens/ReturnRequest'
-import AdminRoute from '../screens/AdminRoute'
 import CourierScreen from '../screens/Courier'
 import ScanScreen from '../screens/Scan'
 import TryInRoomScreen from '../screens/TryInRoom'
@@ -44,6 +46,9 @@ const Tab = createBottomTabNavigator()
 
 function Tabs() {
   const { t } = useI18n()
+  const insets = useSafeAreaInsets()
+  // iOS Safari / PWA: home indicator; native uses system inset
+  const bottomPad = Math.max(insets.bottom, 8)
   return (
     <Tab.Navigator
       screenOptions={{
@@ -51,7 +56,12 @@ function Tabs() {
         tabBarActiveTintColor: colors.red,
         tabBarInactiveTintColor: '#9A9A9A',
         tabBarLabelStyle: { fontWeight: '700', fontSize: 11 },
-        tabBarStyle: { borderTopColor: colors.line, height: 62, paddingBottom: 8, paddingTop: 6 },
+        tabBarStyle: {
+          borderTopColor: colors.line,
+          height: 50 + bottomPad,
+          paddingBottom: bottomPad,
+          paddingTop: 6,
+        },
       }}
     >
       <Tab.Screen
@@ -86,6 +96,15 @@ function Tabs() {
 export default function RootNavigator() {
   const { lang } = useI18n()
   const { isCourier, hydrated } = useApp()
+  const { customerEntry, consumeCustomerEntry } = useShell() || {}
+  const initialRef = useRef(null)
+  if (initialRef.current == null) {
+    initialRef.current = customerEntry || (lang ? (isCourier ? 'CourierHome' : 'Tabs') : 'Language')
+  }
+
+  useEffect(() => {
+    consumeCustomerEntry?.()
+  }, [consumeCustomerEntry])
 
   if (!hydrated) {
     return (
@@ -96,10 +115,7 @@ export default function RootNavigator() {
   }
 
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName={lang ? (isCourier ? 'CourierHome' : 'Tabs') : 'Language'}
-    >
+    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialRef.current}>
       <Stack.Screen name="Language" component={LanguageScreen} />
       <Stack.Screen name="Tabs" component={Tabs} />
       <Stack.Screen name="CourierHome" component={CourierScreen} />
@@ -127,7 +143,6 @@ export default function RootNavigator() {
       <Stack.Screen name="Referral" component={ReferralScreen} />
       <Stack.Screen name="Wallet" component={WalletScreen} />
       <Stack.Screen name="ReturnRequest" component={ReturnRequestScreen} />
-      <Stack.Screen name="Admin" component={AdminRoute} />
       <Stack.Screen name="Courier" component={CourierScreen} />
       <Stack.Screen name="Scan" component={ScanScreen} />
       <Stack.Screen name="TryInRoom" component={TryInRoomScreen} options={{ animation: 'fade' }} />

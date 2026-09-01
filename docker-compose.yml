@@ -1,3 +1,5 @@
+# Yerel önizleme: docker compose up --build
+# Dokploy: Dockerfile provider, port 80, domain apk.retailex.app (HTTPS proxy'de)
 services:
   m10-web:
     build:

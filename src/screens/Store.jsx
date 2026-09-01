@@ -27,6 +27,7 @@ import {
 } from '../data/mock'
 import { aisleFallback, src } from '../utils/images'
 import { colors, shadow } from '../theme'
+import { useWebLayout } from '../layout/web'
 
 export default function StoreScreen({ navigation, route }) {
   const { id, aisle: aisleParam } = route.params
@@ -34,6 +35,7 @@ export default function StoreScreen({ navigation, route }) {
     useApp()
   const store = getLiveStore(id)
   const { t, lang, isRTL } = useI18n()
+  const { isWeb } = useWebLayout()
   const [tab, setTab] = useState('shop')
   const [aisle, setAisle] = useState(aisleParam || null)
   const [q, setQ] = useState('')
@@ -436,7 +438,15 @@ export default function StoreScreen({ navigation, route }) {
                 )
               })}
             </ScrollView>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 16 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: isWeb ? 'flex-start' : 'space-between',
+                paddingHorizontal: 16,
+                gap: isWeb ? 12 : 0,
+              }}
+            >
               {shown.length === 0 && tab === 'again' ? (
                 <View style={{ width: '100%', paddingVertical: 36, alignItems: 'center' }}>
                   <View

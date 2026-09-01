@@ -7,11 +7,13 @@ import { canTryInRoom, formatIQD, formatUnitPrice, getSubstitute, isInStock, pro
 import ProductImage from './ProductImage'
 import SoftPress from './SoftPress'
 import { colors, shadow } from '../theme'
+import { productCardWidth, useWebLayout } from '../layout/web'
 
 export default function ProductCard({ product, storeId, disabled, compact }) {
   const navigation = useNavigation()
   const { cart, addToCart, setQty, storeOverrides } = useApp()
   const { t, lang, isRTL } = useI18n()
+  const { storefrontW, productCols } = useWebLayout()
   const item =
     cart.find((i) => i.storeId === storeId && i.productId === product.id && !i.variantId) ||
     cart.find((i) => i.storeId === storeId && i.productId === product.id)
@@ -43,7 +45,7 @@ export default function ProductCard({ product, storeId, disabled, compact }) {
     addToCart(storeId, product.id)
   }
 
-  const cardW = compact ? 150 : '48%'
+  const cardW = compact ? 150 : productCardWidth({ compact: false, cols: productCols, storefrontW })
   const imgH = compact ? 110 : 152
   const bodyMinH = compact ? 108 : 118
   const addBtn = compact ? 28 : 32
@@ -100,7 +102,7 @@ export default function ProductCard({ product, storeId, disabled, compact }) {
                 paddingVertical: 4,
               }}
             >
-              <Text style={{ color: colors.ink, fontSize: 10, fontWeight: '900' }}>{t('cats.offers')}</Text>
+              <Text style={{ color: colors.ink, fontSize: 12, fontWeight: '900' }}>{t('dealBadge')}</Text>
             </View>
           ) : null}
         </SoftPress>
@@ -131,7 +133,7 @@ export default function ProductCard({ product, storeId, disabled, compact }) {
       <View style={{ padding: compact ? 8 : 10, paddingTop: 8, minHeight: bodyMinH, justifyContent: 'space-between' }}>
         <SoftPress onPress={openDetail}>
           {product.oldPrice ? (
-            <Text style={{ color: colors.red, fontWeight: '800', fontSize: 10, marginBottom: 2 }}>{t('cats.offers')}</Text>
+            <Text style={{ color: colors.red, fontWeight: '800', fontSize: 10, marginBottom: 2 }}>{t('campaign')}</Text>
           ) : product.popular ? (
             <Text style={{ color: colors.muted, fontWeight: '700', fontSize: 10, marginBottom: 2 }}>{t('popular')}</Text>
           ) : null}

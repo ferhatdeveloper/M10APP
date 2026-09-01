@@ -69,6 +69,27 @@ export const formatUnitPrice = (p, lang = 'ar', price) => {
   return `${formatIQD(up, lang)} / ${unit}`
 }
 
+/** Order unit multipliers: piece=1; pack/carton from product or defaults */
+export const DEFAULT_PACK_SIZE = 6
+export const DEFAULT_CARTON_SIZE = 12
+
+export const packSizeOf = (p) => {
+  const n = Number(p?.packSize)
+  return n > 0 ? n : DEFAULT_PACK_SIZE
+}
+
+export const cartonSizeOf = (p) => {
+  const n = Number(p?.cartonSize)
+  return n > 0 ? n : DEFAULT_CARTON_SIZE
+}
+
+/** @param {'piece'|'pack'|'carton'} unitType */
+export const orderUnitMultiplier = (p, unitType = 'piece') => {
+  if (unitType === 'pack') return packSizeOf(p)
+  if (unitType === 'carton') return cartonSizeOf(p)
+  return 1
+}
+
 const img = (id, q) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&q=70&${q || ''}`
 
@@ -358,6 +379,8 @@ export const catalog = [
     brand: 'Almarai',
     unit: 'L',
     unitAmount: 1,
+    packSize: 6,
+    cartonSize: 12,
     allergens: ['milk'],
     variants: [v('1l', '1 لتر', '1 L', '1 L', 2250), v('2l', '2 لتر', '2 L', '2 L', 4200)],
     image: img('photo-1563636619-e9143da7973b', 'sig=milk'),
@@ -375,6 +398,8 @@ export const catalog = [
     brand: 'Farm',
     unit: 'pcs',
     unitAmount: 30,
+    packSize: 1,
+    cartonSize: 2,
     allergens: ['eggs'],
     image: img('photo-1587486913049-53fc88980cfc', 'sig=eggs'),
     popular: true,
@@ -423,6 +448,8 @@ export const catalog = [
     brand: 'Local bakery',
     unit: 'pcs',
     unitAmount: 10,
+    packSize: 2,
+    cartonSize: 5,
     allergens: ['gluten'],
     image: img('photo-1509440159596-0249088772ff', 'sig=bread'),
   },
@@ -439,6 +466,8 @@ export const catalog = [
     brand: 'Wild Tiger',
     unit: 'ml',
     unitAmount: 250,
+    packSize: 6,
+    cartonSize: 24,
     allergens: [],
     image: img('photo-1554866585-cd94860890b7', 'sig=wt'),
     popular: true,
@@ -455,6 +484,8 @@ export const catalog = [
     brand: 'Coca-Cola',
     unit: 'L',
     unitAmount: 1.5,
+    packSize: 6,
+    cartonSize: 12,
     allergens: [],
     image: img('photo-1629203851122-3726ecdf080e', 'sig=cola'),
   },
@@ -981,6 +1012,8 @@ export const catalog = [
     brand: 'Lays',
     unit: 'g',
     unitAmount: 150,
+    packSize: 6,
+    cartonSize: 24,
     allergens: [],
     image: img('photo-1566478989037-eec170784d0b', 'sig=chip'),
     popular: true,

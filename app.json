@@ -14,7 +14,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.m10.app"
+      "bundleIdentifier": "com.m10.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow M10 to use your camera to scan barcodes and place home accessories in your room.",
+        "NSPhotoLibraryUsageDescription": "Allow M10 to access photos for product images and room try-on."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +31,17 @@
     "web": {
       "favicon": "./assets/icon.png",
       "bundler": "metro",
-      "output": "single"
+      "output": "single",
+      "name": "M10",
+      "shortName": "M10",
+      "lang": "tr",
+      "themeColor": "#E31E24",
+      "backgroundColor": "#E31E24",
+      "display": "standalone",
+      "orientation": "portrait",
+      "barStyle": "black-translucent",
+      "startUrl": "/",
+      "description": "M10 — market ve teslimat web demosu (iOS Safari)"
     },
     "plugins": [
       "expo-localization",
@@ -45,7 +59,15 @@
           "recordAudioAndroid": false
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "15.1"
+          }
+        }
+      ]
     ]
   }
 }

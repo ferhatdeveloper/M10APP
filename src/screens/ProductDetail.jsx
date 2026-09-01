@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Alert, ScrollView, Text, View } from 'react-native'
+import { Alert, ScrollView, Text, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Plus, ShoppingBag, Camera } from 'lucide-react-native'
+import { Minus, Plus, ShoppingBag, Camera } from 'lucide-react-native'
 import TopBar from '../components/TopBar'
 import SoftPress from '../components/SoftPress'
 import { useApp } from '../context/AppContext'
@@ -9,10 +9,13 @@ import { useI18n } from '../context/I18nContext'
 import {
   allergenLabel,
   canTryInRoom,
+  cartonSizeOf,
   formatIQD,
   formatUnitPrice,
   getSubstitute,
   isInStock,
+  orderUnitMultiplier,
+  packSizeOf,
   productDesc,
   productImages,
   productName,
@@ -20,6 +23,12 @@ import {
 } from '../data/mock'
 import ProductImage from '../components/ProductImage'
 import { colors, radius, shadow } from '../theme'
+
+const UNIT_TYPES = [
+  { id: 'piece', labelKey: 'unitPiece' },
+  { id: 'pack', labelKey: 'unitPack' },
+  { id: 'carton', labelKey: 'unitCarton' },
+]
 
 export default function ProductDetailScreen({ navigation, route }) {
   const { storeId, productId } = route.params || {}
@@ -31,17 +40,40 @@ export default function ProductDetailScreen({ navigation, route }) {
   const [imgIdx, setImgIdx] = useState(0)
   const variants = product?.variants || []
   const [variantId, setVariantId] = useState(variants[0]?.id || null)
+  const [unitType, setUnitType] = useState('piece')
+  const [qtyText, setQtyText] = useState('1')
 
   const activeVariant = useMemo(
     () => variants.find((v) => v.id === variantId) || variants[0] || null,
     [variants, variantId],
   )
-  const price = activeVariant?.price ?? product?.price ?? 0
+  const piecePrice = activeVariant?.price ?? product?.price ?? 0
   const inStock = isInStock(product)
   const sub = !inStock && product ? getSubstitute(storeId, product) : null
-  const unitLine = formatUnitPrice(product, lang, price)
+  const unitLine = formatUnitPrice(product, lang, piecePrice)
   const closed = store?.status === 'closed' || store?.comingSoon
   const thisStore = cartStore?.id === storeId && cartCount > 0
+
+  const multiplier = orderUnitMultiplier(product, unitType)
+  const qtyNum = Math.max(0, parseInt(String(qtyText).replace(/[^\d]/g, ''), 10) || 0)
+  const unitPrice = piecePrice * multiplier
+  const lineTotal = unitPrice * qtyNum
+  const pieceHint =
+    unitType === 'pack'
+      ? t('piecesInUnit', { n: packSizeOf(product) })
+      : unitType === 'carton'
+        ? t('piecesInUnit', { n: cartonSizeOf(product) })
+        : null
+
+  const setQtySafe = (n) => {
+    const next = Math.max(1, Math.min(999, Math.floor(Number(n) || 1)))
+    setQtyText(String(next))
+  }
+
+  const onQtyChange = (text) => {
+    const cleaned = String(text).replace(/[^\d]/g, '')
+    setQtyText(cleaned)
+  }
 
   if (!product || !store) {
     return (
@@ -66,9 +98,11 @@ export default function ProductDetailScreen({ navigation, route }) {
       }
       return
     }
-    addToCart(storeId, product.id, 1, {
+    const units = Math.max(1, qtyNum || 1)
+    const pieces = units * multiplier
+    addToCart(storeId, product.id, pieces, {
       variantId: activeVariant?.id || null,
-      unitPrice: price,
+      unitPrice: piecePrice,
     })
   }
 
@@ -98,6 +132,21 @@ export default function ProductDetailScreen({ navigation, route }) {
               }}
             >
               <Text style={{ color: '#fff', fontWeight: '800', fontSize: 12 }}>{t('outOfStock')}</Text>
+            </View>
+          ) : product.oldPrice ? (
+            <View
+              style={{
+                position: 'absolute',
+                top: 14,
+                left: isRTL ? undefined : 14,
+                right: isRTL ? 14 : undefined,
+                backgroundColor: colors.yellow,
+                borderRadius: 999,
+                paddingHorizontal: 12,
+                paddingVertical: 6,
+              }}
+            >
+              <Text style={{ color: colors.ink, fontWeight: '900', fontSize: 14 }}>{t('dealBadge')}</Text>
             </View>
           ) : null}
           {images.length > 1 ? (
@@ -163,14 +212,18 @@ export default function ProductDetailScreen({ navigation, route }) {
           </Text>
 
           <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'baseline', gap: 10, marginTop: 14 }}>
-            <Text style={{ color: colors.red, fontWeight: '900', fontSize: 22 }}>{formatIQD(price, lang)}</Text>
-            {product.oldPrice && !activeVariant ? (
+            <Text style={{ color: colors.red, fontWeight: '900', fontSize: 22 }}>{formatIQD(unitPrice, lang)}</Text>
+            {product.oldPrice && !activeVariant && unitType === 'piece' ? (
               <Text style={{ color: colors.muted, textDecorationLine: 'line-through' }}>
                 {formatIQD(product.oldPrice, lang)}
               </Text>
             ) : null}
           </View>
-          {unitLine ? (
+          {pieceHint ? (
+            <Text style={{ color: colors.muted, marginTop: 4, fontWeight: '600', textAlign: isRTL ? 'right' : 'left' }}>
+              {t('perUnit')}: {pieceHint} · {formatIQD(piecePrice, lang)} / {t('unitPiece').toLowerCase()}
+            </Text>
+          ) : unitLine ? (
             <Text style={{ color: colors.muted, marginTop: 4, fontWeight: '600', textAlign: isRTL ? 'right' : 'left' }}>
               {t('unitPrice')}: {unitLine}
             </Text>
@@ -205,6 +258,127 @@ export default function ProductDetailScreen({ navigation, route }) {
               </View>
             </View>
           ) : null}
+
+          <View style={{ marginTop: 16 }}>
+            <Text style={{ fontWeight: '800', marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }}>{t('perUnit')}</Text>
+            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 8 }}>
+              {UNIT_TYPES.map((u) => {
+                const on = unitType === u.id
+                const mult = orderUnitMultiplier(product, u.id)
+                return (
+                  <SoftPress
+                    key={u.id}
+                    onPress={() => setUnitType(u.id)}
+                    style={{
+                      paddingHorizontal: 14,
+                      paddingVertical: 10,
+                      borderRadius: 999,
+                      backgroundColor: on ? colors.redSoft : colors.bg,
+                      borderWidth: 1.5,
+                      borderColor: on ? colors.red : colors.line,
+                      minWidth: 88,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text style={{ fontWeight: '800', color: on ? colors.red : colors.ink }}>{t(u.labelKey)}</Text>
+                    <Text style={{ fontSize: 11, color: colors.muted, marginTop: 2 }}>
+                      {mult > 1 ? `×${mult}` : formatIQD(piecePrice, lang)}
+                    </Text>
+                  </SoftPress>
+                )
+              })}
+            </View>
+          </View>
+
+          <View style={{ marginTop: 16 }}>
+            <Text style={{ fontWeight: '800', marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }}>{t('quantity')}</Text>
+            <View
+              style={{
+                flexDirection: isRTL ? 'row-reverse' : 'row',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <SoftPress
+                onPress={() => setQtySafe(qtyNum - 1)}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: colors.bg,
+                  borderWidth: 1,
+                  borderColor: colors.line,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Minus size={16} color={colors.ink} strokeWidth={2.5} />
+              </SoftPress>
+              <TextInput
+                value={qtyText}
+                onChangeText={onQtyChange}
+                onBlur={() => {
+                  if (!qtyText || qtyNum < 1) setQtyText('1')
+                }}
+                keyboardType="number-pad"
+                selectTextOnFocus
+                accessibilityLabel={t('quantity')}
+                style={{
+                  flex: 1,
+                  maxWidth: 120,
+                  height: 44,
+                  borderWidth: 1.5,
+                  borderColor: colors.line,
+                  borderRadius: 12,
+                  textAlign: 'center',
+                  fontWeight: '800',
+                  fontSize: 18,
+                  color: colors.ink,
+                  backgroundColor: '#fff',
+                  writingDirection: 'ltr',
+                }}
+              />
+              <SoftPress
+                onPress={() => setQtySafe(qtyNum + 1)}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: colors.bg,
+                  borderWidth: 1,
+                  borderColor: colors.line,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Plus size={16} color={colors.ink} strokeWidth={2.5} />
+              </SoftPress>
+            </View>
+          </View>
+
+          <View
+            style={{
+              marginTop: 16,
+              paddingTop: 14,
+              borderTopWidth: 1,
+              borderTopColor: colors.line,
+              gap: 6,
+            }}
+          >
+            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
+              <Text style={{ color: colors.muted, fontWeight: '600' }}>{t('unitPrice')}</Text>
+              <Text style={{ fontWeight: '800', color: colors.ink }}>{formatIQD(unitPrice, lang)}</Text>
+            </View>
+            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between' }}>
+              <Text style={{ color: colors.muted, fontWeight: '600' }}>{t('lineTotal')}</Text>
+              <Text style={{ fontWeight: '900', fontSize: 18, color: colors.red }}>{formatIQD(lineTotal, lang)}</Text>
+            </View>
+            {multiplier > 1 && qtyNum > 0 ? (
+              <Text style={{ color: colors.muted, fontSize: 12, textAlign: isRTL ? 'right' : 'left' }}>
+                {qtyNum} × {multiplier} = {qtyNum * multiplier} {t('unitPiece').toLowerCase()}
+              </Text>
+            ) : null}
+          </View>
 
           {(product.allergens || []).length ? (
             <View style={{ marginTop: 16 }}>
@@ -261,7 +435,9 @@ export default function ProductDetailScreen({ navigation, route }) {
             }}
           >
             <Plus size={18} color="#fff" strokeWidth={3} />
-            <Text style={{ color: '#fff', fontWeight: '800' }}>{inStock ? t('addToCart') : t('addSubstitute')}</Text>
+            <Text style={{ color: '#fff', fontWeight: '800' }}>
+              {inStock ? `${t('addToCart')} · ${formatIQD(lineTotal || unitPrice, lang)}` : t('addSubstitute')}
+            </Text>
           </SoftPress>
         </View>
       ) : null}

@@ -25,6 +25,7 @@ import SoftPress from '../components/SoftPress'
 import Logo from '../components/Logo'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
+import { useShell } from '../context/ShellContext'
 import { colors, shadow } from '../theme'
 
 function MenuRow({ icon: Icon, label, hint, onPress, isRTL, last }) {
@@ -65,12 +66,13 @@ function resetTo(navigation, name) {
 export default function ProfileScreen({ navigation }) {
   const { user, isLoggedIn, logout, hydrated, plusActive, setUserRole, setAppDemoMode, isCourier, isAdmin } = useApp()
   const { t, lang, setLang, langs, isRTL } = useI18n()
+  const { openAdmin } = useShell()
 
   const goLogin = () => navigation.navigate('Login')
 
   const goAdmin = () => {
     if (isAdmin) setAppDemoMode('admin')
-    navigation.navigate('Admin')
+    openAdmin()
   }
 
   const applyRole = (role) => {
