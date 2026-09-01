@@ -55,10 +55,20 @@ TLS **proxy’de** (Traefik/Caddy) biter; container içi nginx yalnızca **80** 
 
 ## Expo Go vs web (önemli)
 
-Statik nginx **Expo Go native bundle** (`exp://…`) servis edemez.
+Statik nginx **Expo Go native bundle** (`exp://…` / EAS Update manifest) servis edemez. Domain şu an yalnızca **web SPA** sunar.
 
 - **Web:** `apk.retailex.app` → iOS Safari demosu (harita web’de placeholder; kamera/AR sınırlı veya manuel giriş).
-- **Expo Go:** geliştirici makinesinde `npx expo start` (LAN) veya ileride **EAS Update** + `updates.url`. Domain üzerinden Expo Go istenirse ayrıca `eas.json` + updates yapılandırması gerekir; şu anki tercih **web’i iOS’ta iyi çalıştırmak**.
+- **Expo Go:** geliştirici makinesinde `npx expo start` (LAN) veya **EAS Update** (`exp://u.expo.dev/...`). Domain üzerinden gerçek native yükleme için `EXPO_TOKEN` + `eas update` gerekir.
+
+### QR dosyaları (repo kökü)
+
+| Dosya | Kodlanan string | Ne olur? |
+|-------|-----------------|----------|
+| `apk-retailex-qr.png` | `https://apk.retailex.app` | Telefon kamerası / Safari → **web** |
+| `apk-retailex-expo-go-qr.png` | `exps://apk.retailex.app` | Expo Go’yu açmayı dener (`exps` → `https`); **manifest yok** → native proje yüklenmez |
+| `apk-retailex-expo-go-android-intent-qr.png` | Android `intent://…package=host.exp.exponent` | Expo Go paketini hedefler; yine native bundle yok |
+
+**Kullanım:** Expo Go uygulamasını aç → kamera ile `apk-retailex-expo-go-qr.png` tara. Safari açılırsa veya “legacy manifest / unable to load” görürsen domain hâlâ web SPA’dır; native için EAS Update kurulumu gerekir (`EXPO_TOKEN` yoksa paylaşılmalı).
 
 ## iOS / Expo yapılandırma (repo)
 

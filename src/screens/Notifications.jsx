@@ -196,6 +196,24 @@ export default function NotificationsScreen({ navigation }) {
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={{ fontWeight: '800', textAlign: isRTL ? 'right' : 'left' }}>{notifTitle(n, lang)}</Text>
+                {n.demo ? (
+                  <Text
+                    style={{
+                      alignSelf: isRTL ? 'flex-end' : 'flex-start',
+                      marginTop: 4,
+                      fontSize: 10,
+                      fontWeight: '800',
+                      color: colors.red,
+                      backgroundColor: colors.redSoft,
+                      paddingHorizontal: 8,
+                      paddingVertical: 2,
+                      borderRadius: 8,
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {t('demoNotifBadge')}
+                  </Text>
+                ) : null}
                 <Text style={{ color: colors.muted, marginTop: 4, textAlign: isRTL ? 'right' : 'left' }}>
                   {notifBody(n, lang)}
                 </Text>

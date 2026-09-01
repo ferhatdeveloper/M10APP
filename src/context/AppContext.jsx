@@ -27,6 +27,12 @@ import {
   user as seedUser,
   DEMO_ACCOUNTS,
 } from '../data/mock.js'
+import {
+  attachDemoPushListeners,
+  markDemoQueueDelivered,
+  scheduleDemoPushSeries,
+  syncDemoQueueToInbox,
+} from '../utils/demoNotifications'
 import { scheduleLocalDemo } from '../utils/push'
 
 const AppContext = createContext(null)
@@ -106,6 +112,29 @@ const seedLiveStores = () => seedStores.map((s) => ({ ...s }))
 
 const cloneCatalog = () => seedCatalog.map((p) => ({ ...p, disabled: false }))
 
+const seedCouriers = () => [
+  {
+    id: 'c-hussein',
+    name: 'Hüseyin El-Musavi',
+    nameAr: 'حسين الموسوي',
+    nameEn: 'Hussein Al-Mousawi',
+    nameTr: 'Hüseyin El-Musavi',
+    phone: '0771 555 0001',
+    vehicle: 'motorcycle',
+    active: true,
+  },
+  {
+    id: 'c-demo-2',
+    name: 'Ali Demir',
+    nameAr: 'علي ديمير',
+    nameEn: 'Ali Demir',
+    nameTr: 'Ali Demir',
+    phone: '0770 444 2211',
+    vehicle: 'car',
+    active: true,
+  },
+]
+
 export const isPlusActive = (user, now = Date.now()) => {
   const plus = user?.m10Plus
   if (!plus?.active) return false
@@ -146,10 +175,13 @@ export function AppProvider({ children }) {
   const [liveAisles, setLiveAisles] = useState(seedLiveAisles)
   const [liveCampaigns, setLiveCampaigns] = useState(seedLiveCampaigns)
   const [liveStores, setLiveStores] = useState(seedLiveStores)
+  const [couriers, setCouriers] = useState(seedCouriers)
+  const [surveys, setSurveys] = useState([])
   const [adminUnlocked, setAdminUnlocked] = useState(false)
   const [isOffline, setIsOffline] = useState(false)
   const [simulateOffline, setSimulateOffline] = useState(false)
   const [demoMode, setDemoMode] = useState('customer') // customer | admin | courier
+  const [demoPushEnabled, setDemoPushEnabledState] = useState(true)
   const closeDemoDone = useRef(false)
   const closeDemoPending = useRef(false)
   const closeDemoTimer = useRef(null)
@@ -282,12 +314,16 @@ export function AppProvider({ children }) {
         setLiveStores(seedLiveStores())
       }
       setSimulateOffline(!!(await load('m10-sim-offline', false)))
+      const storedCouriers = await load('m10-admin-couriers', null)
+      setCouriers(Array.isArray(storedCouriers) && storedCouriers.length ? storedCouriers : seedCouriers())
+      setSurveys(await load('m10-surveys', []))
       const storedDemo = (await load('m10-demo-mode', 'customer')) || 'customer'
       setDemoMode(storedDemo)
       if (storedDemo === 'admin') setAdminUnlocked(true)
       const closeDemo = await load('m10-close-demo', { done: false, pending: false })
       closeDemoDone.current = !!closeDemo?.done
       closeDemoPending.current = !!closeDemo?.pending && !closeDemo?.done
+      setDemoPushEnabledState(!!(await load('m10-demo-push-enabled', true)))
       // Light catalog cache for offline UX (compact product snapshot)
       const cacheSource = Array.isArray(storedCatalog) && storedCatalog.length ? storedCatalog : seedCatalog
       persist('m10-catalog-cache', {
@@ -378,6 +414,44 @@ export function AppProvider({ children }) {
     return () => {
       sub.remove()
       if (closeDemoTimer.current) clearTimeout(closeDemoTimer.current)
+    }
+  }, [hydrated])
+
+  const deliverDemoPush = (item, createdAt) => {
+    setNotifications((prev) => {
+      if (prev.some((n) => n.id === item.id)) return prev
+      const next = [
+        {
+          read: false,
+          createdAt: createdAt || Date.now(),
+          ...item,
+          id: item.id || `n-demo-${Date.now()}`,
+        },
+        ...prev,
+      ]
+      persist('m10-notifs', next)
+      return next
+    })
+    markDemoQueueDelivered(item.id).catch(() => {})
+  }
+
+  const syncDemoInbox = () => {
+    syncDemoQueueToInbox(
+      notifications.map((n) => n.id),
+      deliverDemoPush,
+    ).catch(() => {})
+  }
+
+  useEffect(() => {
+    if (!hydrated) return undefined
+    syncDemoInbox()
+    const detach = attachDemoPushListeners({ onDelivered: deliverDemoPush })
+    const sub = AppState.addEventListener('change', (next) => {
+      if (next === 'active') syncDemoInbox()
+    })
+    return () => {
+      detach()
+      sub.remove()
     }
   }, [hydrated])
 
@@ -496,19 +570,19 @@ export function AppProvider({ children }) {
       return next
     })
     // Also keep a flat survey log for demo inspection
-    load('m10-surveys', []).then((prev) => {
+    const entry = {
+      orderId,
+      storeStars,
+      courierStars,
+      comment: comment || '',
+      answers: answers || {},
+      at: Date.now(),
+    }
+    setSurveys((prev) => {
       const list = Array.isArray(prev) ? prev : []
-      persist('m10-surveys', [
-        {
-          orderId,
-          storeStars,
-          courierStars,
-          comment: comment || '',
-          answers: answers || {},
-          at: Date.now(),
-        },
-        ...list,
-      ].slice(0, 50))
+      const next = [entry, ...list].slice(0, 50)
+      persist('m10-surveys', next)
+      return next
     })
     setUser((u) => {
       const updated = { ...u, points: (u.points || 0) + 20 }
@@ -872,6 +946,82 @@ export function AppProvider({ children }) {
     return true
   }
 
+  const adminUpsertCourier = (courier) => {
+    if (!courier?.name && !courier?.phone) return false
+    setCouriers((prev) => {
+      const id = courier.id || `c-${Date.now().toString(36)}`
+      const i = prev.findIndex((c) => c.id === id)
+      const normalized = {
+        ...(i >= 0 ? prev[i] : {}),
+        ...courier,
+        id,
+        name: courier.name || courier.nameTr || courier.nameEn || courier.nameAr || '',
+        nameAr: courier.nameAr || courier.name || '',
+        nameEn: courier.nameEn || courier.name || '',
+        nameTr: courier.nameTr || courier.name || '',
+        phone: courier.phone || '',
+        vehicle: courier.vehicle || 'motorcycle',
+        active: courier.active !== false,
+      }
+      const next = i >= 0 ? prev.map((c, idx) => (idx === i ? normalized : c)) : [...prev, normalized]
+      persist('m10-admin-couriers', next)
+      return next
+    })
+    return true
+  }
+
+  const adminToggleCourier = (courierId) => {
+    setCouriers((prev) => {
+      const next = prev.map((c) => (c.id === courierId ? { ...c, active: !c.active } : c))
+      persist('m10-admin-couriers', next)
+      return next
+    })
+  }
+
+  const adminDeleteCourier = (courierId) => {
+    setCouriers((prev) => {
+      const next = prev.filter((c) => c.id !== courierId)
+      persist('m10-admin-couriers', next)
+      return next
+    })
+  }
+
+  /** Add product IDs into an existing campaign (Aktüel) or the first active one. */
+  const adminAddProductsToCampaign = (productIds, campaignId) => {
+    const ids = (Array.isArray(productIds) ? productIds : [productIds]).filter(Boolean)
+    if (!ids.length) return false
+    setLiveCampaigns((prev) => {
+      let target = campaignId ? prev.find((c) => c.id === campaignId) : null
+      if (!target) target = prev.find((c) => c.active !== false) || prev[0]
+      if (!target) {
+        const created = {
+          id: `camp-${Date.now().toString(36)}`,
+          titleAr: 'عروض',
+          titleEn: 'Deals',
+          titleTr: 'Aktüel',
+          kickerAr: 'عروض',
+          kickerEn: 'DEALS',
+          kickerTr: 'AKTÜEL',
+          discount: 10,
+          productIds: ids,
+          skus: ids,
+          active: true,
+        }
+        const next = [...prev, created]
+        persist('m10-admin-campaigns', next)
+        return next
+      }
+      const existing = new Set([...(target.productIds || target.skus || []), ...ids])
+      const productIdsNext = [...existing]
+      const next = prev.map((c) =>
+        c.id === target.id ? { ...c, productIds: productIdsNext, skus: productIdsNext } : c,
+      )
+      persist('m10-admin-campaigns', next)
+      return next
+    })
+    return true
+  }
+
   const unlockAdmin = (pin) => {
     if (String(pin).trim() === ADMIN_PIN || user?.role === 'admin' || demoMode === 'admin') {
       setAdminUnlocked(true)
@@ -1029,6 +1179,17 @@ export function AppProvider({ children }) {
       persistUser(updated)
       return updated
     })
+  }
+
+  const setDemoPushEnabled = (enabled) => {
+    const next = !!enabled
+    setDemoPushEnabledState(next)
+    persist('m10-demo-push-enabled', next)
+  }
+
+  const scheduleDemoNotifications = async (lang = 'tr') => {
+    if (!demoPushEnabled) return { ok: false, reason: 'disabled' }
+    return scheduleDemoPushSeries({ lang, onDelivered: deliverDemoPush })
   }
 
   const redeemReward = (reward) => {
@@ -1196,6 +1357,9 @@ export function AppProvider({ children }) {
       cancelPlus,
       plusActive,
       setPushEnabled,
+      demoPushEnabled,
+      setDemoPushEnabled,
+      scheduleDemoNotifications,
       isLoggedIn: !!user?.loggedIn,
       login,
       logout,
@@ -1241,6 +1405,12 @@ export function AppProvider({ children }) {
       adminDeleteCampaign,
       adminUpdateStore,
       adminSetCustomerPoints,
+      adminUpsertCourier,
+      adminToggleCourier,
+      adminDeleteCourier,
+      adminAddProductsToCampaign,
+      couriers,
+      surveys,
       unlockAdmin,
       lockAdmin,
       adminUnlocked,
@@ -1252,6 +1422,7 @@ export function AppProvider({ children }) {
       demoMode,
       setAppDemoMode,
       setUserRole,
+      demoPushEnabled,
       isCourier: (user?.role || demoMode) === 'courier',
       isAdmin: (user?.role || demoMode) === 'admin',
     }),
@@ -1283,11 +1454,14 @@ export function AppProvider({ children }) {
       liveAisles,
       liveCampaigns,
       liveStores,
+      couriers,
+      surveys,
       adminUnlocked,
       isAdminAccess,
       isOffline,
       simulateOffline,
       demoMode,
+      demoPushEnabled,
     ],
   )
 

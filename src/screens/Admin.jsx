@@ -20,12 +20,13 @@ import {
   Megaphone,
   ClipboardList,
   Store,
-  WifiOff,
   Plus,
   Search,
   ImagePlus,
   Lock,
   Sparkles,
+  MessageCircle,
+  Bike,
 } from 'lucide-react-native'
 import AdminChrome, { AdminGateLayout } from '../components/AdminChrome'
 import { useApp } from '../context/AppContext'
@@ -40,7 +41,11 @@ import {
   productName,
   storeName,
 } from '../data/mock'
-import { colors, shadow } from '../theme'
+import { colors } from '../theme'
+import AdminOverview from './admin/AdminOverview'
+import AdminFeedback from './admin/AdminFeedback'
+import AdminCouriers from './admin/AdminCouriers'
+import { ProductAiImageButton, ProductBatchTranslateBar, SelectDot } from './admin/ProductAiTools'
 
 const STATUSES = ['confirmed', 'preparing', 'onway', 'delivered', 'cancelled']
 const SECTIONS = [
@@ -50,6 +55,8 @@ const SECTIONS = [
   { id: 'customers', icon: Users },
   { id: 'campaigns', icon: Megaphone },
   { id: 'orders', icon: ClipboardList },
+  { id: 'feedback', icon: MessageCircle },
+  { id: 'couriers', icon: Bike },
   { id: 'stores', icon: Store },
   { id: 'ai', icon: Sparkles },
 ]
@@ -150,29 +157,6 @@ function Field({ label, value, onChangeText, isRTL, keyboardType, multiline, pla
   )
 }
 
-function StatCard({ label, value, isRTL, desktop }) {
-  return (
-    <View
-      style={{
-        flex: 1,
-        minWidth: desktop ? 180 : '45%',
-        maxWidth: desktop ? 280 : undefined,
-        backgroundColor: '#fff',
-        borderRadius: 14,
-        padding: desktop ? 18 : 14,
-        borderLeftWidth: 3,
-        borderLeftColor: colors.red,
-        ...shadow.soft,
-      }}
-    >
-      <Text style={{ color: colors.muted, fontSize: 12, fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }}>{label}</Text>
-      <Text style={{ fontSize: 22, fontWeight: '900', marginTop: 6, color: colors.ink, textAlign: isRTL ? 'right' : 'left' }}>
-        {value}
-      </Text>
-    </View>
-  )
-}
-
 export default function AdminScreen() {
   const {
     orders,
@@ -193,6 +177,12 @@ export default function AdminScreen() {
     adminDeleteCampaign,
     adminUpdateStore,
     adminSetCustomerPoints,
+    adminAddProductsToCampaign,
+    adminUpsertCourier,
+    adminToggleCourier,
+    adminDeleteCourier,
+    couriers,
+    surveys,
     unlockAdmin,
     isAdminAccess,
     setOfflineSim,
@@ -211,6 +201,7 @@ export default function AdminScreen() {
   const [aisleForm, setAisleForm] = useState(null)
   const [campaignForm, setCampaignForm] = useState(null)
   const [pointsEdit, setPointsEdit] = useState({})
+  const [selectedProductIds, setSelectedProductIds] = useState([])
 
   const storeId = DEFAULT_STORE_ID
   const aisleLabel = (a) => {
@@ -221,14 +212,6 @@ export default function AdminScreen() {
     return t(`cats.${a.id}`) !== `cats.${a.id}` ? t(`cats.${a.id}`) : a.id
   }
 
-  const startOfDay = useMemo(() => {
-    const d = new Date()
-    d.setHours(0, 0, 0, 0)
-    return d.getTime()
-  }, [])
-
-  const ordersToday = orders.filter((o) => (o.createdAt || 0) >= startOfDay).length
-  const activeCampaigns = liveCampaigns.filter((c) => c.active).length
   const enabledProducts = liveCatalog.filter((p) => !p.disabled).length
 
   const customers = useMemo(() => {
@@ -287,6 +270,10 @@ export default function AdminScreen() {
   }, [liveCatalog, productQuery, lang])
 
   const recentOrders = [...orders].sort((a, b) => b.createdAt - a.createdAt).slice(0, 20)
+
+  const toggleProductSelect = (id) => {
+    setSelectedProductIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
+  }
 
   const tryUnlock = () => {
     if (unlockAdmin(pin)) {
@@ -466,78 +453,29 @@ export default function AdminScreen() {
         style={{ flex: 1 }}
       >
         {section === 'overview' ? (
-          <>
-            <View style={{ backgroundColor: colors.ink, borderRadius: 16, padding: 14 }}>
-              <Text style={{ color: colors.yellow, fontWeight: '900', fontSize: 12 }}>DEMO MODE</Text>
-              <Text style={{ color: '#fff', fontWeight: '800', fontSize: 18, marginTop: 6 }}>{t('adminHint')}</Text>
-              <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', gap: 8, marginTop: 12 }}>
-                {['customer', 'admin', 'courier'].map((m) => {
-                  const on = demoMode === m
-                  return (
-                    <Pressable
-                      key={m}
-                      onPress={() => {
-                        setAppDemoMode(m)
-                        if (m === 'customer') leaveToShop()
-                        if (m === 'courier') {
-                          setAppDemoMode('courier')
-                          openStorefront('CourierHome')
-                        }
-                      }}
-                      style={{
-                        flex: 1,
-                        backgroundColor: on ? colors.yellow : 'rgba(255,255,255,0.12)',
-                        borderRadius: 10,
-                        paddingVertical: 10,
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Text style={{ fontWeight: '800', color: on ? colors.ink : '#fff', fontSize: 12 }}>
-                        {t(`demoMode.${m}`)}
-                      </Text>
-                    </Pressable>
-                  )
-                })}
-              </View>
-            </View>
-
-            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 10 }}>
-              <StatCard label={t('adminStatOrdersToday')} value={ordersToday} isRTL={isRTL} desktop={desktop} />
-              <StatCard label={t('adminStatProducts')} value={enabledProducts} isRTL={isRTL} desktop={desktop} />
-              <StatCard label={t('adminStatCustomers')} value={customers.length} isRTL={isRTL} desktop={desktop} />
-              <StatCard label={t('adminStatCampaigns')} value={activeCampaigns} isRTL={isRTL} desktop={desktop} />
-            </View>
-
-            <View
-              style={{
-                backgroundColor: '#fff',
-                borderRadius: 16,
-                padding: 14,
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 10, flex: 1 }}>
-                <WifiOff size={18} color={colors.red} />
-                <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
-                  <Text style={{ fontWeight: '800' }}>{t('simulateOffline')}</Text>
-                  <Text style={{ color: colors.muted, fontSize: 12 }}>{t('simulateOfflineHint')}</Text>
-                </View>
-              </View>
-              <Switch value={simulateOffline} onValueChange={setOfflineSim} trackColor={{ true: colors.red, false: '#ddd' }} />
-            </View>
-
-            <Pressable
-              onPress={() => {
-                setAppDemoMode('courier')
-                openStorefront('CourierHome')
-              }}
-              style={{ backgroundColor: colors.red, borderRadius: 14, padding: 14, alignItems: 'center' }}
-            >
-              <Text style={{ color: '#fff', fontWeight: '800' }}>{t('openCourier')}</Text>
-            </Pressable>
-          </>
+          <AdminOverview
+            t={t}
+            lang={lang}
+            isRTL={isRTL}
+            desktop={desktop}
+            orders={orders}
+            liveCatalog={liveCatalog}
+            liveCampaigns={liveCampaigns}
+            customersCount={customers.length}
+            enabledProducts={enabledProducts}
+            simulateOffline={simulateOffline}
+            setOfflineSim={setOfflineSim}
+            setAppDemoMode={setAppDemoMode}
+            openStorefront={openStorefront}
+            leaveToShop={leaveToShop}
+            demoMode={demoMode}
+            adminAddProductsToCampaign={adminAddProductsToCampaign}
+            onOpenProduct={(p) => {
+              setSection('products')
+              openProductEdit(p)
+            }}
+            onGoCampaigns={() => setSection('campaigns')}
+          />
         ) : null}
 
         {section === 'categories' ? (
@@ -589,7 +527,9 @@ export default function AdminScreen() {
             <View
               style={{
                 backgroundColor: '#fff',
-                borderRadius: 12,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: colors.line,
                 paddingHorizontal: 12,
                 flexDirection: isRTL ? 'row-reverse' : 'row',
                 alignItems: 'center',
@@ -605,11 +545,19 @@ export default function AdminScreen() {
                 style={{ flex: 1, paddingVertical: 12, textAlign: isRTL ? 'right' : 'left' }}
               />
             </View>
+            <ProductBatchTranslateBar
+              t={t}
+              isRTL={isRTL}
+              selectedIds={selectedProductIds}
+              liveCatalog={liveCatalog}
+              adminUpsertProduct={adminUpsertProduct}
+              onClearSelection={() => setSelectedProductIds([])}
+            />
             <Pressable
               onPress={() => openProductEdit(null)}
               style={{
                 backgroundColor: colors.red,
-                borderRadius: 12,
+                borderRadius: 10,
                 padding: 12,
                 flexDirection: isRTL ? 'row-reverse' : 'row',
                 alignItems: 'center',
@@ -624,7 +572,7 @@ export default function AdminScreen() {
               <View
                 style={{
                   backgroundColor: '#fff',
-                  borderRadius: 12,
+                  borderRadius: 10,
                   overflow: 'hidden',
                   borderWidth: 1,
                   borderColor: colors.line,
@@ -635,13 +583,14 @@ export default function AdminScreen() {
                     flexDirection: isRTL ? 'row-reverse' : 'row',
                     paddingHorizontal: 14,
                     paddingVertical: 10,
-                    backgroundColor: '#F7F7F8',
+                    backgroundColor: '#FAFAFA',
                     borderBottomWidth: 1,
                     borderBottomColor: colors.line,
                     gap: 10,
                     alignItems: 'center',
                   }}
                 >
+                  <View style={{ width: 28 }} />
                   <View style={{ width: 48 }} />
                   <Text style={{ flex: 2, fontWeight: '800', fontSize: 11, color: colors.muted }}>{t('adminName')}</Text>
                   <Text style={{ flex: 1, fontWeight: '800', fontSize: 11, color: colors.muted }}>{t('adminPrice')}</Text>
@@ -652,10 +601,10 @@ export default function AdminScreen() {
                   const key = `${storeId}:${p.id}`
                   const stock = storeOverrides[key]?.stock != null ? storeOverrides[key].stock : p.stock
                   const out = (stock ?? 0) <= 0 || p.disabled
+                  const selected = selectedProductIds.includes(p.id)
                   return (
-                    <Pressable
+                    <View
                       key={p.id}
-                      onPress={() => openProductEdit(p)}
                       style={{
                         flexDirection: isRTL ? 'row-reverse' : 'row',
                         paddingHorizontal: 14,
@@ -665,27 +614,34 @@ export default function AdminScreen() {
                         borderBottomWidth: 1,
                         borderBottomColor: colors.line,
                         opacity: p.disabled ? 0.55 : 1,
+                        backgroundColor: selected ? colors.redSoft : '#fff',
                       }}
                     >
-                      {p.image ? (
-                        <Image source={{ uri: p.image }} style={{ width: 40, height: 40, borderRadius: 8 }} />
-                      ) : (
-                        <View style={{ width: 40, height: 40, borderRadius: 8, backgroundColor: colors.bg }} />
-                      )}
-                      <View style={{ flex: 2 }}>
-                        <Text style={{ fontWeight: '800' }} numberOfLines={1}>
-                          {productName(p, lang)}
-                        </Text>
-                        <Text style={{ color: colors.muted, fontSize: 11 }}>{p.id}</Text>
-                      </View>
-                      <Text style={{ flex: 1, fontWeight: '700' }}>{formatIQD(p.price, lang)}</Text>
-                      <Text style={{ width: 88, color: colors.muted, fontSize: 12 }}>{p.aisle}</Text>
+                      <SelectDot on={selected} onPress={() => toggleProductSelect(p.id)} />
+                      <Pressable
+                        onPress={() => openProductEdit(p)}
+                        style={{ flex: 1, flexDirection: isRTL ? 'row-reverse' : 'row', gap: 10, alignItems: 'center' }}
+                      >
+                        {p.image ? (
+                          <Image source={{ uri: p.image }} style={{ width: 40, height: 40, borderRadius: 6 }} />
+                        ) : (
+                          <View style={{ width: 40, height: 40, borderRadius: 6, backgroundColor: colors.bg }} />
+                        )}
+                        <View style={{ flex: 2 }}>
+                          <Text style={{ fontWeight: '800' }} numberOfLines={1}>
+                            {productName(p, lang)}
+                          </Text>
+                          <Text style={{ color: colors.muted, fontSize: 11 }}>{p.id}</Text>
+                        </View>
+                        <Text style={{ flex: 1, fontWeight: '700' }}>{formatIQD(p.price, lang)}</Text>
+                        <Text style={{ width: 88, color: colors.muted, fontSize: 12 }}>{p.aisle}</Text>
+                      </Pressable>
                       <Pressable
                         onPress={() => adminToggleStock(storeId, p.id)}
                         style={{
                           width: 100,
                           backgroundColor: out ? colors.redSoft : colors.openBg,
-                          borderRadius: 999,
+                          borderRadius: 8,
                           paddingHorizontal: 10,
                           paddingVertical: 6,
                           alignItems: 'center',
@@ -695,7 +651,7 @@ export default function AdminScreen() {
                           {p.disabled ? t('adminDisabled') : out ? t('outOfStock') : t('inStockAdmin')}
                         </Text>
                       </Pressable>
-                    </Pressable>
+                    </View>
                   )
                 })}
               </View>
@@ -704,13 +660,15 @@ export default function AdminScreen() {
                 const key = `${storeId}:${p.id}`
                 const stock = storeOverrides[key]?.stock != null ? storeOverrides[key].stock : p.stock
                 const out = (stock ?? 0) <= 0 || p.disabled
+                const selected = selectedProductIds.includes(p.id)
                 return (
-                  <Pressable
+                  <View
                     key={p.id}
-                    onPress={() => openProductEdit(p)}
                     style={{
-                      backgroundColor: '#fff',
-                      borderRadius: 14,
+                      backgroundColor: selected ? colors.redSoft : '#fff',
+                      borderRadius: 10,
+                      borderWidth: 1,
+                      borderColor: colors.line,
                       padding: 12,
                       flexDirection: isRTL ? 'row-reverse' : 'row',
                       gap: 10,
@@ -718,22 +676,28 @@ export default function AdminScreen() {
                       opacity: p.disabled ? 0.55 : 1,
                     }}
                   >
-                    {p.image ? (
-                      <Image source={{ uri: p.image }} style={{ width: 48, height: 48, borderRadius: 10 }} />
-                    ) : (
-                      <View style={{ width: 48, height: 48, borderRadius: 10, backgroundColor: colors.bg }} />
-                    )}
-                    <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
-                      <Text style={{ fontWeight: '800' }}>{productName(p, lang)}</Text>
-                      <Text style={{ color: colors.muted, fontSize: 12 }}>
-                        {formatIQD(p.price, lang)} · {p.aisle} · {p.id}
-                      </Text>
-                    </View>
+                    <SelectDot on={selected} onPress={() => toggleProductSelect(p.id)} />
+                    <Pressable
+                      onPress={() => openProductEdit(p)}
+                      style={{ flex: 1, flexDirection: isRTL ? 'row-reverse' : 'row', gap: 10, alignItems: 'center' }}
+                    >
+                      {p.image ? (
+                        <Image source={{ uri: p.image }} style={{ width: 48, height: 48, borderRadius: 8 }} />
+                      ) : (
+                        <View style={{ width: 48, height: 48, borderRadius: 8, backgroundColor: colors.bg }} />
+                      )}
+                      <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
+                        <Text style={{ fontWeight: '800' }}>{productName(p, lang)}</Text>
+                        <Text style={{ color: colors.muted, fontSize: 12 }}>
+                          {formatIQD(p.price, lang)} · {p.aisle} · {p.id}
+                        </Text>
+                      </View>
+                    </Pressable>
                     <Pressable
                       onPress={() => adminToggleStock(storeId, p.id)}
                       style={{
                         backgroundColor: out ? colors.redSoft : colors.openBg,
-                        borderRadius: 999,
+                        borderRadius: 8,
                         paddingHorizontal: 10,
                         paddingVertical: 6,
                       }}
@@ -742,7 +706,7 @@ export default function AdminScreen() {
                         {p.disabled ? t('adminDisabled') : out ? t('outOfStock') : t('inStockAdmin')}
                       </Text>
                     </Pressable>
-                  </Pressable>
+                  </View>
                 )
               })
             )}
@@ -754,7 +718,16 @@ export default function AdminScreen() {
             <Text style={{ color: colors.muted }}>{t('adminNoCustomers')}</Text>
           ) : (
             customers.map((c) => (
-              <View key={c.phone} style={{ backgroundColor: '#fff', borderRadius: 14, padding: 14 }}>
+              <View
+                key={c.phone}
+                style={{
+                  backgroundColor: '#fff',
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  borderColor: colors.line,
+                  padding: 14,
+                }}
+              >
                 <Text style={{ fontWeight: '800', textAlign: isRTL ? 'right' : 'left' }}>{c.name}</Text>
                 <Text style={{ color: colors.muted, marginTop: 2, textAlign: isRTL ? 'right' : 'left' }}>{c.phone}</Text>
                 <Text style={{ marginTop: 6, textAlign: isRTL ? 'right' : 'left' }}>
@@ -769,14 +742,14 @@ export default function AdminScreen() {
                       flex: 1,
                       borderWidth: 1,
                       borderColor: colors.line,
-                      borderRadius: 10,
+                      borderRadius: 8,
                       padding: 10,
                       textAlign: isRTL ? 'right' : 'left',
                     }}
                   />
                   <Pressable
                     onPress={() => adminSetCustomerPoints(c.phone, pointsEdit[c.phone] ?? c.points)}
-                    style={{ backgroundColor: colors.yellow, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 10 }}
+                    style={{ backgroundColor: colors.yellow, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 10 }}
                   >
                     <Text style={{ fontWeight: '900', color: colors.ink }}>{t('adminSavePoints')}</Text>
                   </Pressable>
@@ -891,6 +864,21 @@ export default function AdminScreen() {
             ))
         ) : null}
 
+        {section === 'feedback' ? (
+          <AdminFeedback t={t} lang={lang} isRTL={isRTL} surveys={surveys} orders={orders} />
+        ) : null}
+
+        {section === 'couriers' ? (
+          <AdminCouriers
+            t={t}
+            isRTL={isRTL}
+            couriers={couriers}
+            adminUpsertCourier={adminUpsertCourier}
+            adminToggleCourier={adminToggleCourier}
+            adminDeleteCourier={adminDeleteCourier}
+          />
+        ) : null}
+
         {section === 'ai' ? (
           <Suspense
             fallback={
@@ -950,7 +938,7 @@ export default function AdminScreen() {
                 onPress={pickImage}
                 style={{
                   backgroundColor: colors.yellow,
-                  borderRadius: 12,
+                  borderRadius: 10,
                   padding: 12,
                   flexDirection: isRTL ? 'row-reverse' : 'row',
                   alignItems: 'center',
@@ -962,8 +950,9 @@ export default function AdminScreen() {
                 <ImagePlus size={16} color={colors.ink} />
                 <Text style={{ fontWeight: '800' }}>{t('adminPickImage')}</Text>
               </Pressable>
+              <ProductAiImageButton t={t} isRTL={isRTL} productForm={productForm} setProductForm={setProductForm} />
               {productForm?.image ? (
-                <Image source={{ uri: productForm.image }} style={{ width: '100%', height: 140, borderRadius: 12, marginBottom: 10 }} />
+                <Image source={{ uri: productForm.image }} style={{ width: '100%', height: 140, borderRadius: 10, marginBottom: 10 }} />
               ) : null}
               <Text style={{ fontWeight: '700', marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }}>{t('adminAisle')}</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, marginBottom: 12 }}>

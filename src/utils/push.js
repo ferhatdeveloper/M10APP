@@ -55,30 +55,26 @@ export async function requestPushPermission() {
   }
 }
 
-export async function scheduleLocalDemo({ title, body, seconds = 0 } = {}) {
+export async function scheduleLocalDemo({ title, body, seconds = 0, data = { demo: true } } = {}) {
   if (!pushSupported()) return { ok: false, reason: 'unavailable' }
   ensureHandler()
   const perm = await requestPushPermission()
   if (!perm.granted) return { ok: false, reason: 'denied' }
+  const content = {
+    title: title || 'M10',
+    body: body || 'Demo notification',
+    data: { demo: true, ...data },
+  }
   try {
     const id = await Notifications.scheduleNotificationAsync({
-      content: {
-        title: title || 'M10',
-        body: body || 'Demo notification',
-        data: { demo: true },
-      },
+      content,
       trigger: seconds > 0 ? { type: Notifications.SchedulableTriggerInputTypes?.TIME_INTERVAL || 'timeInterval', seconds, repeats: false } : null,
     })
     return { ok: true, id }
-  } catch (e) {
-    // Fallback older trigger shape
+  } catch {
     try {
       const id = await Notifications.scheduleNotificationAsync({
-        content: {
-          title: title || 'M10',
-          body: body || 'Demo notification',
-          data: { demo: true },
-        },
+        content,
         trigger: seconds > 0 ? { seconds, repeats: false } : null,
       })
       return { ok: true, id }
@@ -86,4 +82,44 @@ export async function scheduleLocalDemo({ title, body, seconds = 0 } = {}) {
       return { ok: false, reason: 'error' }
     }
   }
+}
+
+export async function cancelScheduledDemoNotifications() {
+  if (!pushSupported()) return
+  ensureHandler()
+  try {
+    const scheduled = await Notifications.getAllScheduledNotificationsAsync()
+    await Promise.all(
+      scheduled
+        .filter((n) => n.content?.data?.demo)
+        .map((n) => Notifications.cancelScheduledNotificationAsync(n.identifier)),
+    )
+  } catch {
+    /* ignore */
+  }
+}
+
+export function subscribePushEvents({ onReceived, onResponse } = {}) {
+  if (!Notifications || Platform.OS === 'web') return () => {}
+  ensureHandler()
+  const subs = []
+  try {
+    if (onReceived) {
+      subs.push(
+        Notifications.addNotificationReceivedListener((event) => {
+          onReceived(event?.notification?.request?.content?.data || {})
+        }),
+      )
+    }
+    if (onResponse) {
+      subs.push(
+        Notifications.addNotificationResponseReceivedListener((event) => {
+          onResponse(event?.notification?.request?.content?.data || {})
+        }),
+      )
+    }
+  } catch {
+    /* ignore */
+  }
+  return () => subs.forEach((s) => s.remove())
 }

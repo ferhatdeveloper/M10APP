@@ -111,7 +111,7 @@ export default function AdminChrome({ section, onSection, sections, children, on
               <Text style={{ color: '#fff', fontWeight: '800', fontSize: 16 }}>{t('adminTitle')}</Text>
             </View>
           </View>
-          <View style={{ gap: 4, flex: 1 }}>
+          <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 4, paddingBottom: 8 }} showsVerticalScrollIndicator={false}>
             {sections.map((s) => (
               <NavItem
                 key={s.id}
@@ -121,7 +121,7 @@ export default function AdminChrome({ section, onSection, sections, children, on
                 isRTL={isRTL}
               />
             ))}
-          </View>
+          </ScrollView>
           {onLeave ? (
             <Pressable
               onPress={onLeave}

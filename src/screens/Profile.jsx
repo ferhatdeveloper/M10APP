@@ -1,4 +1,4 @@
-import { Alert, ScrollView, Text, View } from 'react-native'
+import { Alert, ScrollView, Switch, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {
   Bell,
@@ -13,6 +13,7 @@ import {
   ListChecks,
   LogOut,
   MapPin,
+  Megaphone,
   Receipt,
   Settings2,
   Shield,
@@ -27,6 +28,8 @@ import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
 import { useShell } from '../context/ShellContext'
 import { colors, shadow } from '../theme'
+import { DEMO_PUSH_SECONDS, demoPushPreviewKeys } from '../utils/demoNotifications'
+import { pushSupported } from '../utils/push'
 
 function MenuRow({ icon: Icon, label, hint, onPress, isRTL, last }) {
   const Chevron = isRTL ? ChevronLeft : ChevronRight
@@ -54,6 +57,11 @@ function MenuRow({ icon: Icon, label, hint, onPress, isRTL, last }) {
   )
 }
 
+function formatDemoDelay(seconds, t) {
+  if (seconds < 60) return t('demoNotifDelaySec', { n: seconds })
+  return t('demoNotifDelayMin', { n: Math.round(seconds / 60) })
+}
+
 function resetTo(navigation, name) {
   const root = navigation.getParent?.() || navigation
   if (typeof root.reset === 'function') {
@@ -64,9 +72,23 @@ function resetTo(navigation, name) {
 }
 
 export default function ProfileScreen({ navigation }) {
-  const { user, isLoggedIn, logout, hydrated, plusActive, setUserRole, setAppDemoMode, isCourier, isAdmin } = useApp()
+  const {
+    user,
+    isLoggedIn,
+    logout,
+    hydrated,
+    plusActive,
+    setUserRole,
+    setAppDemoMode,
+    isCourier,
+    isAdmin,
+    demoPushEnabled,
+    setDemoPushEnabled,
+    scheduleDemoNotifications,
+  } = useApp()
   const { t, lang, setLang, langs, isRTL } = useI18n()
   const { openAdmin } = useShell()
+  const nativePush = pushSupported()
 
   const goLogin = () => navigation.navigate('Login')
 
@@ -81,6 +103,34 @@ export default function ProfileScreen({ navigation }) {
     else if (role === 'admin') goAdmin()
     else resetTo(navigation, 'Tabs')
   }
+
+  const scheduleDemoPush = async () => {
+    if (!demoPushEnabled) {
+      Alert.alert(t('demoNotifTitle'), t('demoNotifEnableFirst'))
+      return
+    }
+    const res = await scheduleDemoNotifications(lang)
+    if (!res.ok && res.reason === 'disabled') {
+      Alert.alert(t('demoNotifTitle'), t('demoNotifEnableFirst'))
+      return
+    }
+    if (!res.ok && res.reason === 'denied') {
+      Alert.alert(t('pushTitle'), t('pushDenied'))
+      return
+    }
+    if (!res.ok && res.reason === 'unavailable') {
+      Alert.alert(t('demoNotifTitle'), t('demoNotifWebHint'))
+      return
+    }
+    if (res.web && !res.webPerm?.granted) {
+      Alert.alert(t('demoNotifTitle'), t('demoNotifWebHint'))
+    }
+    if (res.ok) {
+      Alert.alert(t('demoNotifTitle'), t('demoNotifScheduled', { n: res.count }))
+    }
+  }
+
+  const demoPreview = demoPushPreviewKeys()
 
   const links = [
     { to: 'Notifications', icon: Bell, label: t('notifications') },
@@ -209,6 +259,76 @@ export default function ProfileScreen({ navigation }) {
               </SoftPress>
             )
           })}
+        </View>
+
+        <View style={{ backgroundColor: '#fff', borderRadius: 18, padding: 14, ...shadow.soft }}>
+          <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <Megaphone size={18} color={colors.red} />
+            <Text style={{ fontWeight: '800' }}>{t('demoNotifTitle')}</Text>
+          </View>
+          <Text style={{ color: colors.muted, marginBottom: 10, textAlign: isRTL ? 'right' : 'left', fontSize: 12 }}>
+            {t('demoNotifHint')}
+            {!nativePush ? ` ${t('demoNotifWebHint')}` : ''}
+          </Text>
+          <View
+            style={{
+              flexDirection: isRTL ? 'row-reverse' : 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 12,
+              gap: 10,
+            }}
+          >
+            <Text style={{ fontWeight: '700', flex: 1, textAlign: isRTL ? 'right' : 'left' }}>{t('demoNotifToggle')}</Text>
+            <Switch
+              value={!!demoPushEnabled}
+              onValueChange={setDemoPushEnabled}
+              trackColor={{ false: '#DDD', true: colors.red }}
+              thumbColor="#fff"
+            />
+          </View>
+          <Text style={{ fontWeight: '800', marginBottom: 8, textAlign: isRTL ? 'right' : 'left', fontSize: 13 }}>
+            {t('demoNotifListTitle')}
+          </Text>
+          {demoPreview.map((key, i) => (
+            <View
+              key={key}
+              style={{
+                flexDirection: isRTL ? 'row-reverse' : 'row',
+                alignItems: 'center',
+                gap: 8,
+                paddingVertical: 6,
+                borderBottomWidth: i < demoPreview.length - 1 ? 1 : 0,
+                borderBottomColor: colors.line,
+              }}
+            >
+              <View
+                style={{
+                  minWidth: 42,
+                  paddingHorizontal: 8,
+                  paddingVertical: 3,
+                  borderRadius: 8,
+                  backgroundColor: colors.yellow,
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ fontWeight: '800', fontSize: 11 }}>{formatDemoDelay(DEMO_PUSH_SECONDS[i], t)}</Text>
+              </View>
+              <Text style={{ flex: 1, fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }}>{t(key)}</Text>
+            </View>
+          ))}
+          <SoftPress
+            onPress={scheduleDemoPush}
+            style={{
+              backgroundColor: demoPushEnabled ? colors.red : colors.line,
+              borderRadius: 14,
+              padding: 14,
+              alignItems: 'center',
+              marginTop: 14,
+            }}
+          >
+            <Text style={{ color: '#fff', fontWeight: '800', fontSize: 15 }}>{t('demoNotifScheduleBtn')}</Text>
+          </SoftPress>
         </View>
 
         {isLoggedIn ? (
