@@ -54,24 +54,49 @@ function MenuRow({ icon: Icon, label, hint, onPress, isRTL, last }) {
   )
 }
 
+function safeNavigate(navigation, name, params) {
+  try {
+    const root = navigation.getParent?.() || navigation
+    const state = root.getState?.()
+    const exists = state?.routeNames?.includes(name)
+    if (!exists) {
+      console.warn('[M10] navigate: route not found', name)
+      return false
+    }
+  } catch {
+    /* fall through */
+  }
+  try {
+    navigation.navigate(name, params)
+    return true
+  } catch (e) {
+    console.warn('[M10] navigate crashed', name, e?.message)
+    return false
+  }
+}
+
 function resetTo(navigation, name) {
   const root = navigation.getParent?.() || navigation
   if (typeof root.reset === 'function') {
-    root.reset({ index: 0, routes: [{ name }] })
-    return
+    try {
+      root.reset({ index: 0, routes: [{ name }] })
+      return
+    } catch {
+      /* fall through */
+    }
   }
-  navigation.navigate(name)
+  safeNavigate(navigation, name)
 }
 
 export default function ProfileScreen({ navigation }) {
   const { user, isLoggedIn, logout, hydrated, plusActive, setUserRole, setAppDemoMode, isCourier, isAdmin } = useApp()
   const { t, lang, setLang, langs, isRTL, dirMode, setDirMode } = useI18n()
 
-  const goLogin = () => navigation.navigate('Login')
+  const goLogin = () => safeNavigate(navigation, 'Login')
 
   const goAdmin = () => {
     if (isAdmin) setAppDemoMode('admin')
-    navigation.navigate('Admin')
+    safeNavigate(navigation, 'Admin')
   }
 
   const applyRole = (role) => {
@@ -87,11 +112,11 @@ export default function ProfileScreen({ navigation }) {
     { to: 'Wallet', icon: Wallet, label: t('walletTitle'), hint: t('walletMenuHint') },
     { to: 'Referral', icon: UserPlus, label: t('referralTitle'), hint: t('referralMenuHint') },
     { to: 'Lists', icon: ListChecks, label: t('listsTitle'), hint: t('listsMenuHint') },
-    { to: 'OrdersTab', icon: Receipt, label: t('orders') },
+    { to: 'Orders', icon: Receipt, label: t('orders') },
     { to: 'Favorites', icon: Heart, label: t('favorites') },
     { to: 'Addresses', icon: MapPin, label: t('addresses') },
     { to: 'Rewards', icon: Gift, label: t('rewards') },
-    { to: 'ButlerTab', icon: Sparkles, label: t('butler') },
+    { to: 'Butler', icon: Sparkles, label: t('butler') },
     { to: 'Admin', icon: Settings2, label: t('adminTitle'), hint: t('adminMenuHint') },
     { to: 'Presentation', icon: BookOpen, label: t('documentation'), hint: t('documentationHint') },
   ]
@@ -102,7 +127,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={[]}>
-      <TopBar title={t('profile')} onBell={() => navigation.navigate('Notifications')} />
+      <TopBar title={t('profile')} onBell={() => safeNavigate(navigation, 'Notifications')} />
       <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
         {isLoggedIn ? (
           <View
@@ -253,7 +278,7 @@ export default function ProfileScreen({ navigation }) {
                 icon={item.icon}
                 label={item.label}
                 hint={item.hint}
-                onPress={() => (item.to === 'Admin' ? goAdmin() : navigation.navigate(item.to))}
+                onPress={() => (item.to === 'Admin' ? goAdmin() : safeNavigate(navigation, item.to))}
                 isRTL={isRTL}
                 last={false}
               />
@@ -262,7 +287,7 @@ export default function ProfileScreen({ navigation }) {
               icon={Headphones}
               label={t('support')}
               hint={t('helpHint')}
-              onPress={() => navigation.navigate('Support')}
+              onPress={() => safeNavigate(navigation, 'Support')}
               isRTL={isRTL}
               last
             />
@@ -273,7 +298,7 @@ export default function ProfileScreen({ navigation }) {
               icon={BookOpen}
               label={t('documentation')}
               hint={t('documentationHint')}
-              onPress={() => navigation.navigate('Presentation')}
+              onPress={() => safeNavigate(navigation, 'Presentation')}
               isRTL={isRTL}
             />
             <MenuRow
@@ -286,26 +311,26 @@ export default function ProfileScreen({ navigation }) {
             <MenuRow
               icon={Bell}
               label={t('notifications')}
-              onPress={() => navigation.navigate('Notifications')}
+              onPress={() => safeNavigate(navigation, 'Notifications')}
               isRTL={isRTL}
             />
             <MenuRow
               icon={Headphones}
               label={t('helpCenter')}
               hint={t('helpHint')}
-              onPress={() => navigation.navigate('Support')}
+              onPress={() => safeNavigate(navigation, 'Support')}
               isRTL={isRTL}
             />
             <MenuRow
               icon={FileText}
               label={t('terms')}
-              onPress={() => navigation.navigate('Support')}
+              onPress={() => safeNavigate(navigation, 'Support')}
               isRTL={isRTL}
             />
             <MenuRow
               icon={Shield}
               label={t('privacy')}
-              onPress={() => navigation.navigate('Support')}
+              onPress={() => safeNavigate(navigation, 'Support')}
               isRTL={isRTL}
               last
             />
