@@ -1,0 +1,25 @@
+{
+  "name": "M10",
+  "short_name": "M10",
+  "description": "M10 — market ve teslimat web demosu",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E31E24",
+  "theme_color": "#E31E24",
+  "lang": "tr",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
