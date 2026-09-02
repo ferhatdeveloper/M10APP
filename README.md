@@ -6,6 +6,25 @@
 
 ---
 
+## 🚀 Hızlı Erişim — QR ile İndir
+
+| Platform | QR | URL |
+|----------|-----|-----|
+| 📱 **Native Android APK** | ![Android APK QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) |
+| 🍎 **iOS Web (Safari)** | ![iOS Safari QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) |
+| 🔬 **Expo Go (geliştirici)** | ![Expo Go QR](apk-retailex-expo-go-qr.png) | `exps://apk.retailex.app` |
+
+**Nasıl kullanılır:**
+1. Telefonun kamerasını QR'a doğrult
+2. Açılan bağlantıyı tıkla
+3. Android'de APK doğrudan indirilir / iOS'ta Safari'de PWA açılır
+
+> **Not:** Domain hâlâ **web SPA** barındırmaktadır (`apk.retailex.app`). Gerçek native bundle için EAS Update veya GitHub Releases üzerinden `.apk` dağıtımı gerekir. Detaylar: [`DOKPLOY.md`](./DOKPLOY.md).
+
+---
+
+---
+
 ## 1. Platform ve Yığın (Tech Stack)
 
 | Katman | Teknoloji |
