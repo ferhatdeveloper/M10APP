@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "M10",
+    "slug": "m10",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#E31E24"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.m10.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#E31E24"
+      },
+      "package": "com.m10.app",
+      "versionCode": 4
+    },
+    "web": {
+      "favicon": "./assets/icon.png",
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-localization",
+      [
+        "expo-notifications",
+        {
+          "color": "#E31E24"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow M10 to use your camera to scan barcodes and place home accessories in your room.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      "expo-asset"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+# Expo web → Dokploy (iPhone Safari testi)
+node_modules
+.expo
+.git
+.gitignore
+android
+dist
+web-dist
+_toters_dump
+*.apk
+*.aab
+expo-qr.png
+m10_launch.png
+npm-debug.*
+.env
+.env.*
+*.md
+.cursor

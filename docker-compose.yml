@@ -1,0 +1,8 @@
+services:
+  m10-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    restart: unless-stopped
