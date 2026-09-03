@@ -37,7 +37,7 @@
 | AI | OpenRouter API (GPT-4o-mini chat, Gemini 2.5 Flash image) |
 | Konum | `expo-network` (offline tespiti), `react-native-maps` (delivery tracking) |
 | Kamera | `expo-camera` (barkod tarama + AR try-in-room) |
-| 3D / AR | `expo-gl` + `three.js` + `expo-three` (GLB model önizleme — legacy) |
+| 3D / AR | `expo-gl` + `three.js` + `expo-three` (gerçek FurniMesh GLB modelleri — remote cache'li) |
 | Push | `expo-notifications` (yerel demo bildirimler) |
 | Ödeme | Demo akışı (Apple/Google Pay, card, wallet, cash simülasyonu) |
 | Build | `expo export --platform web` → Docker (alpine + nginx 1.27) → **Dokploy** için hazır |
@@ -289,7 +289,7 @@ Login ekranı, üç demo hesabını rol rozetleriyle listeler.
 - Puan/lip sistemi, ödül kataloğu
 - Tarifler + alışveriş listeleri (YouTube video bağlantılı)
 - Barkod tarama (kamera + manuel)
-- AR "Odanızda Dene" (PNG cutout + kamera overlay + jest ile sürükle/zoom/döndür)
+- AR "Odanızda Dene" — gerçek FurniMesh GLB modelleri (lamba, vazo, saksı, palm ağacı, bonsai, minder, çerçeve, duvar lambası) runtime'da cache'e indirilip Three.js ile render; jest ile sürükle/zoom/döndür; APK boyutu küçük kalır
 - Admin paneli: ürün/reyon/kampanya/mağaza/müşteri/sipariş yönetimi
 - AI yardımcısı: OpenRouter üzerinden çeviri, görsel üretimi, sosyal medya paketi
 - Push notification (yerel demo)
@@ -307,7 +307,7 @@ Login ekranı, üç demo hesabını rol rozetleriyle listeler.
 2. **Gerçek auth yok** — OTP demo (`12345`), sadece client-side `accounts` map.
 3. **Gerçek push yok** — yalnızca yerel `expo-notifications`; sunucu tarafı bildirim tetikleme yok.
 4. **Gerçek harita verisi yok** — kurye konumu `lerp` ile simüle ediliyor.
-5. **Gerçek GLB/3D pipeline yok** — `ARModelScene.jsx` legacy kod, `TryInRoom` artık 2.5D PNG cutout kullanıyor.
+5. **Gerçek GLB/3D pipeline var** — FurniMesh GLB modelleri runtime'da indirilip cache'leniyor, Three.js ile render ediliyor. Gıda ürünleri için Khronos duck/avocado/boombox sample mesh'leri kullanılıyor.
 6. **Çoklu dil çevirileri eşit değil** — TR çevirileri var ama tam audit gerekir; örneğin bazı bileşenlerde hard-coded Arapça var.
 7. **Web (Vite) gerçek router kullanılmıyor** — `src/pages/*` ve `vite.config.js` eski web prototipinden kalma; aktif giriş `expo export` üzerinden.
 8. **E2E test / unit test yok** — yalnızca manuel demo.

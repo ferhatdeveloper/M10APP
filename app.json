@@ -24,6 +24,7 @@
       "package": "com.m10.app",
       "versionCode": 4,
       "permissions": [
+        "android.permission.CAMERA",
         "android.permission.CAMERA"
       ]
     },
@@ -55,6 +56,10 @@
         "projectId": "f5df0de1-7a05-4d7d-a056-217d9da60e29"
       }
     },
-    "owner": "dev.ferhatnas"
+    "owner": "dev.ferhatnas",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/f5df0de1-7a05-4d7d-a056-217d9da60e29"
+    }
   }
 }

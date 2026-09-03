@@ -43,6 +43,7 @@ import CourierScreen from '../screens/Courier'
 import ScanScreen from '../screens/Scan'
 import TryInRoomScreen from '../screens/TryInRoom'
 import VisualSearchScreen from '../screens/VisualSearch'
+import CampaignsScreen from '../screens/Campaigns'
 import PresentationScreen from '../screens/Presentation'
 
 const Stack = createNativeStackNavigator()
@@ -148,6 +149,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Courier" component={CourierScreen} />
       <Stack.Screen name="Scan" component={ScanScreen} />
       <Stack.Screen name="VisualSearch" component={VisualSearchScreen} />
+      <Stack.Screen name="Campaigns" component={CampaignsScreen} />
       <Stack.Screen name="TryInRoom" component={TryInRoomScreen} options={{ animation: 'fade' }} />
       <Stack.Screen name="Presentation" component={PresentationScreen} options={{ animation: 'slide_from_bottom' }} />
     </Stack.Navigator>

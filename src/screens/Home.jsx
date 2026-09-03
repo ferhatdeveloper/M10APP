@@ -8,6 +8,7 @@ import {
   ShoppingBag,
   Sparkles,
   Star,
+  Tag,
   Timer,
   Truck,
 } from 'lucide-react-native'
@@ -334,6 +335,35 @@ export default function HomeScreen({ navigation }) {
             />
           ))}
         </View>
+
+        <SoftPress
+          onPress={() => go('Campaigns')}
+          style={{
+            marginHorizontal: 16,
+            marginTop: 10,
+            backgroundColor: '#fff',
+            borderRadius: 14,
+            padding: 14,
+            flexDirection: isRTL ? 'row-reverse' : 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderWidth: 1,
+            borderColor: colors.line,
+            borderLeftWidth: 3,
+            borderLeftColor: colors.red,
+            ...shadow.soft,
+          }}
+        >
+          <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 10 }}>
+            <Tag size={18} color={colors.red} strokeWidth={2.5} />
+            <Text style={{ color: colors.ink, fontWeight: '900', fontSize: 14 }}>
+              {t('campaignsTitle') || 'Campaigns'}
+            </Text>
+          </View>
+          <Text style={{ color: colors.red, fontWeight: '800', fontSize: 12 }}>
+            {t('campaignsViewAll') || 'View all'} →
+          </Text>
+        </SoftPress>
 
         <SoftPress
           onPress={() => go('Plus')}

@@ -17,7 +17,13 @@ import SoftPress from '../components/SoftPress'
 import ARModelScene from '../components/ARModelScene'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
-import { arModelScale, arModelSource, arOverlayHeight } from '../data/arModels'
+import {
+  arModelRemoteUrl,
+  arModelScale,
+  arModelSource,
+  arModelSourceLabel,
+  arOverlayHeight,
+} from '../data/arModels'
 import { arProductImage, canTryInRoom, getProduct, productName } from '../data/mock'
 import { colors, radius, shadow } from '../theme'
 
@@ -47,7 +53,18 @@ export default function TryInRoomScreen({ navigation, route }) {
   // Native-only — web falls back to the 2D cutout because expo-gl's WebGL
   // implementation is too unreliable on web for production use.
   const use3D = Platform.OS !== 'web' && !!product?.id
-  const modelAsset = useMemo(() => (use3D ? arModelSource(product?.id) : null), [use3D, product?.id])
+  const modelAsset = useMemo(
+    () => (use3D ? arModelSource(product?.id) : null),
+    [use3D, product?.id],
+  )
+  const modelUrl = useMemo(
+    () => (use3D ? arModelRemoteUrl(product?.id) : null),
+    [use3D, product?.id],
+  )
+  const modelSourceLabel = useMemo(
+    () => (use3D ? arModelSourceLabel(product?.id) : ''),
+    [use3D, product?.id],
+  )
   const modelScale = useMemo(() => arModelScale(product?.id), [product?.id])
 
   const syncTransform = useCallback((next) => {
@@ -126,10 +143,14 @@ export default function TryInRoomScreen({ navigation, route }) {
       Alert.alert(t('tryInRoomTitle'), t('tryInRoomAddFail'))
       return
     }
-    Alert.alert(t('tryInRoomTitle'), t('tryInRoomAdded', { name: productName(product, lang) }), [
-      { text: t('continue'), style: 'cancel', onPress: () => navigation.goBack() },
-      { text: t('goToCart'), onPress: () => navigation.navigate('Cart') },
-    ])
+    Alert.alert(
+      t('tryInRoomTitle'),
+      t('tryInRoomAdded', { name: productName(product, lang) }),
+      [
+        { text: t('continue'), style: 'cancel', onPress: () => navigation.goBack() },
+        { text: t('goToCart'), onPress: () => navigation.navigate('Cart') },
+      ],
+    )
   }
 
   if (!product || !canTryInRoom(product) || !cutoutUri) {
@@ -215,7 +236,9 @@ export default function TryInRoomScreen({ navigation, route }) {
             >
               {use3D ? (
                 <ARModelScene
+                  key={`${reloadKey}-${product?.id}`}
                   asset={modelAsset}
+                  url={modelUrl}
                   scale={modelScale}
                   height={baseH * tf.scale}
                   isRTL={isRTL}
@@ -269,6 +292,11 @@ export default function TryInRoomScreen({ navigation, route }) {
               <View style={styles.badge3d} pointerEvents="none">
                 <Box size={10} color="#000" strokeWidth={3} />
                 <Text style={styles.badge3dText}>3D</Text>
+                {modelSourceLabel ? (
+                  <Text style={styles.badgeSrcText}>
+                    {t('tryInRoomModelSource')} {modelSourceLabel}
+                  </Text>
+                ) : null}
               </View>
             ) : null}
           </View>
@@ -326,7 +354,6 @@ const styles = StyleSheet.create({
   cutoutWrap: {
     position: 'absolute',
     zIndex: 2,
-    // Soft product drop shadow without a rectangular “photo frame”
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -334,9 +361,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.38,
         shadowRadius: 16,
       },
-      android: {
-        // Avoid elevation (draws a hard rect). Ground ellipse handles contact shadow.
-      },
+      android: {},
       default: {},
     }),
   },
@@ -443,11 +468,12 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: 14,
     textAlign: 'center',
+    flexShrink: 1,
   },
   badge3d: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
+    gap: 4,
     backgroundColor: '#FFF200',
     paddingHorizontal: 6,
     paddingVertical: 3,
@@ -458,6 +484,12 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     fontSize: 10,
     letterSpacing: 0.5,
+  },
+  badgeSrcText: {
+    color: '#000',
+    fontWeight: '700',
+    fontSize: 9,
+    letterSpacing: 0.4,
   },
   gestureHint: {
     alignSelf: 'center',
