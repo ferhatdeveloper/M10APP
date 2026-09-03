@@ -61,36 +61,45 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 
 #### Servis 2: `m10-metro` (yeni — Expo Go native bundle)
 
-> Bu servis `docker-compose.yml` veya tek başına `Dockerfile.metro` ile çalışır.
+> EXFINPDKS'te (`exp.exfinpdks.com:8081`) kullanılan kalıplı yapı.
 > QR: `exp://apk.retailex.app:8081`
 
-**Yöntem A — Compose (önerilen):**
+**EXFINPDKS pattern'i (referans):**
+
+| Env | Değer | Açıklama |
+|-----|-------|----------|
+| `PUBLIC_HOST` | `apk.retailex.app` | Manifest içindeki public hostname |
+| `EXPO_PACKAGER_HOSTNAME` | `apk.retailex.app` | Aynı |
+| `EXPO_PACKAGER_PROXY_URL` | `https://apk.retailex.app:443` | HTTPS proxy adresi |
+| `EXPO_PORT` | `8081` | Metro port |
+| `METRO_TRAEFIK_ENABLE` | `false` | Traefik proxy yok, Metro doğrudan dinler |
+
+**Compose yöntemi (önerilen, EXFINPDKS ile aynı):**
 
 1. Aynı projede → **Create Service** → **Application** → **Compose**.
 2. **Repository:** `ferhatdeveloper/M10APP`.
 3. **Branch:** `master`.
 4. **Compose file:** `docker-compose.yml`.
 5. **Service:** `m10-metro` seç.
-6. **Port:** `8081`.
-7. **Environment variables:**
-   - `EXPO_PACKAGER_HOSTNAME=apk.retailex.app`
-   - `EXPO_PACKAGER_PROXY_URL=https://apk.retailex.app:443`
-8. Deploy.
+6. **Port:** `8081` (sadece bu port açık, Traefik host-based rule ile).
+7. **Environment variables:** yukarıdaki tablo (zaten `docker-compose.yml`'de tanımlı).
+8. **Host binding:** Dokploy panelinde `apk.retailex.app` host'unu bu servise yönlendir.
+9. Deploy.
 
-**Yöntem B — Dockerfile (Compose yoksa):**
+**Dockerfile yöntemi (Compose yoksa):**
 
 1. **Create Service** → **Application** → **Dockerfile**.
 2. **Dockerfile path:** `Dockerfile.metro`.
 3. **Port:** `8081`.
-4. **Environment variables** yukarıdaki gibi.
+4. **Environment variables** yukarıdaki tablo.
 5. Deploy.
 
-**Yöntem C — Domain bağlama (HTTPS ile):**
+**Domain / Host yapısı (Dokploy'da):**
 
-Metro'yu domain'in arkasına alırsanız (örn. `metro.apk.retailex.app`):
-- Let's Encrypt aktif olur
-- QR: `exp://metro.apk.retailex.app` (port yok, varsayılan 443)
-- HTTPS sertifikası Traefik/Caddy'de biter, container 8081'i dinler
+| Service | Host | Port | Yönlendirme |
+|---------|------|------|-------------|
+| `m10-web` | `apk.retailex.app` | 443 → 80 | Traefik HTTPS (Let's Encrypt) |
+| `m10-metro` | `apk.retailex.app` | 8081 | Metro doğrudan (HTTP) |
 
 ### DNS (Metro için)
 
