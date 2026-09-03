@@ -16,3 +16,5 @@ npm-debug.*
 .env.*
 *.md
 .cursor
+ios
+.expo.prebuild

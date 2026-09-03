@@ -5,7 +5,9 @@ WORKDIR /app
 RUN apk add --no-cache libc6-compat
 
 COPY package.json package-lock.json ./
-RUN npm ci
+# --legacy-peer-deps: expo-three@8.0.0 vs three@0.169.0 peer uyumsuzluğunu
+# geçici olarak yoksay (expo-three SDK 55+'a kadar güncellenmedi).
+RUN npm ci --legacy-peer-deps --no-audit --no-fund
 
 COPY . .
 

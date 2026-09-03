@@ -6,20 +6,24 @@
 
 ---
 
-## 🚀 Hızlı Erişim — QR ile İndir
+## 🚀 Hızlı Erişim — QR ile Aç
 
-| Platform | QR | URL |
-|----------|-----|-----|
-| 📱 **Native Android APK** | ![Android APK QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) |
-| 🍎 **iOS Web (Safari)** | ![iOS Safari QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) |
-| 🔬 **Expo Go (geliştirici)** | ![Expo Go QR](apk-retailex-expo-go-qr.png) | `exps://apk.retailex.app` |
+| Platform | QR | URL | Ne açar? |
+|----------|-----|-----|----------|
+| 🍎 **iOS Web (Safari)** | ![iOS Safari QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) | Statik web SPA (Dokploy/nginx) |
+| 📱 **Android Web** | ![Android Web QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) | Aynı web SPA |
+| 🔬 **Expo Go (iOS + Android, native)** | ![EAS Update QR](apk-retailex-eas-update-qr.png) | `https://u.expo.dev/.../manifest?channel-name=production&runtime-version=1.0.0&platform=ios` | Kamera/barkod/AR — **tam native** |
 
 **Nasıl kullanılır:**
-1. Telefonun kamerasını QR'a doğrult
-2. Açılan bağlantıyı tıkla
-3. Android'de APK doğrudan indirilir / iOS'ta Safari'de PWA açılır
 
-> **Not:** Domain hâlâ **web SPA** barındırmaktadır (`apk.retailex.app`). Gerçek native bundle için EAS Update veya GitHub Releases üzerinden `.apk` dağıtımı gerekir. Detaylar: [`DOKPLOY.md`](./DOKPLOY.md).
+- **Web için:** Telefon kamerasıyla `apk-retailex-qr.png` okut → Safari’de açılır.
+- **Native için (kamera, AR, barkod):**
+  1. Telefona **Expo Go** yükle (App Store / Play Store).
+  2. `apk-retailex-eas-update-qr.png` dosyasını telefona gönder (AirDrop / iCloud / mail).
+  3. **Expo Go içinden** QR’ı aç → kamera ile okut.
+  4. Native bundle iner, uygulama açılır. Aynı Wi-Fi gerekmez.
+
+> **Not:** `apk.retailex.app` web SPA; native bundle Expo sunucusundadır (EAS Update). Detaylar: [`DOKPLOY.md`](./DOKPLOY.md).
 
 ---
 
