@@ -1,0 +1,20 @@
+# M10 — Expo Metro dev server (Expo Go için)
+# Docker Compose içinde m10-metro servisi olarak çalışır.
+# Port 8081 doğrudan dışarıya açılır; QR: exp://apk.retailex.app:8081
+FROM node:22-alpine
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat
+
+# Hostname/ip için (manifest içindeki asset URL'leri https üzerinden gelsin)
+ENV EXPO_DEV_SERVER_HOST=0.0.0.0
+ENV EXPO_DEV_SERVER_PORT=8081
+
+COPY package.json package-lock.json ./
+RUN npm ci --legacy-peer-deps --no-audit --no-fund
+
+COPY . .
+
+# Container içinde interaktif soruları bastır, watch modda çalış
+# Reload sadece dosya değişince bundle'ı yeniden üretir.
+CMD ["npx", "expo", "start", "--host", "0.0.0.0", "--port", "8081", "--non-interactive"]

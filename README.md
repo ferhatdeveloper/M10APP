@@ -12,7 +12,7 @@
 |----------|-----|-----|----------|
 | 🍎 **iOS Web (Safari)** | ![iOS Safari QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) | Statik web SPA (Dokploy/nginx) |
 | 📱 **Android Web** | ![Android Web QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) | Aynı web SPA |
-| 🔬 **Expo Go (iOS + Android, native)** | ![EAS Update QR](apk-retailex-eas-update-qr.png) | `https://u.expo.dev/.../manifest?channel-name=production&runtime-version=1.0.0&platform=ios` | Kamera/barkod/AR — **tam native** |
+| 🔬 **Expo Go (iOS + Android, native)** | ![Expo Go QR](apk-retailex-expo-go-qr.png) | `exp://apk.retailex.app:8081` | Metro dev server'dan native bundle — **kamera/AR tam** |
 
 **Nasıl kullanılır:**
 

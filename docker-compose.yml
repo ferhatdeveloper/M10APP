@@ -1,8 +1,27 @@
 services:
+  # Static web build (iPhone Safari + Dokploy preview)
   m10-web:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    restart: unless-stopped
+
+  # Expo Metro dev server (Expo Go native bundle — kamera/AR/barkod)
+  # 8081 portu doğrudan açılır; Traefik/Caddy HTTPS ile proxy'lenir.
+  # EXPO_PACKAGER_PROXY_URL=https://apk.retailex.app:443
+  #   → manifest içindeki asset URL'leri HTTPS üzerinden servise yönlenir.
+  # QR: exp://apk.retailex.app:8081
+  m10-metro:
+    build:
+      context: .
+      dockerfile: Dockerfile.metro
+    environment:
+      - CI=1
+      - EXPO_PACKAGER_PROXY_URL=https://apk.retailex.app:443
+      - EXPO_PACKAGER_HOSTNAME=apk.retailex.app
+      - EXPO_NO_INTERACTIVE=1
+    ports:
+      - "8081:8081"
     restart: unless-stopped

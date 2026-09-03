@@ -13,9 +13,14 @@ Kaynak: [ferhatdeveloper/M10APP](https://github.com/ferhatdeveloper/M10APP) · d
 
 ---
 
-## 1) Web (Dokploy) — mevcut kurulum
+## iPhone’da nasıl açılır?
 
-Statik nginx container. iPhone Safari’de `apk.retailex.app`’i açar, “Ana Ekrana Ekle” ile PWA benzeri tam ekran olur.
+| Yol | Adres / komut | Ne çalışır? |
+|-----|----------------|-------------|
+| **iOS Safari (web demo)** | `https://apk.retailex.app` | Dokploy’daki SPA. Touch + safe-area odaklı. |
+| Ana ekrana ekle | Safari → Paylaş → **Ana Ekrana Ekle** | PWA benzeri tam ekran; ikon `apple-touch-icon`. |
+| **Expo Go (native)** | `exp://apk.retailex.app:8081` | Metro dev server’dan native bundle indirir. **Kamera / barkod / AR tam native.** |
+| **EAS Update (alternatif)** | `exps://u.expo.dev/.../manifest?...` | EAS Update ile native bundle (asset HMAC bazen sorunlu) |
 
 ### DNS (sen ekleyeceksin)
 
@@ -35,6 +40,10 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 
 ### Dokploy UI adımları
 
+**İki ayrı servis oluştur:**
+
+#### Servis 1: `m10-web` (mevcut — statik web)
+
 1. **Projects** → proje seç veya oluştur → **Create Service** → **Application**.
 2. **Git Provider:** GitHub.
 3. **Repository:** `ferhatdeveloper/M10APP`.
@@ -49,6 +58,45 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 12. **Environment variables:** yok — bu web export `process.env` / `EXPO_PUBLIC_*` kullanmıyor.
 13. Deploy / Rebuild.
 14. iPhone Safari’de `https://apk.retailex.app` aç; kilit simgesi / geçerli sertifika kontrol et.
+
+#### Servis 2: `m10-metro` (yeni — Expo Go native bundle)
+
+> Bu servis `docker-compose.yml` veya tek başına `Dockerfile.metro` ile çalışır.
+> QR: `exp://apk.retailex.app:8081`
+
+**Yöntem A — Compose (önerilen):**
+
+1. Aynı projede → **Create Service** → **Application** → **Compose**.
+2. **Repository:** `ferhatdeveloper/M10APP`.
+3. **Branch:** `master`.
+4. **Compose file:** `docker-compose.yml`.
+5. **Service:** `m10-metro` seç.
+6. **Port:** `8081`.
+7. **Environment variables:**
+   - `EXPO_PACKAGER_HOSTNAME=apk.retailex.app`
+   - `EXPO_PACKAGER_PROXY_URL=https://apk.retailex.app:443`
+8. Deploy.
+
+**Yöntem B — Dockerfile (Compose yoksa):**
+
+1. **Create Service** → **Application** → **Dockerfile**.
+2. **Dockerfile path:** `Dockerfile.metro`.
+3. **Port:** `8081`.
+4. **Environment variables** yukarıdaki gibi.
+5. Deploy.
+
+**Yöntem C — Domain bağlama (HTTPS ile):**
+
+Metro'yu domain'in arkasına alırsanız (örn. `metro.apk.retailex.app`):
+- Let's Encrypt aktif olur
+- QR: `exp://metro.apk.retailex.app` (port yok, varsayılan 443)
+- HTTPS sertifikası Traefik/Caddy'de biter, container 8081'i dinler
+
+### DNS (Metro için)
+
+| Name | Type | Value | Not |
+|------|------|-------|-----|
+| `metro` | **CNAME** | `<DOKPLOY_SUNUCU_HOSTNAME>` | Opsiyonel. Yöntem C ise ekle |
 
 ### Dockerfile davranışı
 
@@ -130,8 +178,8 @@ npm run update:list
 | Dosya | Kodlanan string | Ne olur? |
 |-------|-----------------|----------|
 | `apk-retailex-qr.png` | `https://apk.retailex.app` | Telefon kamerası / Safari → **web** |
-| `apk-retailex-eas-update-qr.png` | `https://u.expo.dev/.../manifest?channel-name=production&runtime-version=1.0.0&platform=ios` | Expo Go → **native bundle** (kamera/AR tam) |
-| `apk-retailex-expo-go-qr.png` | `exps://apk.retailex.app` | Eski deneme — manifest yok, **kullanma** |
+| `apk-retailex-expo-go-qr.png` | `exp://apk.retailex.app:8081` | Expo Go → **Metro dev server** (kamera/AR tam) |
+| `apk-retailex-eas-update-qr.png` | `exps://u.expo.dev/.../manifest?...` | Alternatif: EAS Update manifest (asset HMAC sorunlu olabilir) |
 | `apk-retailex-expo-go-android-intent-qr.png` | Android intent → host.exp.exponent | Eski deneme — **kullanma** |
 
 ---
@@ -165,16 +213,29 @@ Geliştirme akışı:
 
 ## Build özeti
 
+### Web (`m10-web`)
+
 | Alan | Değer |
 |------|-------|
 | Git | GitHub `ferhatdeveloper/M10APP` |
 | Branch | `master` |
-| Build | Dockerfile (Dockerfile + `--legacy-peer-deps`) |
+| Build | Dockerfile |
 | Port | `80` |
 | Domain | `apk.retailex.app` |
 | HTTPS | Dokploy Let’s Encrypt (**zorunlu**) |
 | Build args | yok |
 | Env | yok |
-| EAS Update branch | `production` |
+
+### Metro (`m10-metro`)
+
+| Alan | Değer |
+|------|-------|
+| Build | Compose (`docker-compose.yml`) **veya** Dockerfile (`Dockerfile.metro`) |
+| Service | `m10-metro` |
+| Port | `8081` |
+| Domain | Opsiyonel (Yöntem C: `metro.apk.retailex.app`) |
+| Env | `EXPO_PACKAGER_HOSTNAME=apk.retailex.app`, `EXPO_PACKAGER_PROXY_URL=https://apk.retailex.app:443` |
+| QR | `exp://apk.retailex.app:8081` |
+| Restart | unless-stopped |
 
 Yerel kontrol: `npm run web:export` veya `docker compose up --build`.
