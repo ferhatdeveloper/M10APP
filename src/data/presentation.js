@@ -1,7 +1,12 @@
 // Sistem dokümantasyonu slaytları — M10 uygulamasının gerçek ekranlarını
 // telefon mockup'ı içinde gösterir. 11 slayt, 3 dil (TR/EN/AR).
 
-// Gerçek ekran görüntüleri (uygulamadan alınmış PNG'ler)
+// Gerçek ekran görüntüleri (uygulamadan alınmış PNG'ler).
+// Her slayt için elde hazır PNG varsa `image` alanı kullanılır, yoksa
+// `mock` alanındaki MockXxx bileşeni PhoneMockup'a children olarak geçilir.
+// `previewUrl` alanı sadece "Tam önizleme" modal'ı içindir — canlı
+// apk.retailex.app'ı tam ekran iframe'de gösterir (sunumdaki telefon
+// çerçevesinin içinde değil).
 const IMG = {
   language: require('../../assets/presentation/language.png'),
   permissions: require('../../assets/presentation/permissions.png'),
@@ -12,6 +17,12 @@ const IMG = {
   profileGuest: require('../../assets/presentation/profile-guest.png'),
 }
 
+// Tek bir canlı önizleme URL'i — tüm slaytlar aynı SPA'ya düşer, modal'da
+// gösterildiği için sorun değil; her seferinde ilgili ekrana manuel
+// gidilir. (apk.retailex.app/<sayfa> nginx fallback nedeniyle her path
+// için aynı içerik döndürüyor.)
+const LIVE_APP = 'https://apk.retailex.app/'
+
 export const PRESENTATION_META = {
   title: 'Sistem Dokümantasyonu',
   subtitle: 'M10 — Süpermarket, Market ve Hizmet Platformu',
@@ -20,19 +31,20 @@ export const PRESENTATION_META = {
 }
 
 // Slayt tipleri:
-//   - "screen" : sol sütunda telefon mockup (mockScreen bileşeni), sağ sütunda açıklayıcı metin
-//   - "split"  : iki mockup yan yana (örn. müşteri vs kurye)
+//   - "screen" : sol sütunda telefon mockup (mock bileşeni veya PNG), sağ sütunda açıklayıcı metin
 //   - "ending" : kapanış — teşekkürler + iletişim
 //
-// mockScreen bileşenleri src/components/PhoneMockup.jsx içinde tanımlı.
-// `image` alanı varsa, gerçek ekran görüntüsünü gösterir (mock yerine).
+// mock bileşenleri src/components/PhoneMockup.jsx içinde tanımlı.
+// `image` alanı varsa gerçek ekran görüntüsünü gösterir (mock yerine).
+// `previewUrl` alanı varsa "Tam önizleme" butonu görünür ve tıklandığında
+// tam ekran iframe modal'ı açılır (canlı apk.retailex.app).
 export const PRESENTATION_SLIDES = [
-  // 1 — Dil seçimi (canlı apk.retailex.app iframe)
+  // 1 — Dil seçimi (PNG)
   {
     type: 'screen',
     mock: 'MockLanguage',
     image: IMG.language,
-    webview: 'https://apk.retailex.app',
+    previewUrl: LIVE_APP,
     badge: '01',
     title: { tr: 'Hoş Geldiniz', en: 'Welcome', ar: 'مرحباً' },
     subtitle: {
@@ -55,11 +67,11 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 2 — Login + OTP (canlı apk.retailex.app iframe)
+  // 2 — Login + OTP (PNG yok → MockLogin)
   {
     type: 'screen',
     mock: 'MockLogin',
-    webview: 'https://apk.retailex.app',
+    previewUrl: LIVE_APP,
     badge: '02',
     title: { tr: 'Giriş Akışı', en: 'Login Flow', ar: 'تسجيل الدخول' },
     subtitle: {
@@ -82,11 +94,12 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 3 — Anasayfa (gerçek ekran görüntüsü)
+  // 3 — Anasayfa (PNG)
   {
     type: 'screen',
     mock: 'MockHome',
     image: IMG.home,
+    previewUrl: LIVE_APP,
     badge: '03',
     title: { tr: 'Anasayfa', en: 'Home', ar: 'الرئيسية' },
     subtitle: {
@@ -109,10 +122,11 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 4 — Mağaza içi
+  // 4 — Mağaza içi (PNG yok → MockStore)
   {
     type: 'screen',
     mock: 'MockStore',
+    previewUrl: LIVE_APP,
     badge: '04',
     title: { tr: 'Mağaza İçi', en: 'Store', ar: 'داخل المتجر' },
     subtitle: {
@@ -135,10 +149,11 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 5 — Sepet
+  // 5 — Sepet (PNG yok → MockCart)
   {
     type: 'screen',
     mock: 'MockCart',
+    previewUrl: LIVE_APP,
     badge: '05',
     title: { tr: 'Sepet', en: 'Cart', ar: 'السلة' },
     subtitle: {
@@ -161,10 +176,11 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 6 — Checkout
+  // 6 — Checkout (PNG yok → MockCheckout)
   {
     type: 'screen',
     mock: 'MockCheckout',
+    previewUrl: LIVE_APP,
     badge: '06',
     title: { tr: 'Ödeme', en: 'Checkout', ar: 'الدفع' },
     subtitle: {
@@ -187,10 +203,11 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 7 — Sipariş takibi
+  // 7 — Sipariş takibi (PNG yok → MockTracking)
   {
     type: 'screen',
     mock: 'MockTracking',
+    previewUrl: LIVE_APP,
     badge: '07',
     title: { tr: 'Canlı Sipariş Takibi', en: 'Live Order Tracking', ar: 'تتبع الطلب المباشر' },
     subtitle: {
@@ -213,11 +230,12 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 8 — Siparişler + Plus
+  // 8 — Siparişler + Plus (PNG var)
   {
     type: 'screen',
     mock: 'MockOrders',
     image: IMG.orders,
+    previewUrl: LIVE_APP,
     badge: '08',
     title: { tr: 'Siparişler & M10+', en: 'Orders & M10+', ar: 'الطلبات وM10+' },
     subtitle: {
@@ -240,11 +258,12 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 9 — Şoför hizmeti
+  // 9 — Şoför hizmeti (PNG var)
   {
     type: 'screen',
     mock: 'MockButler',
     image: IMG.butler,
+    previewUrl: LIVE_APP,
     badge: '09',
     title: { tr: 'Şoför Hizmeti', en: 'Butler Service', ar: 'خدمة السائق' },
     subtitle: {
@@ -267,10 +286,11 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 10 — Admin
+  // 10 — Admin (PNG yok → MockAdmin)
   {
     type: 'screen',
     mock: 'MockAdmin',
+    previewUrl: LIVE_APP,
     badge: '10',
     title: { tr: 'Admin Paneli', en: 'Admin Panel', ar: 'لوحة الإدارة' },
     subtitle: {
@@ -293,11 +313,12 @@ export const PRESENTATION_SLIDES = [
     ],
   },
 
-  // 11 — Profil + Dokümantasyon girişi
+  // 11 — Profil + Dokümantasyon girişi (PNG var)
   {
     type: 'screen',
     mock: 'MockProfile',
     image: IMG.profileGuest,
+    previewUrl: LIVE_APP,
     badge: '11',
     title: { tr: 'Hesap & Çok Dilli', en: 'Profile & Multilingual', ar: 'الحساب واللغات' },
     subtitle: {

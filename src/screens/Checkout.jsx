@@ -103,36 +103,54 @@ export default function CheckoutScreen({ navigation }) {
 
   const submit = () => {
     if (!canSubmit()) return
-    if (digitalPay) {
-      setPayState('confirming')
-      setTimeout(() => {
-        const order = placeOrder({
-          payment: paymentLabel(),
-          paymentMethod: payment,
-          schedule: when === 'now' ? t('now') : t('schedule'),
-          slot: when === 'later' && chosenSlot ? { dayKey: chosenSlot.dayKey, dayLabel: chosenSlot.dayLabel, window: chosenSlot.window, startTs: chosenSlot.startTs, endTs: chosenSlot.endTs } : null,
-          cardLast4: payment === 'card' ? cardNumber.replace(/\D/g, '').slice(-4) : null,
-          note,
-          fulfillment,
-        })
-        if (!order) {
-          setPayState('fail')
-          return
-        }
-        setPayState('success')
-        setTimeout(() => navigation.replace('Track', { id: order.id }), 700)
-      }, 900)
+    let order
+    try {
+      const payload = {
+        payment: paymentLabel(),
+        paymentMethod: payment,
+        schedule: when === 'now' ? t('now') : t('schedule'),
+        slot: when === 'later' && chosenSlot ? { dayKey: chosenSlot.dayKey, dayLabel: chosenSlot.dayLabel, window: chosenSlot.window, startTs: chosenSlot.startTs, endTs: chosenSlot.endTs } : null,
+        cardLast4: payment === 'card' ? cardNumber.replace(/\D/g, '').slice(-4) : null,
+        note,
+        fulfillment,
+      }
+      if (digitalPay) {
+        setPayState('confirming')
+        setTimeout(() => {
+          try {
+            order = placeOrder(payload)
+          } catch (e) {
+            console.warn('[M10] placeOrder crashed', e?.message, e?.stack)
+            setPayState('fail')
+            return
+          }
+          if (!order) {
+            setPayState('fail')
+            return
+          }
+          setPayState('success')
+          setTimeout(() => {
+            try {
+              navigation.replace('Track', { id: order.id })
+            } catch (e) {
+              console.warn('[M10] nav to Track failed', e?.message)
+            }
+          }, 700)
+        }, 900)
+        return
+      }
+      order = placeOrder(payload)
+    } catch (e) {
+      console.warn('[M10] placeOrder crashed', e?.message, e?.stack)
       return
     }
-    const order = placeOrder({
-      payment: paymentLabel(),
-      paymentMethod: payment,
-      schedule: when === 'now' ? t('now') : t('schedule'),
-slot: when === 'later' && chosenSlot ? { dayKey: chosenSlot.dayKey, dayLabel: chosenSlot.dayLabel, window: chosenSlot.window, startTs: chosenSlot.startTs, endTs: chosenSlot.endTs } : null,
-          note,
-          fulfillment,
-        })
-    if (order) navigation.replace('Track', { id: order.id })
+    if (order) {
+      try {
+        navigation.replace('Track', { id: order.id })
+      } catch (e) {
+        console.warn('[M10] nav to Track failed', e?.message)
+      }
+    }
   }
 
   return (

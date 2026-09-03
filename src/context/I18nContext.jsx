@@ -34,6 +34,16 @@ export function I18nProvider({ children }) {
     } catch {
       /* ignore */
     }
+    // If user switches away from Arabic, reset dirMode to 'auto' so we don't
+    // keep an RTL override that's no longer visible/usable in the UI.
+    if (next !== 'ar' && next !== 'ckb' && dirMode !== 'auto') {
+      setDirModeState('auto')
+      try {
+        await AsyncStorage.setItem(KEY_DIR, 'auto')
+      } catch {
+        /* ignore */
+      }
+    }
   }
 
   const setDirMode = async (next) => {

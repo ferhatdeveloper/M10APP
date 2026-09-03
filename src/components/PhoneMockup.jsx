@@ -2,17 +2,20 @@ import { Image, Platform, Text, View } from 'react-native'
 import { colors, radius, shadow } from '../theme'
 
 /**
- * Hafif iOS-style telefon çerçevesi.
- * Çocuk olarak gösterilecek mock ekranı alır.
- * Dış çerçeve sabit, içerideki mock ekranlar prop.children ile basılır.
- * Öncelik sırası: `webview` > `image` > children (mock).
- *  - `webview` URL verildiğinde, gerçek apk.retailex.app sitesini iframe'de gösterir (sadece web).
- *  - `image` prop'u varsa gerçek ekran görüntüsünü gösterir (mock yerine).
+ * iPhone 17 Pro Max (430x932 pt) çerçevesi.
+ * Öncelik sırası:
+ *   1. `image`    → gerçek ekran görüntüsü (PNG)
+ *   2. children   → mock bileşen (MockXxx)
+ *
+ * NOT: `webview` prop burada KULLANILMAZ; iframe'ler kararlılık sorunu
+ * yarattığı için yalnızca "Tam önizleme" modal'ında (PreviewModal)
+ * gösterilir. Bu prop geriye dönük uyumluluk için kabul edilir ama yok
+ * sayılır.
  */
 export default function PhoneMockup({
   children,
   image,
-  webview,
+  webview: _webview, // eslint-disable-line no-unused-vars
   statusBarBg = '#fff',
   statusBarText = '#161616',
 }) {
@@ -20,65 +23,65 @@ export default function PhoneMockup({
     <View
       style={{
         width: 280,
-        height: 580,
-        borderRadius: 44,
+        height: 600,
+        borderRadius: 56,
         backgroundColor: '#0F0F12',
-        padding: 8,
+        padding: 9,
         ...shadow.float,
       }}
     >
       <View
         style={{
           flex: 1,
-          borderRadius: 36,
+          borderRadius: 48,
           backgroundColor: '#fff',
           overflow: 'hidden',
           position: 'relative',
         }}
       >
-        {/* Status bar */}
+        {/* Status bar — iPhone 17 Pro Max: Dynamic Island */}
         <View
           style={{
-            height: 36,
+            height: 50,
             backgroundColor: statusBarBg,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingHorizontal: 18,
-            paddingTop: 10,
+            paddingHorizontal: 22,
+            paddingTop: 14,
           }}
         >
-          <Text style={{ fontSize: 11, fontWeight: '800', color: statusBarText }}>9:41</Text>
+          <Text style={{ fontSize: 12, fontWeight: '800', color: statusBarText }}>9:41</Text>
           <View
             style={{
-              width: 90,
-              height: 22,
-              borderRadius: 14,
+              width: 100,
+              height: 26,
+              borderRadius: 18,
               backgroundColor: '#000',
               alignItems: 'center',
               justifyContent: 'center',
               position: 'absolute',
-              top: 8,
+              top: 10,
               left: '50%',
-              marginLeft: -45,
+              marginLeft: -50,
             }}
           >
             <View
               style={{
-                width: 6,
-                height: 6,
-                borderRadius: 3,
+                width: 7,
+                height: 7,
+                borderRadius: 4,
                 backgroundColor: '#1A1A1F',
               }}
             />
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <Text style={{ fontSize: 10, color: statusBarText, fontWeight: '700' }}>●●●</Text>
-            <Text style={{ fontSize: 10, color: statusBarText, fontWeight: '700' }}>5G</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <Text style={{ fontSize: 11, color: statusBarText, fontWeight: '700' }}>●●●</Text>
+            <Text style={{ fontSize: 11, color: statusBarText, fontWeight: '700' }}>5G</Text>
             <View
               style={{
-                width: 16,
-                height: 8,
+                width: 18,
+                height: 9,
                 borderRadius: 2,
                 borderWidth: 1,
                 borderColor: statusBarText,
@@ -88,22 +91,7 @@ export default function PhoneMockup({
         </View>
         {/* Content */}
         <View style={{ flex: 1, backgroundColor: '#F6F6F7' }}>
-          {Platform.OS === 'web' && webview ? (
-            // eslint-disable-next-line react-native/no-inline-styles, react/no-unknown-property
-            <iframe
-              src={webview}
-              title="M10 live"
-              style={{
-                width: '100%',
-                height: '100%',
-                border: '0',
-                backgroundColor: '#fff',
-                display: 'block',
-              }}
-              allow="camera; microphone; geolocation; clipboard-write"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-            />
-          ) : image ? (
+          {image ? (
             <Image
               source={image}
               style={{ width: '100%', height: '100%' }}

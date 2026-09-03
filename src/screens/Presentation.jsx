@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { GestureDetector, Gesture, GestureHandlerRootView } from 'react-native-gesture-handler'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react-native'
+import { ChevronLeft, ChevronRight, ExternalLink, Maximize2, X } from 'lucide-react-native'
 import SoftPress from '../components/SoftPress'
 import PhoneMockup, {
   MockAdmin,
@@ -73,23 +73,67 @@ function ScreenSlide({ slide, lang, isRTL }) {
   const subtitle = pickLocalized(slide.subtitle, lang)
   const body = pickLocalized(slide.body, lang)
   const bullets = slide.bullets || []
+  const [previewOpen, setPreviewOpen] = useState(false)
 
+  // Telefon çerçevesinin iç ölçüsü: 280 - 9*2 padding = 262 px (yaklaşık iPhone 17 Pro Max ekran oranı)
+  // iframe'in mobil görünmesi için bir scale uygulanabilir; burada native en/boy oranını koruyoruz.
   return (
     <ScrollView
       contentContainerStyle={{
-        flexDirection: isRTL ? 'row-reverse' : 'row',
-        padding: 24,
-        paddingBottom: 96,
-        gap: 24,
-        alignItems: 'flex-start',
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        paddingVertical: 24,
+        paddingHorizontal: 16,
       }}
       showsVerticalScrollIndicator={false}
     >
+      {/* Beyaz container — belirli bir alan içinde tut */}
+      <View
+        style={{
+          width: '100%',
+          maxWidth: 880,
+          backgroundColor: '#fff',
+          borderRadius: 24,
+          padding: 24,
+          flexDirection: isRTL ? 'row-reverse' : 'row',
+          gap: 24,
+          alignItems: 'flex-start',
+          ...shadow.card,
+        }}
+      >
       {/* Mock phone */}
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <PhoneMockup image={slide.image} webview={slide.webview}>
-          {slide.image || slide.webview ? null : MockComponent ? <MockComponent /> : null}
-        </PhoneMockup>
+      <View style={{ alignItems: 'center', justifyContent: 'flex-start', gap: 10 }}>
+        <View
+          style={{
+            // iframe content'i mobil gibi görünsün diye sabit tut
+            width: 280,
+            alignItems: 'center',
+          }}
+        >
+          <PhoneMockup image={slide.image}>
+            {slide.image ? null : MockComponent ? <MockComponent /> : null}
+          </PhoneMockup>
+        </View>
+        {slide.previewUrl && Platform.OS === 'web' && (
+          <SoftPress
+            onPress={() => setPreviewOpen(true)}
+            style={{
+              flexDirection: isRTL ? 'row-reverse' : 'row',
+              alignItems: 'center',
+              gap: 6,
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              borderRadius: 999,
+              backgroundColor: '#161616',
+            }}
+          >
+            <Maximize2 size={14} color="#fff" />
+            <Text style={{ color: '#fff', fontWeight: '800', fontSize: 12 }}>
+              {lang === 'ar' ? 'معاينة كاملة' : lang === 'en' ? 'Full preview' : 'Tam önizleme'}
+            </Text>
+          </SoftPress>
+        )}
       </View>
 
       {/* Text column */}
@@ -97,6 +141,7 @@ function ScreenSlide({ slide, lang, isRTL }) {
         style={{
           flex: 1,
           minWidth: 280,
+          maxWidth: 480,
           gap: 12,
           alignItems: isRTL ? 'flex-end' : 'flex-start',
         }}
@@ -195,7 +240,114 @@ function ScreenSlide({ slide, lang, isRTL }) {
           </View>
         )}
       </View>
+      {/* Full-screen preview modal — gerçek telefon boyutunda iframe */}
+      {previewOpen && slide.previewUrl && Platform.OS === 'web' && (
+        <PreviewModal url={slide.previewUrl} onClose={() => setPreviewOpen(false)} />
+      )}
+      </View>
     </ScrollView>
+  )
+}
+
+function PreviewModal({ url, onClose }) {
+  // Esc tuşuyla kapatma — web için
+  useEffect(() => {
+    if (Platform.OS !== 'web') return
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        e.stopPropagation()
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
+  }, [onClose])
+  if (Platform.OS !== 'web') return null
+  return (
+    <View
+      onPress={onClose}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9999,
+        backgroundColor: 'rgba(15,15,18,0.92)',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 60,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingHorizontal: 16,
+          backgroundColor: 'rgba(15,15,18,0.6)',
+        }}
+      >
+        <Text style={{ color: '#fff', fontWeight: '900', fontSize: 14 }}>
+          Canlı Önizleme · apk.retailex.app
+        </Text>
+        <SoftPress
+          onPress={onClose}
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: 18,
+            backgroundColor: 'rgba(255,255,255,0.15)',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <X size={18} color="#fff" />
+        </SoftPress>
+      </View>
+      {/* iPhone 17 Pro Max boyutunda iframe */}
+      <View
+        style={{
+          width: 393,
+          height: 852,
+          borderRadius: 56,
+          backgroundColor: '#0F0F12',
+          padding: 9,
+          overflow: 'hidden',
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            borderRadius: 48,
+            backgroundColor: '#fff',
+            overflow: 'hidden',
+          }}
+        >
+          {/* eslint-disable-next-line react/no-unknown-property */}
+          <iframe
+            src={url}
+            title="M10 preview full"
+            style={{
+              width: '100%',
+              height: '100%',
+              border: '0',
+              display: 'block',
+            }}
+            allow="camera; microphone; geolocation; clipboard-write"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          />
+        </View>
+      </View>
+      <Text style={{ color: '#fff', marginTop: 16, fontSize: 12, opacity: 0.7 }}>
+        Esc veya ✕ ile kapat
+      </Text>
+    </View>
   )
 }
 
@@ -205,13 +357,26 @@ function EndingSlide({ slide, lang, isRTL, onClose, t }) {
   return (
     <ScrollView
       contentContainerStyle={{
-        padding: 24,
-        paddingBottom: 96,
+        flexGrow: 1,
         alignItems: 'center',
-        gap: 16,
+        justifyContent: 'flex-start',
+        paddingVertical: 24,
+        paddingHorizontal: 16,
       }}
       showsVerticalScrollIndicator={false}
     >
+      <View
+        style={{
+          width: '100%',
+          maxWidth: 720,
+          backgroundColor: '#fff',
+          borderRadius: 24,
+          padding: 24,
+          alignItems: 'center',
+          gap: 16,
+          ...shadow.card,
+        }}
+      >
       <PhoneMockup>
         <MockProfile />
       </PhoneMockup>
@@ -250,6 +415,7 @@ function EndingSlide({ slide, lang, isRTL, onClose, t }) {
       </SoftPress>
 
       <Text style={{ color: colors.muted, fontSize: 11 }}>{meta.copyright}</Text>
+      </View>
     </ScrollView>
   )
 }
@@ -333,9 +499,9 @@ export default function PresentationScreen({ navigation }) {
   const ChevronOpp = isRTL ? ChevronLeft : ChevronRight
 
   return (
-    <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.bg }}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={['top', 'left', 'right']}>
-        <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#F4F4F6' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#F4F4F6' }} edges={['top', 'left', 'right']}>
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
         {/* Header */}
         <View
@@ -394,6 +560,7 @@ export default function PresentationScreen({ navigation }) {
           <Animated.View
             style={{
               flex: 1,
+              backgroundColor: '#F4F4F6',
               opacity: slideAnim,
               transform: [
                 {

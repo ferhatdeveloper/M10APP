@@ -34,6 +34,7 @@ export default function ProductDetailScreen({ navigation, route }) {
     storeOverrides,
     isOnStockAlert,
     toggleStockAlert,
+    addReview,
   } = useApp()
   const product = getLiveProduct(storeId, productId)
   const store = getLiveStore(storeId)

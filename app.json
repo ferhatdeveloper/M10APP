@@ -22,7 +22,10 @@
         "backgroundColor": "#E31E24"
       },
       "package": "com.m10.app",
-      "versionCode": 4
+      "versionCode": 4,
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/icon.png",
@@ -46,6 +49,12 @@
         }
       ],
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f5df0de1-7a05-4d7d-a056-217d9da60e29"
+      }
+    },
+    "owner": "dev.ferhatnas"
   }
 }

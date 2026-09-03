@@ -27,6 +27,8 @@ import {
   Sparkles,
   MessageCircle,
   Bike,
+  BookOpen,
+  Wand2,
 } from 'lucide-react-native'
 import AdminChrome, { AdminGateLayout } from '../components/AdminChrome'
 import { useApp } from '../context/AppContext'
@@ -350,6 +352,14 @@ export default function AdminScreen() {
     } catch {
       Alert.alert(t('adminImageFail'))
     }
+  }
+
+  const onAiCreateStory = () => {
+    Alert.alert(t('adminAiCreateStory'), t('adminAiComingSoon'))
+  }
+
+  const onAiEditImage = () => {
+    Alert.alert(t('adminAiEditImage'), t('adminAiComingSoon'))
   }
 
   const saveAisle = () => {
@@ -912,93 +922,301 @@ export default function AdminScreen() {
             style={{
               backgroundColor: colors.bg,
               width: desktop ? '100%' : undefined,
-              maxWidth: desktop ? 560 : undefined,
+              maxWidth: desktop ? 720 : undefined,
               maxHeight: desktop ? '88%' : '92%',
-              borderTopLeftRadius: desktop ? 16 : 20,
-              borderTopRightRadius: desktop ? 16 : 20,
-              borderRadius: desktop ? 16 : undefined,
+              borderTopLeftRadius: desktop ? 18 : 20,
+              borderTopRightRadius: desktop ? 18 : 20,
+              borderRadius: desktop ? 18 : undefined,
               overflow: 'hidden',
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.18,
+              shadowRadius: 24,
+              elevation: 12,
             }}
           >
-            <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: colors.line, backgroundColor: '#fff' }}>
+            <View style={{ padding: 18, borderBottomWidth: 1, borderBottomColor: colors.line, backgroundColor: '#fff' }}>
               <Text style={{ fontWeight: '900', fontSize: 18, textAlign: isRTL ? 'right' : 'left' }}>
                 {productForm?.id ? t('adminEditProduct') : t('adminAddProduct')}
               </Text>
             </View>
-            <ScrollView contentContainerStyle={{ padding: 16 }}>
-              <Field label="ID" value={productForm?.id || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, id: v }))} isRTL={isRTL} placeholder="mm-new" />
-              <Field label={`${t('adminName')} (AR)`} value={productForm?.nameAr || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameAr: v }))} isRTL={isRTL} />
-              <Field label={`${t('adminName')} (EN)`} value={productForm?.nameEn || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameEn: v }))} isRTL={isRTL} />
-              <Field label={`${t('adminName')} (TR)`} value={productForm?.nameTr || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameTr: v }))} isRTL={isRTL} />
-              <Field label={t('adminPrice')} value={productForm?.price || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, price: v }))} isRTL={isRTL} keyboardType="number-pad" />
-              <Field label={t('adminStock')} value={productForm?.stock || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, stock: v }))} isRTL={isRTL} keyboardType="number-pad" />
-              <Field label={t('adminBarcode')} value={productForm?.barcode || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, barcode: v }))} isRTL={isRTL} />
-              <Field label={t('adminImageUrl')} value={productForm?.image || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, image: v }))} isRTL={isRTL} />
-              <Pressable
-                onPress={pickImage}
-                style={{
-                  backgroundColor: colors.yellow,
-                  borderRadius: 10,
-                  padding: 12,
-                  flexDirection: isRTL ? 'row-reverse' : 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  marginBottom: 10,
-                }}
-              >
-                <ImagePlus size={16} color={colors.ink} />
-                <Text style={{ fontWeight: '800' }}>{t('adminPickImage')}</Text>
-              </Pressable>
-              <ProductAiImageButton t={t} isRTL={isRTL} productForm={productForm} setProductForm={setProductForm} />
-              {productForm?.image ? (
-                <Image source={{ uri: productForm.image }} style={{ width: '100%', height: 140, borderRadius: 10, marginBottom: 10 }} />
-              ) : null}
-              <Text style={{ fontWeight: '700', marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }}>{t('adminAisle')}</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, marginBottom: 12 }}>
-                {liveAisles.filter((a) => a.enabled !== false).map((a) => (
-                  <Chip
-                    key={a.id}
-                    label={aisleLabel(a)}
-                    on={productForm?.aisle === a.id}
-                    onPress={() => setProductForm((f) => ({ ...f, aisle: a.id }))}
-                    isRTL={isRTL}
-                  />
-                ))}
-              </ScrollView>
-              <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                <Text style={{ fontWeight: '700' }}>tryInRoom</Text>
-                <Switch
-                  value={!!productForm?.tryInRoom}
-                  onValueChange={(v) => setProductForm((f) => ({ ...f, tryInRoom: v }))}
-                  trackColor={{ true: colors.red, false: '#ddd' }}
-                />
-              </View>
-              <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <Text style={{ fontWeight: '700' }}>{t('adminDisabled')}</Text>
-                <Switch
-                  value={!!productForm?.disabled}
-                  onValueChange={(v) => setProductForm((f) => ({ ...f, disabled: v }))}
-                  trackColor={{ true: colors.red, false: '#ddd' }}
-                />
-              </View>
-              <Pressable onPress={saveProduct} style={{ backgroundColor: colors.red, borderRadius: 12, padding: 14, alignItems: 'center' }}>
-                <Text style={{ color: '#fff', fontWeight: '900' }}>{t('save')}</Text>
-              </Pressable>
-              {productForm?.id ? (
-                <Pressable
-                  onPress={() => {
-                    adminToggleProductDisabled(productForm.id)
-                    setProductForm(null)
+            <ScrollView contentContainerStyle={{ padding: desktop ? 20 : 16 }}>
+              {desktop ? (
+                <View
+                  style={{
+                    flexDirection: isRTL ? 'row-reverse' : 'row',
+                    gap: 20,
+                    alignItems: 'flex-start',
                   }}
-                  style={{ padding: 14, alignItems: 'center' }}
                 >
-                  <Text style={{ color: colors.red, fontWeight: '700' }}>{t('adminToggleDisable')}</Text>
-                </Pressable>
-              ) : null}
-              <Pressable onPress={() => setProductForm(null)} style={{ padding: 14, alignItems: 'center' }}>
-                <Text style={{ color: colors.muted, fontWeight: '700' }}>{t('cancel')}</Text>
-              </Pressable>
+                  <View style={{ flex: 1, minWidth: 260 }}>
+                    <Text style={{ fontWeight: '700', fontSize: 12, color: colors.muted, marginBottom: 6, textAlign: isRTL ? 'right' : 'left' }}>
+                      {t('adminImageUrl')}
+                    </Text>
+                    <Field label="" value={productForm?.image || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, image: v }))} isRTL={isRTL} />
+                    <Pressable
+                      onPress={pickImage}
+                      style={{
+                        backgroundColor: colors.yellow,
+                        borderRadius: 10,
+                        padding: 12,
+                        flexDirection: isRTL ? 'row-reverse' : 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        marginBottom: 10,
+                      }}
+                    >
+                      <ImagePlus size={16} color={colors.ink} />
+                      <Text style={{ fontWeight: '800' }}>{t('adminPickImage')}</Text>
+                    </Pressable>
+                    <ProductAiImageButton t={t} isRTL={isRTL} productForm={productForm} setProductForm={setProductForm} />
+                    {productForm?.image ? (
+                      <Image
+                        source={{ uri: productForm.image }}
+                        style={{ width: '100%', height: 200, borderRadius: 12, marginBottom: 10 }}
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <View
+                        style={{
+                          width: '100%',
+                          height: 200,
+                          borderRadius: 12,
+                          marginBottom: 10,
+                          backgroundColor: colors.bg,
+                          borderWidth: 1,
+                          borderColor: colors.line,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <ImagePlus size={28} color={colors.muted} />
+                      </View>
+                    )}
+                    <View
+                      style={{
+                        flexDirection: isRTL ? 'row-reverse' : 'row',
+                        gap: 8,
+                        marginBottom: 10,
+                      }}
+                    >
+                      <Pressable
+                        onPress={onAiCreateStory}
+                        style={{
+                          flex: 1,
+                          backgroundColor: '#7C3AED',
+                          borderRadius: 10,
+                          paddingVertical: 12,
+                          paddingHorizontal: 10,
+                          flexDirection: isRTL ? 'row-reverse' : 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 6,
+                        }}
+                      >
+                        <BookOpen size={16} color="#fff" />
+                        <Text style={{ color: '#fff', fontWeight: '800', fontSize: 12 }}>{t('adminAiCreateStory')}</Text>
+                      </Pressable>
+                      <Pressable
+                        onPress={onAiEditImage}
+                        style={{
+                          flex: 1,
+                          backgroundColor: '#10B981',
+                          borderRadius: 10,
+                          paddingVertical: 12,
+                          paddingHorizontal: 10,
+                          flexDirection: isRTL ? 'row-reverse' : 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 6,
+                        }}
+                      >
+                        <Wand2 size={16} color="#fff" />
+                        <Text style={{ color: '#fff', fontWeight: '800', fontSize: 12 }}>{t('adminAiEditImage')}</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                  <View style={{ flex: 1.2, minWidth: 280 }}>
+                    <Field label="ID" value={productForm?.id || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, id: v }))} isRTL={isRTL} placeholder="mm-new" />
+                    <Field label={`${t('adminName')} (AR)`} value={productForm?.nameAr || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameAr: v }))} isRTL={isRTL} />
+                    <Field label={`${t('adminName')} (EN)`} value={productForm?.nameEn || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameEn: v }))} isRTL={isRTL} />
+                    <Field label={`${t('adminName')} (TR)`} value={productForm?.nameTr || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameTr: v }))} isRTL={isRTL} />
+                    <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', gap: 10 }}>
+                      <View style={{ flex: 1 }}>
+                        <Field label={t('adminPrice')} value={productForm?.price || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, price: v }))} isRTL={isRTL} keyboardType="number-pad" />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Field label={t('adminStock')} value={productForm?.stock || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, stock: v }))} isRTL={isRTL} keyboardType="number-pad" />
+                      </View>
+                    </View>
+                    <Field label={t('adminBarcode')} value={productForm?.barcode || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, barcode: v }))} isRTL={isRTL} />
+                    <Text style={{ fontWeight: '700', marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }}>{t('adminAisle')}</Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, marginBottom: 12 }}>
+                      {liveAisles.filter((a) => a.enabled !== false).map((a) => (
+                        <Chip
+                          key={a.id}
+                          label={aisleLabel(a)}
+                          on={productForm?.aisle === a.id}
+                          onPress={() => setProductForm((f) => ({ ...f, aisle: a.id }))}
+                          isRTL={isRTL}
+                        />
+                      ))}
+                    </ScrollView>
+                    <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                      <Text style={{ fontWeight: '700' }}>tryInRoom</Text>
+                      <Switch
+                        value={!!productForm?.tryInRoom}
+                        onValueChange={(v) => setProductForm((f) => ({ ...f, tryInRoom: v }))}
+                        trackColor={{ true: colors.red, false: '#ddd' }}
+                      />
+                    </View>
+                    <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                      <Text style={{ fontWeight: '700' }}>{t('adminDisabled')}</Text>
+                      <Switch
+                        value={!!productForm?.disabled}
+                        onValueChange={(v) => setProductForm((f) => ({ ...f, disabled: v }))}
+                        trackColor={{ true: colors.red, false: '#ddd' }}
+                      />
+                    </View>
+                    <Pressable onPress={saveProduct} style={{ backgroundColor: colors.red, borderRadius: 12, padding: 14, alignItems: 'center' }}>
+                      <Text style={{ color: '#fff', fontWeight: '900' }}>{t('save')}</Text>
+                    </Pressable>
+                    {productForm?.id ? (
+                      <Pressable
+                        onPress={() => {
+                          adminToggleProductDisabled(productForm.id)
+                          setProductForm(null)
+                        }}
+                        style={{ padding: 14, alignItems: 'center' }}
+                      >
+                        <Text style={{ color: colors.red, fontWeight: '700' }}>{t('adminToggleDisable')}</Text>
+                      </Pressable>
+                    ) : null}
+                    <Pressable onPress={() => setProductForm(null)} style={{ padding: 14, alignItems: 'center' }}>
+                      <Text style={{ color: colors.muted, fontWeight: '700' }}>{t('cancel')}</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              ) : (
+                <>
+                  <Field label="ID" value={productForm?.id || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, id: v }))} isRTL={isRTL} placeholder="mm-new" />
+                  <Field label={`${t('adminName')} (AR)`} value={productForm?.nameAr || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameAr: v }))} isRTL={isRTL} />
+                  <Field label={`${t('adminName')} (EN)`} value={productForm?.nameEn || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameEn: v }))} isRTL={isRTL} />
+                  <Field label={`${t('adminName')} (TR)`} value={productForm?.nameTr || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, nameTr: v }))} isRTL={isRTL} />
+                  <Field label={t('adminPrice')} value={productForm?.price || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, price: v }))} isRTL={isRTL} keyboardType="number-pad" />
+                  <Field label={t('adminStock')} value={productForm?.stock || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, stock: v }))} isRTL={isRTL} keyboardType="number-pad" />
+                  <Field label={t('adminBarcode')} value={productForm?.barcode || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, barcode: v }))} isRTL={isRTL} />
+                  <Field label={t('adminImageUrl')} value={productForm?.image || ''} onChangeText={(v) => setProductForm((f) => ({ ...f, image: v }))} isRTL={isRTL} />
+                  <Pressable
+                    onPress={pickImage}
+                    style={{
+                      backgroundColor: colors.yellow,
+                      borderRadius: 10,
+                      padding: 12,
+                      flexDirection: isRTL ? 'row-reverse' : 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 8,
+                      marginBottom: 10,
+                    }}
+                  >
+                    <ImagePlus size={16} color={colors.ink} />
+                    <Text style={{ fontWeight: '800' }}>{t('adminPickImage')}</Text>
+                  </Pressable>
+                  <ProductAiImageButton t={t} isRTL={isRTL} productForm={productForm} setProductForm={setProductForm} />
+                  {productForm?.image ? (
+                    <Image source={{ uri: productForm.image }} style={{ width: '100%', height: 140, borderRadius: 10, marginBottom: 10 }} />
+                  ) : null}
+                  <View
+                    style={{
+                      flexDirection: isRTL ? 'row-reverse' : 'row',
+                      gap: 8,
+                      marginBottom: 10,
+                    }}
+                  >
+                    <Pressable
+                      onPress={onAiCreateStory}
+                      style={{
+                        flex: 1,
+                        backgroundColor: '#7C3AED',
+                        borderRadius: 10,
+                        paddingVertical: 12,
+                        paddingHorizontal: 10,
+                        flexDirection: isRTL ? 'row-reverse' : 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                      }}
+                    >
+                      <BookOpen size={16} color="#fff" />
+                      <Text style={{ color: '#fff', fontWeight: '800', fontSize: 12 }}>{t('adminAiCreateStory')}</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={onAiEditImage}
+                      style={{
+                        flex: 1,
+                        backgroundColor: '#10B981',
+                        borderRadius: 10,
+                        paddingVertical: 12,
+                        paddingHorizontal: 10,
+                        flexDirection: isRTL ? 'row-reverse' : 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                      }}
+                    >
+                      <Wand2 size={16} color="#fff" />
+                      <Text style={{ color: '#fff', fontWeight: '800', fontSize: 12 }}>{t('adminAiEditImage')}</Text>
+                    </Pressable>
+                  </View>
+                  <Text style={{ fontWeight: '700', marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }}>{t('adminAisle')}</Text>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, marginBottom: 12 }}>
+                    {liveAisles.filter((a) => a.enabled !== false).map((a) => (
+                      <Chip
+                        key={a.id}
+                        label={aisleLabel(a)}
+                        on={productForm?.aisle === a.id}
+                        onPress={() => setProductForm((f) => ({ ...f, aisle: a.id }))}
+                        isRTL={isRTL}
+                      />
+                    ))}
+                  </ScrollView>
+                  <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <Text style={{ fontWeight: '700' }}>tryInRoom</Text>
+                    <Switch
+                      value={!!productForm?.tryInRoom}
+                      onValueChange={(v) => setProductForm((f) => ({ ...f, tryInRoom: v }))}
+                      trackColor={{ true: colors.red, false: '#ddd' }}
+                    />
+                  </View>
+                  <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                    <Text style={{ fontWeight: '700' }}>{t('adminDisabled')}</Text>
+                    <Switch
+                      value={!!productForm?.disabled}
+                      onValueChange={(v) => setProductForm((f) => ({ ...f, disabled: v }))}
+                      trackColor={{ true: colors.red, false: '#ddd' }}
+                    />
+                  </View>
+                  <Pressable onPress={saveProduct} style={{ backgroundColor: colors.red, borderRadius: 12, padding: 14, alignItems: 'center' }}>
+                    <Text style={{ color: '#fff', fontWeight: '900' }}>{t('save')}</Text>
+                  </Pressable>
+                  {productForm?.id ? (
+                    <Pressable
+                      onPress={() => {
+                        adminToggleProductDisabled(productForm.id)
+                        setProductForm(null)
+                      }}
+                      style={{ padding: 14, alignItems: 'center' }}
+                    >
+                      <Text style={{ color: colors.red, fontWeight: '700' }}>{t('adminToggleDisable')}</Text>
+                    </Pressable>
+                  ) : null}
+                  <Pressable onPress={() => setProductForm(null)} style={{ padding: 14, alignItems: 'center' }}>
+                    <Text style={{ color: colors.muted, fontWeight: '700' }}>{t('cancel')}</Text>
+                  </Pressable>
+                </>
+              )}
             </ScrollView>
           </View>
         </View>
@@ -1017,12 +1235,17 @@ export default function AdminScreen() {
           <View
             style={{
               backgroundColor: '#fff',
-              padding: 16,
+              padding: desktop ? 22 : 16,
               width: desktop ? '100%' : undefined,
-              maxWidth: desktop ? 520 : undefined,
-              borderTopLeftRadius: desktop ? 16 : 20,
-              borderTopRightRadius: desktop ? 16 : 20,
-              borderRadius: desktop ? 16 : undefined,
+              maxWidth: desktop ? 560 : undefined,
+              borderTopLeftRadius: desktop ? 18 : 20,
+              borderTopRightRadius: desktop ? 18 : 20,
+              borderRadius: desktop ? 18 : undefined,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.18,
+              shadowRadius: 24,
+              elevation: 12,
             }}
           >
             <Text style={{ fontWeight: '900', fontSize: 18, marginBottom: 12, textAlign: isRTL ? 'right' : 'left' }}>
@@ -1055,13 +1278,18 @@ export default function AdminScreen() {
           <View
             style={{
               backgroundColor: '#fff',
-              padding: 16,
+              padding: desktop ? 22 : 16,
               maxHeight: desktop ? '88%' : '90%',
               width: desktop ? '100%' : undefined,
-              maxWidth: desktop ? 560 : undefined,
-              borderTopLeftRadius: desktop ? 16 : 20,
-              borderTopRightRadius: desktop ? 16 : 20,
-              borderRadius: desktop ? 16 : undefined,
+              maxWidth: desktop ? 640 : undefined,
+              borderTopLeftRadius: desktop ? 18 : 20,
+              borderTopRightRadius: desktop ? 18 : 20,
+              borderRadius: desktop ? 18 : undefined,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.18,
+              shadowRadius: 24,
+              elevation: 12,
             }}
           >
             <ScrollView>

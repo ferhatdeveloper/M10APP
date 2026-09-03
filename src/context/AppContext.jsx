@@ -1011,75 +1011,93 @@ export function AppProvider({ children }) {
   }
 
   const placeOrder = ({ payment, schedule, note, slot, cardLast4, paymentMethod, walletPaid }) => {
-    if (isOffline) return null
-    const fee = cartFee
-    const discount = cartDiscount
-    const method = paymentMethod || (payment === 'card' || payment === 'wallet' || payment === 'apple' || payment === 'google' ? payment : 'cash')
-    let paidFromWallet = 0
-    if (method === 'wallet' || walletPaid) {
-      paidFromWallet = Math.min(walletBalance, cartPayable)
-      if (paidFromWallet < cartPayable && method === 'wallet') return null
-      const nextBal = walletBalance - paidFromWallet
-      setWalletBalance(nextBal)
-      persist('m10-wallet', nextBal)
+    try {
+      if (isOffline) return null
+      const fee = cartFee
+      const discount = cartDiscount
+      const method = paymentMethod || (payment === 'card' || payment === 'wallet' || payment === 'apple' || payment === 'google' ? payment : 'cash')
+      let paidFromWallet = 0
+      if (method === 'wallet' || walletPaid) {
+        paidFromWallet = Math.min(walletBalance, cartPayable)
+        if (paidFromWallet < cartPayable && method === 'wallet') return null
+        const nextBal = walletBalance - paidFromWallet
+        setWalletBalance(nextBal)
+        persist('m10-wallet', nextBal)
+      }
+      const addrCoords = coordsForAddress(user.address) || { lat: 33.3152, lng: 44.3661 }
+      const order = {
+        id: `M10-${Date.now().toString().slice(-7)}`,
+        createdAt: Date.now(),
+        items: cart,
+        storeId: cart[0]?.storeId,
+        total: cartPayable,
+        subtotal: cartTotal,
+        fee,
+        discount,
+        payment: payment || method,
+        paymentMethod: method,
+        schedule: schedule || 'now',
+        slot: slot || null,
+        cardLast4: cardLast4 || null,
+        walletPaid: paidFromWallet || 0,
+        note,
+        address: {
+          ...(user.address || {}),
+          lat: user.address?.lat ?? addrCoords.lat,
+          lng: user.address?.lng ?? addrCoords.lng,
+        },
+        status: 'confirmed',
+        coupon: coupon || null,
+        pointsEarned: Math.round(cartTotal / 1000),
+        paymentStatus: method === 'cash' ? 'cod' : 'paid',
+      }
+      const next = [order, ...orders]
+      persist('m10-orders', next)
+      setOrders(next)
+      setUser((u) => {
+        const updated = { ...u, points: (u.points || 0) + order.pointsEarned }
+        persistUser(updated)
+        return updated
+      })
+      if (coupon) {
+        setCoupon(null)
+        persist('m10-coupon', null)
+      }
+      try {
+        pushNotification({
+          id: `n-order-${order.id}`,
+          titleAr: 'تم تأكيد طلبك',
+          titleEn: 'Order confirmed',
+          titleTr: 'Siparişin onaylandı',
+          bodyAr: `${order.id} — يمكنك تتبع الطلب.`,
+          bodyEn: `${order.id} — you can track it now.`,
+          bodyTr: `${order.id} — şimdi takip edebilirsin.`,
+          cta: { screen: 'Track', params: { id: order.id } },
+        })
+      } catch (e) {
+        console.warn('[M10] pushNotification failed', e?.message)
+      }
+      try {
+        if (user?.pushEnabled) {
+          scheduleLocalDemo({
+            title: 'M10',
+            body: order.id,
+            seconds: 0,
+          }).catch(() => {})
+        }
+      } catch (e) {
+        console.warn('[M10] scheduleLocalDemo failed', e?.message)
+      }
+      try {
+        clearCart()
+      } catch (e) {
+        console.warn('[M10] clearCart failed', e?.message)
+      }
+      return order
+    } catch (e) {
+      console.warn('[M10] placeOrder crashed', e?.message, e?.stack)
+      return null
     }
-    const order = {
-      id: `M10-${Date.now().toString().slice(-7)}`,
-      createdAt: Date.now(),
-      items: cart,
-      storeId: cart[0]?.storeId,
-      total: cartPayable,
-      subtotal: cartTotal,
-      fee,
-      discount,
-      payment: payment || method,
-      paymentMethod: method,
-      schedule: schedule || 'now',
-      slot: slot || null,
-      cardLast4: cardLast4 || null,
-      walletPaid: paidFromWallet || 0,
-      note,
-      address: {
-        ...(user.address || {}),
-        lat: user.address?.lat ?? coordsForAddress(user.address).lat,
-        lng: user.address?.lng ?? coordsForAddress(user.address).lng,
-      },
-      status: 'confirmed',
-      coupon: coupon || null,
-      pointsEarned: Math.round(cartTotal / 1000),
-      paymentStatus: method === 'cash' ? 'cod' : 'paid',
-    }
-    const next = [order, ...orders]
-    persist('m10-orders', next)
-    setOrders(next)
-    setUser((u) => {
-      const updated = { ...u, points: (u.points || 0) + order.pointsEarned }
-      persistUser(updated)
-      return updated
-    })
-    if (coupon) {
-      setCoupon(null)
-      persist('m10-coupon', null)
-    }
-    pushNotification({
-      id: `n-order-${order.id}`,
-      titleAr: 'تم تأكيد طلبك',
-      titleEn: 'Order confirmed',
-      titleTr: 'Siparişin onaylandı',
-      bodyAr: `${order.id} — يمكنك تتبع الطلب.`,
-      bodyEn: `${order.id} — you can track it now.`,
-      bodyTr: `${order.id} — şimdi takip edebilirsin.`,
-      cta: { screen: 'Track', params: { id: order.id } },
-    })
-    if (user?.pushEnabled) {
-      scheduleLocalDemo({
-        title: 'M10',
-        body: order.id,
-        seconds: 0,
-      }).catch(() => {})
-    }
-    clearCart()
-    return order
   }
 
   const subscribePlus = () => {

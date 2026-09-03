@@ -55,24 +55,25 @@ function MenuRow({ icon: Icon, label, hint, onPress, isRTL, last }) {
 }
 
 function safeNavigate(navigation, name, params) {
-  try {
-    const root = navigation.getParent?.() || navigation
-    const state = root.getState?.()
-    const exists = state?.routeNames?.includes(name)
-    if (!exists) {
-      console.warn('[M10] navigate: route not found', name)
-      return false
+  // Walk up the navigator tree to find a parent that knows the target route.
+  let nav = navigation
+  let attempts = 6
+  while (nav && attempts-- > 0) {
+    try {
+      const state = nav.getState?.()
+      if (state?.routeNames?.includes(name)) {
+        nav.navigate(name, params)
+        return true
+      }
+    } catch {
+      /* keep walking up */
     }
-  } catch {
-    /* fall through */
+    const parent = nav.getParent?.()
+    if (!parent || parent === nav) break
+    nav = parent
   }
-  try {
-    navigation.navigate(name, params)
-    return true
-  } catch (e) {
-    console.warn('[M10] navigate crashed', name, e?.message)
-    return false
-  }
+  console.warn('[M10] safeNavigate: route not found in any parent', name)
+  return false
 }
 
 function resetTo(navigation, name) {
@@ -236,39 +237,41 @@ export default function ProfileScreen({ navigation }) {
           })}
         </View>
 
-        <View style={{ backgroundColor: '#fff', borderRadius: 18, padding: 14, ...shadow.soft }}>
-          <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-            <Settings2 size={18} color={colors.red} />
-            <Text style={{ fontWeight: '800' }}>{t('layoutDirection')}</Text>
+        {lang === 'ar' ? (
+          <View style={{ backgroundColor: '#fff', borderRadius: 18, padding: 14, ...shadow.soft }}>
+            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <Settings2 size={18} color={colors.red} />
+              <Text style={{ fontWeight: '800' }}>{t('layoutDirection')}</Text>
+            </View>
+            <Text style={{ color: colors.muted, fontSize: 12, marginBottom: 10, textAlign: isRTL ? 'right' : 'left' }}>
+              {t('layoutDirectionHint')}
+            </Text>
+            {[
+              { id: 'auto', label: t('dirAuto'), hint: t('dirAutoHint') },
+              { id: 'rtl', label: t('dirRtl'), hint: t('dirRtlHint') },
+              { id: 'ltr', label: t('dirLtr'), hint: t('dirLtrHint') },
+            ].map((opt) => {
+              const on = dirMode === opt.id
+              return (
+                <SoftPress
+                  key={opt.id}
+                  onPress={() => setDirMode(opt.id)}
+                  style={{
+                    padding: 12,
+                    borderRadius: 12,
+                    marginBottom: 6,
+                    backgroundColor: on ? colors.redSoft : colors.bg,
+                    borderWidth: 1,
+                    borderColor: on ? colors.red : colors.line,
+                  }}
+                >
+                  <Text style={{ fontWeight: '800', color: on ? colors.red : colors.ink }}>{opt.label}</Text>
+                  <Text style={{ color: colors.muted, fontSize: 12, marginTop: 2 }}>{opt.hint}</Text>
+                </SoftPress>
+              )
+            })}
           </View>
-          <Text style={{ color: colors.muted, fontSize: 12, marginBottom: 10, textAlign: isRTL ? 'right' : 'left' }}>
-            {t('layoutDirectionHint')}
-          </Text>
-          {[
-            { id: 'auto', label: t('dirAuto'), hint: t('dirAutoHint') },
-            { id: 'rtl', label: t('dirRtl'), hint: t('dirRtlHint') },
-            { id: 'ltr', label: t('dirLtr'), hint: t('dirLtrHint') },
-          ].map((opt) => {
-            const on = dirMode === opt.id
-            return (
-              <SoftPress
-                key={opt.id}
-                onPress={() => setDirMode(opt.id)}
-                style={{
-                  padding: 12,
-                  borderRadius: 12,
-                  marginBottom: 6,
-                  backgroundColor: on ? colors.redSoft : colors.bg,
-                  borderWidth: 1,
-                  borderColor: on ? colors.red : colors.line,
-                }}
-              >
-                <Text style={{ fontWeight: '800', color: on ? colors.red : colors.ink }}>{opt.label}</Text>
-                <Text style={{ color: colors.muted, fontSize: 12, marginTop: 2 }}>{opt.hint}</Text>
-              </SoftPress>
-            )
-          })}
-        </View>
+        ) : null}
 
         {isLoggedIn ? (
           <View style={{ backgroundColor: '#fff', borderRadius: 18, overflow: 'hidden', ...shadow.soft }}>

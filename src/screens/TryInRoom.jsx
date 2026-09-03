@@ -12,11 +12,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { CameraView, useCameraPermissions } from 'expo-camera'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
-import { Camera, RotateCcw, ShoppingBag, X } from 'lucide-react-native'
+import { Box, Camera, RotateCcw, ShoppingBag, X } from 'lucide-react-native'
 import SoftPress from '../components/SoftPress'
+import ARModelScene from '../components/ARModelScene'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
-import { arOverlayHeight } from '../data/arModels'
+import { arModelScale, arModelSource, arOverlayHeight } from '../data/arModels'
 import { arProductImage, canTryInRoom, getProduct, productName } from '../data/mock'
 import { colors, radius, shadow } from '../theme'
 
@@ -42,6 +43,12 @@ export default function TryInRoomScreen({ navigation, route }) {
   const cutoutUri = useMemo(() => arProductImage(product), [product])
   const baseH = useMemo(() => arOverlayHeight(product?.id), [product?.id])
   const baseW = Math.round(baseH * 0.92)
+  // Prefer the real .glb 3D model when available on this platform.
+  // Native-only — web falls back to the 2D cutout because expo-gl's WebGL
+  // implementation is too unreliable on web for production use.
+  const use3D = Platform.OS !== 'web' && !!product?.id
+  const modelAsset = useMemo(() => (use3D ? arModelSource(product?.id) : null), [use3D, product?.id])
+  const modelScale = useMemo(() => arModelScale(product?.id), [product?.id])
 
   const syncTransform = useCallback((next) => {
     tfRef.current = next
@@ -201,17 +208,30 @@ export default function TryInRoomScreen({ navigation, route }) {
                   width: baseW * tf.scale,
                   height: baseH * tf.scale,
                   transform: [{ rotate: `${tf.rotation}deg` }],
+                  overflow: 'hidden',
+                  borderRadius: 14,
                 },
               ]}
             >
-              <Image
-                key={`${cutoutUri}-${reloadKey}`}
-                source={{ uri: cutoutUri }}
-                style={styles.cutoutImage}
-                resizeMode="contain"
-                onLoad={() => setImgState('ready')}
-                onError={() => setImgState('error')}
-              />
+              {use3D ? (
+                <ARModelScene
+                  asset={modelAsset}
+                  scale={modelScale}
+                  height={baseH * tf.scale}
+                  isRTL={isRTL}
+                  backgroundColor="transparent"
+                  onError={() => setImgState('error')}
+                />
+              ) : (
+                <Image
+                  key={`${cutoutUri}-${reloadKey}`}
+                  source={{ uri: cutoutUri }}
+                  style={styles.cutoutImage}
+                  resizeMode="contain"
+                  onLoad={() => setImgState('ready')}
+                  onError={() => setImgState('error')}
+                />
+              )}
             </View>
 
             {imgState === 'loading' ? (
@@ -245,6 +265,12 @@ export default function TryInRoomScreen({ navigation, route }) {
             <Text style={styles.titleText} numberOfLines={1}>
               {productName(product, lang)}
             </Text>
+            {use3D ? (
+              <View style={styles.badge3d} pointerEvents="none">
+                <Box size={10} color="#000" strokeWidth={3} />
+                <Text style={styles.badge3dText}>3D</Text>
+              </View>
+            ) : null}
           </View>
           <SoftPress onPress={reset} style={styles.iconBtn} accessibilityLabel={t('tryInRoomReset')}>
             <RotateCcw size={20} color="#fff" strokeWidth={2.5} />
@@ -403,16 +429,35 @@ const styles = StyleSheet.create({
   },
   titlePill: {
     flex: 1,
+    flexDirection: 'row',
     backgroundColor: 'rgba(22,22,22,0.72)',
     borderRadius: 999,
     paddingHorizontal: 14,
     paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
   titleText: {
     color: '#fff',
     fontWeight: '800',
     fontSize: 14,
     textAlign: 'center',
+  },
+  badge3d: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#FFF200',
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 999,
+  },
+  badge3dText: {
+    color: '#000',
+    fontWeight: '900',
+    fontSize: 10,
+    letterSpacing: 0.5,
   },
   gestureHint: {
     alignSelf: 'center',

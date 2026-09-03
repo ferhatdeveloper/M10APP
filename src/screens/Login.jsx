@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Apple, BookOpen, Chrome } from 'lucide-react-native'
+import { Apple, BookOpen } from 'lucide-react-native'
 import TopBar from '../components/TopBar'
 import Logo from '../components/Logo'
 import SoftPress from '../components/SoftPress'
@@ -16,8 +16,18 @@ export default function LoginScreen({ navigation }) {
   const handleSocial = (provider) => {
     Alert.alert(provider === 'google' ? 'Google' : 'Apple', t('signInMockNotice'))
     setTimeout(() => {
-      loginWithProvider(provider)
-      navigation.replace('Tabs')
+      try {
+        loginWithProvider(provider)
+      } catch (e) {
+        console.warn('[M10] social login failed', e?.message)
+      }
+      try {
+        const root = navigation.getParent?.() || navigation
+        if (typeof root.reset === 'function') root.reset({ index: 0, routes: [{ name: 'Tabs' }] })
+        else navigation.navigate('Tabs')
+      } catch (e) {
+        console.warn('[M10] navigate to Tabs failed', e?.message)
+      }
     }, 700)
   }
   const [phone, setPhone] = useState('')
@@ -43,7 +53,18 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={[]}>
-      <TopBar title={t('loginSignup')} onBack={() => navigation.goBack()} />
+      <TopBar title={t('loginSignup')} onBack={() => {
+        try {
+          if (navigation.canGoBack?.()) navigation.goBack()
+          else {
+            const root = navigation.getParent?.() || navigation
+            if (typeof root.reset === 'function') root.reset({ index: 0, routes: [{ name: 'Tabs' }] })
+            else navigation.navigate('Tabs')
+          }
+        } catch (e) {
+          console.warn('[M10] goBack failed', e?.message)
+        }
+      }} />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }} keyboardShouldPersistTaps="handled">
           <View style={{ alignItems: 'center', paddingTop: 12, paddingBottom: 4 }}>
@@ -142,7 +163,7 @@ export default function LoginScreen({ navigation }) {
                 borderColor: colors.line,
               }}
             >
-              <Chrome size={18} color="#4285F4" />
+              <Text style={{ fontWeight: '900', fontSize: 18, color: '#4285F4' }}>G</Text>
               <Text style={{ fontWeight: '800' }}>{t('signInGoogle')}</Text>
             </SoftPress>
             <SoftPress
