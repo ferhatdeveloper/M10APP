@@ -10,16 +10,22 @@ COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps --no-audit --no-fund
 
 COPY . .
-RUN chmod +x scripts/start-metro.sh
+RUN chmod +x scripts/start-metro.sh scripts/patch-expo-anonymous-manifest.js
+# Expo Go signed-manifest 500 in CI: serve anonymous unsigned manifest.
+RUN node scripts/patch-expo-anonymous-manifest.js
 
 ENV CI=1
 ENV EXPO_NO_TELEMETRY=1
 ENV EXPO_NO_INTERACTIVE=1
+ENV EXPO_NO_DOTENV=1
+ENV EXPO_OFFLINE=1
+ENV EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
 ENV PUBLIC_HOST=72.60.182.107
 ENV EXPO_PACKAGER_HOSTNAME=72.60.182.107
+ENV REACT_NATIVE_PACKAGER_HOSTNAME=72.60.182.107
 ENV EXPO_PACKAGER_PROXY_URL=http://72.60.182.107:8081
 ENV EXPO_PORT=8081
 
-EXPOSE 8081
+EXPOSE 8081 19000 19001
 
 CMD ["scripts/start-metro.sh"]

@@ -64,16 +64,23 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 > Canlı adres: `https://metro.retailex.app` (Traefik 443 → container 8081).
 > **QR: `exp://72.60.182.107:8081`** — domain kullanma (`metro.retailex.app` HTTPS/HSTS → TLS hatası).
 
-**Zorunlu env (Dokploy panelinde de aynı değerler olmalı):**
+**Zorunlu env (EXFINPDKS compose kalıbı — Dokploy panelinde de aynı):**
 
 | Env | Değer | Açıklama |
 |-----|-------|----------|
-| `PUBLIC_HOST` | `metro.retailex.app` | Manifest içindeki public hostname |
-| `EXPO_PACKAGER_HOSTNAME` | `metro.retailex.app` | Aynı |
+| `CI` | `1` | Non-interactive; imza prompt’unu keser |
+| `EXPO_OFFLINE` | `1` | `npx expo start --offline` — online imza yolu kapalı |
+| `EXPO_NO_DOTENV` | `1` | `.env` okuma yok |
+| `EXPO_DEVTOOLS_LISTEN_ADDRESS` | `0.0.0.0` | Metro tüm arayüzlerde dinler |
+| `PUBLIC_HOST` | `72.60.182.107` | Manifest hostname (IP — TLS/HSTS yok) |
+| `EXPO_PACKAGER_HOSTNAME` | `72.60.182.107` | Aynı |
+| `REACT_NATIVE_PACKAGER_HOSTNAME` | `72.60.182.107` | Aynı |
 | `EXPO_PACKAGER_PROXY_URL` | `http://72.60.182.107:8081` | Manifest/bundle URL’leri düz HTTP IP |
 | `EXPO_PORT` | `8081` | Container içi Metro portu |
 
-`EXPO_PACKAGER_PROXY_URL` yoksa Expo yanlış porta düşer. **8081 host publish** şart — aksi halde Expo Go timeout verir.
+Komut: **`npx expo start --offline --port 8081`** (`--host lan` kullanma — Expo CLI v6’da `--offline` ile çakışır ve imza 500 üretir).
+
+`EXPO_PACKAGER_PROXY_URL` yoksa Expo yanlış porta düşer. **8081 host publish** şart — aksi halde Expo Go timeout verir. Host portları: `8081`, `19000`, `19001`.
 
 **Dockerfile yöntemi (önerilen — mevcut canlı servis böyle):**
 
@@ -239,7 +246,8 @@ Geliştirme akışı:
 | Service | `m10-metro` |
 | Port | `8081` |
 | Domain | `metro.retailex.app` (443 → 8081) |
-| Env | `EXPO_PACKAGER_HOSTNAME=72.60.182.107`, `EXPO_PACKAGER_PROXY_URL=http://72.60.182.107:8081` |
+| Env | `EXPO_OFFLINE=1`, `EXPO_PACKAGER_HOSTNAME=72.60.182.107`, `EXPO_PACKAGER_PROXY_URL=http://72.60.182.107:8081` |
+| Start | `npx expo start --offline --port 8081` |
 | QR | `exp://72.60.182.107:8081` |
 | Restart | unless-stopped |
 
