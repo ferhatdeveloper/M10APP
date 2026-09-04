@@ -5,7 +5,8 @@ Bu servis **iki kanaldan** yayın yapar:
 | Kanal | Adres | İçerik | Çalıştıran |
 |-------|-------|--------|------------|
 | **Web** (Dokploy) | `https://apk.retailex.app` | Statik web SPA (`expo export --platform web` → nginx) | iOS Safari, Android tarayıcı |
-| **Native** (EAS Update) | `https://u.expo.dev/<projectId>?channel-name=production&runtime-version=1.0.0&platform=ios` | Metro iOS/Android bundle | Expo Go (kamera, barkod, AR) |
+| **Native (Metro)** | `exp://72.60.182.107:8081` | Canlı Metro, **SDK 57** | iPhone Expo Go 57 |
+| **EAS Update (eski)** | `https://u.expo.dev/<projectId>?...&runtime-version=1.0.0` | Production update **SDK 54** — iPhone Expo Go **açmaz** | Kullanma |
 
 Kaynak: [ferhatdeveloper/M10APP](https://github.com/ferhatdeveloper/M10APP) · dal `master`.
 
@@ -191,7 +192,7 @@ npm run update:list
 |-------|-----------------|----------|
 | `apk-retailex-qr.png` | `https://apk.retailex.app` | Telefon kamerası / Safari → **web** |
 | `apk-retailex-expo-go-qr.png` | `exp://72.60.182.107:8081` | Expo Go → Metro (kamera/AR tam) |
-| `apk-retailex-eas-update-qr.png` | `exps://u.expo.dev/.../manifest?...` | Alternatif: EAS Update manifest (asset HMAC sorunlu olabilir) |
+| `apk-retailex-eas-update-qr.png` | `exp://72.60.182.107:8081` | Eski EAS (SDK 54) QR’si — iPhone’da açılmaz; Metro’ya yönlendirildi |
 | `apk-retailex-expo-go-android-intent-qr.png` | Android intent → host.exp.exponent | Eski deneme — **kullanma** |
 
 ---
@@ -217,7 +218,7 @@ Geliştirme akışı:
 | iOS `deploymentTarget` | **15.1** |
 | `bundleIdentifier` | `com.m10.app` |
 | `supportsTablet` | `true` |
-| `runtimeVersion` | `1.0.0` |
+| `runtimeVersion` | **57.0.0** (Metro). EAS production hâlâ `1.0.0` / SDK 54 — iPhone’da kullanma |
 | `updates.url` | `https://u.expo.dev/f5df0de1-7a05-4d7d-a056-217d9da60e29` |
 | Web | Metro SPA + PWA manifest / `apple-touch-icon` / `viewport-fit=cover` |
 
