@@ -80,7 +80,19 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 | `EXPO_PACKAGER_PROXY_URL` | `http://72.60.182.107:8081` | Manifest/bundle URL’leri düz HTTP IP |
 | `EXPO_PORT` | `8081` | Container içi Metro portu |
 
-Komut: **`npx expo start --offline --port 8081`** (`--host lan` kullanma — Expo CLI v6’da `--offline` ile çakışır ve imza 500 üretir).
+### EXPO_TOKEN (iOS 57)
+
+iPhone **Kamera** veya Expo Go **Enter URL** `npx expo login` diyorsa manifesto imzasızdır. Token’ı sohbete yazma.
+
+1. [expo.dev](https://expo.dev) → Expo Go’da giriş yaptığın **aynı hesap**.
+2. **Account settings** → **Access tokens** → token oluştur.
+3. Dokploy → **M10 Mobile** → **m10-metro** → **Environment**.
+4. `EXPO_TOKEN` = o token. Kaydet.
+5. **Deploy** yetmezse **Stop** sonra **Start** (Reload çoğu zaman eski process’i bırakır).
+
+Token varken `scripts/start-metro.sh` `--offline` kapatır ve expo-root imzası üretir. Token yoksa imzasız 200 devam eder; iOS 57 App Store onu açmaz.
+
+Komut: **`npx expo start --offline --port 8081`** (`--host lan` kullanma — Expo CLI v6’da `--offline` ile çakışır ve imza 500 üretir). Token varsa script `npx expo start --port 8081` çalıştırır.
 
 `EXPO_PACKAGER_PROXY_URL` yoksa Expo yanlış porta düşer. **8081 host publish** şart — aksi halde Expo Go timeout verir. Host portları: `8081`, `19000`, `19001`.
 

@@ -13,20 +13,25 @@
 </p>
 
 <p align="center">
-  <b>Expo Go içinden oku</b><br />
+  <b>Kamera yok — URL’yi elle gir</b><br />
   <code>exp://72.60.182.107:8081</code>
 </p>
 
-1. Telefona **Expo Go SDK 57** yükle.
-   - **iPhone:** App Store Expo Go artık yalnızca SDK 57 (eski sürüm yüklenemez).
-   - **Android:** Play Store hâlâ 54 ise Expo Go’yu güncelle veya [expo.dev/go](https://expo.dev/go?sdkVersion=57&platform=android) (SDK 57). Android 54 Expo Go bu projeyi **açamaz**.
-2. Expo Go’da sağ üst **avatar** ile **giriş yap** (iOS Expo Go 57 resmi olarak hesap ister).
-3. Kayıtlı eski **M10** (SDK 54 / EAS) varsa sil.
-4. QR’ı **Expo Go içindeki kamera** ile oku — iPhone’un kendi **Kamera** uygulaması bu giriş hatasını tetikler.
-   - **Yalnızca** `exp://72.60.182.107:8081`. GitHub **master** / `u.expo.dev` kullanma.
-5. Olmazsa Expo Go → **Enter URL manually** → `exp://72.60.182.107:8081`
+**iPhone Expo Go 57’de uygulama içi QR kamerası yok.** iPhone **Kamera** ile okutma: ekranda “Kamera” kalır ve `npx expo login` hatası çıkar (imzasız Metro).
 
-Canlı Metro **SDK 57**. Kamera, barkod ve AR native çalışır. Aynı Wi-Fi gerekmez.
+1. Telefonda **Expo Go**’yu aç (App Store, SDK 57).
+2. Alt menüde **Home**.
+3. Sağ üst **avatar** → Expo hesabına **giriş yap** (iOS 57 zorunlu).
+4. Home’da aşağı kaydır → **Enter URL manually** (bazen **+** veya URL kutusu).
+   - Kutu: `exp://` — yaz: `exp://72.60.182.107:8081`
+   - **Connect** / klavyede **Go**.
+5. Görmüyorsan: girişten sonra Home’da **Development servers** listesine bak; yoksa adresi **Notlar**’a yapıştırıp mavi `exp://…` satırına dokun (Kamera ile aynı deep link).
+
+Eski kayıtlı **M10** (SDK 54) varsa sil. GitHub master / `u.expo.dev` kullanma.
+
+iPhone Kamerası veya Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Aynı Expo hesabının **EXPO_TOKEN** değeri Dokploy `m10-metro` env’sine eklenmeli — adımlar: [`DOKPLOY.md`](./DOKPLOY.md#expo-token-ios-57). Token’ı sohbete yapıştırma.
+
+**Android:** Play Store 54 Expo Go bu projeyi açamaz → [SDK 57](https://expo.dev/go?sdkVersion=57&platform=android).
 
 <details>
 <summary>Web önizleme (Safari / Chrome)</summary>
