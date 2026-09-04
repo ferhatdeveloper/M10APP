@@ -17,5 +17,7 @@ echo "Metro public host: $PUBLIC_HOST"
 echo "EXPO_PACKAGER_PROXY_URL: $EXPO_PACKAGER_PROXY_URL"
 echo "Expo Go QR: exp://${PUBLIC_HOST}:${EXPO_PORT}"
 
-# Expo CLI v6+ rejects --non-interactive and --host 0.0.0.0.
-exec npx expo start --host lan --port "$EXPO_PORT" --offline
+node scripts/patch-expo-anonymous-manifest.js
+
+# --host lan and --offline are mutually exclusive in Expo CLI v6.
+exec npx expo start --host lan --port "$EXPO_PORT"
