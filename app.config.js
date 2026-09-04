@@ -1,28 +1,27 @@
 // M10 is Expo SDK 57 — iPhone App Store Expo Go is 57-only.
-// Metro (EXPO_OFFLINE/CI) must not look like the EAS production project:
-// u.expo.dev still serves SDK 54 / runtime 1.0.0 for slug "m10".
+// Metro must not follow EAS production (u.expo.dev runtime 1.0.0 / SDK 54).
+// EXPO_TOKEN: keep projectId so CLI can mint an expo-root development cert.
+// No token: strip EAS id and serve anonymous unsigned (iOS 57 App Store still asks login).
 module.exports = ({ config }) => {
-  const offline = process.env.EXPO_OFFLINE === '1' || process.env.CI === '1'
+  const hasToken = Boolean(process.env.EXPO_TOKEN)
   const next = {
     ...config,
+    name: 'M10 SDK57',
+    slug: 'm10-metro57',
     sdkVersion: '57.0.0',
     runtimeVersion: '57.0.0',
     ios: {
       ...(config.ios || {}),
       deploymentTarget: '15.1',
     },
+    updates: { enabled: false },
   }
 
-  if (!offline) {
-    next.updates = config.updates
+  if (hasToken) {
     return next
   }
 
-  // Distinct from cached Expo Go "M10" / EAS project (SDK 54).
-  next.name = 'M10 SDK57'
-  next.slug = 'm10-metro57'
   next.owner = undefined
-  next.updates = { enabled: false }
   next.extra = { ...(config.extra || {}) }
   delete next.extra.eas
   delete next.owner

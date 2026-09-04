@@ -70,7 +70,8 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 | Env | Değer | Açıklama |
 |-----|-------|----------|
 | `CI` | `1` | Non-interactive; imza prompt’unu keser |
-| `EXPO_OFFLINE` | `1` | `npx expo start --offline` — online imza yolu kapalı |
+| `EXPO_OFFLINE` | `1` | Token yoksa `--offline` (imzasız). `EXPO_TOKEN` varsa script bunu kapatır |
+| `EXPO_TOKEN` | (opsiyonel) | iOS Expo Go 57 imzalı manifesto için aynı Expo hesabının access token’ı |
 | `EXPO_NO_DOTENV` | `1` | `.env` okuma yok |
 | `EXPO_DEVTOOLS_LISTEN_ADDRESS` | `0.0.0.0` | Metro tüm arayüzlerde dinler |
 | `PUBLIC_HOST` | `72.60.182.107` | Manifest hostname (IP — TLS/HSTS yok) |
