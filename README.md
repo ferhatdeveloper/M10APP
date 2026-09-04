@@ -22,7 +22,7 @@
    - **Android:** Play Store hâlâ 54 ise Expo Go’yu güncelle veya [expo.dev/go](https://expo.dev/go?sdkVersion=57&platform=android) (SDK 57). Android 54 Expo Go bu projeyi **açamaz**.
 2. Expo Go’da kayıtlı **M10** (SDK 54 / EAS) varsa sil — Recents’ten o proje hâlâ `u.expo.dev` SDK 54 açar.
 3. QR’ı **Expo Go kamerasıyla** oku (iPhone’un kendi kamerası `exp://` açmaz).
-   - **Yalnızca** `exp://72.60.182.107:8081` — GitHub **master** QR (`exp://apk.retailex.app:8081`) veya `apk-retailex-eas-update-qr.png` (**EAS, SDK 54**) kullanma.
+   - **Yalnızca** `exp://72.60.182.107:8081`. GitHub **master** QR (`exp://apk.retailex.app:8081`) veya `u.expo.dev` / EAS Update QR (**SDK 54**) kullanma.
 4. Olmazsa Expo Go → **Enter URL manually** → `exp://72.60.182.107:8081`
 
 Canlı Metro **SDK 57**. Kamera, barkod ve AR native çalışır. Aynı Wi-Fi gerekmez.
