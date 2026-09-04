@@ -6,25 +6,35 @@
 
 ---
 
-## 🚀 Hızlı Erişim — QR ile Aç
+## Expo Go — telefonla aç
 
-| Platform | QR | URL | Ne açar? |
-|----------|-----|-----|----------|
-| 🍎 **iOS Web (Safari)** | ![iOS Safari QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) | Statik web SPA (Dokploy/nginx) |
-| 📱 **Android Web** | ![Android Web QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) | Aynı web SPA |
-| 🔬 **Expo Go (iOS + Android, native)** | ![Expo Go QR](apk-retailex-expo-go-qr.png) | `exps://metro.retailex.app` | HTTPS Metro native bundle — **kamera/AR tam** |
+<p align="center">
+  <img src="apk-retailex-expo-go-qr.png" alt="Expo Go QR exps://metro.retailex.app" width="280" />
+</p>
 
-**Nasıl kullanılır:**
+<p align="center">
+  <b>Expo Go içinden oku</b><br />
+  <code>exps://metro.retailex.app</code>
+</p>
 
-- **Web için:** Telefon kamerasıyla `apk-retailex-qr.png` okut → Safari’de açılır.
-- **Native için (kamera, AR, barkod):**
-  1. Telefona **Expo Go** yükle (App Store / Play Store).
-  2. `apk-retailex-expo-go-qr.png` dosyasını telefona gönder (AirDrop / iCloud / mail).
-  3. **Expo Go içinden** QR’ı aç → kamera ile okut (`exps://metro.retailex.app`).
-  4. Native bundle iner, uygulama açılır. Aynı Wi-Fi gerekmez.
-  5. Manuel URL: Expo Go → **Enter URL manually** → `exps://metro.retailex.app`
+1. Telefona **Expo Go** yükle (App Store / Play Store).
+2. Yukarıdaki QR’ı **Expo Go kamerasıyla** okut (telefonun kendi kamerası `exps://` açmaz).
+3. Olmazsa Expo Go → **Enter URL manually** → `exps://metro.retailex.app`
 
-> **Not:** `apk.retailex.app` web SPA; native bundle Expo sunucusundadır (EAS Update). Detaylar: [`DOKPLOY.md`](./DOKPLOY.md).
+Kamera, barkod ve AR native çalışır. Aynı Wi-Fi gerekmez.
+
+<details>
+<summary>Web önizleme (Safari / Chrome)</summary>
+
+<p align="center">
+  <img src="apk-retailex-qr.png" alt="Web QR https://apk.retailex.app" width="200" />
+</p>
+
+<p align="center"><a href="https://apk.retailex.app">https://apk.retailex.app</a></p>
+
+</details>
+
+> Native bundle: `metro.retailex.app` (Dokploy Metro). Detay: [`DOKPLOY.md`](./DOKPLOY.md).
 
 ---
 

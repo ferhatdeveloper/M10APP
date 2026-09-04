@@ -7,7 +7,7 @@ const root = path.join(__dirname, '..')
 const files = ['apk-retailex-expo-go-qr.png', 'expo-go-qr.png']
 
 for (const file of files) {
-  execFileSync('npx', ['--yes', 'qrcode@1.5.4', url, '-o', file], {
+  execFileSync('npx', ['--yes', 'qrcode@1.5.4', '-w', '512', url, '-o', file], {
     cwd: root,
     stdio: 'inherit',
   })
