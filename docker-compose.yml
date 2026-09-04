@@ -15,36 +15,21 @@ services:
   # =============================================================
   # m10-metro: Expo Metro dev server (Expo Go native bundle)
   # =============================================================
-  # Expo Go üzerinden native bundle servis eder.
-  # QR: exp://apk.retailex.app:8081
-  #
-  # EXFINPDKS pattern'i (exp.exfinpdks.com):
-  #   PUBLIC_HOST=exp.exfinpdks.com
-  #   EXPO_PORT=8081
-  #   METRO_TRAEFIK_ENABLE=false   ← Metro doğrudan dinler
-  #
-  # Traefik host-based rule ile 8081'i dışarıya açar.
-  # Dokploy panelinde ayrı host binding gerekir (m10-web ile aynı
-  # domain, farklı port).
+  # Traefik: https://metro.retailex.app (443) → container:8081
+  # 8081 public değil. Manifest HTTPS 443 üzerinden yayınlanmalı.
+  # QR: exps://metro.retailex.app
   m10-metro:
     build:
       context: .
       dockerfile: Dockerfile.metro
     environment:
-      # Expo / Metro yapılandırması
       - CI=1
+      - EXPO_NO_TELEMETRY=1
       - EXPO_NO_INTERACTIVE=1
-      - NODE_ENV=production
-      # Public hostname (manifest içindeki URL'ler buna göre üretilir)
-      - PUBLIC_HOST=apk.retailex.app
-      - EXPO_PACKAGER_HOSTNAME=apk.retailex.app
-      - EXPO_PACKAGER_PROXY_URL=https://apk.retailex.app:443
+      - PUBLIC_HOST=metro.retailex.app
+      - EXPO_PACKAGER_HOSTNAME=metro.retailex.app
+      - EXPO_PACKAGER_PROXY_URL=https://metro.retailex.app
       - EXPO_PORT=8081
-      # Traefik proxy'sini devre dışı bırak (Metro doğrudan dinler)
-      - METRO_TRAEFIK_ENABLE=false
-      # WebSocket & dev server
-      - EXPO_DEV_SERVER_HOST=0.0.0.0
-      - EXPO_DEV_SERVER_PORT=8081
     ports:
       - "8081:8081"
     restart: unless-stopped

@@ -12,16 +12,17 @@
 |----------|-----|-----|----------|
 | 🍎 **iOS Web (Safari)** | ![iOS Safari QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) | Statik web SPA (Dokploy/nginx) |
 | 📱 **Android Web** | ![Android Web QR](apk-retailex-qr.png) | [apk.retailex.app](https://apk.retailex.app) | Aynı web SPA |
-| 🔬 **Expo Go (iOS + Android, native)** | ![Expo Go QR](apk-retailex-expo-go-qr.png) | `exp://apk.retailex.app:8081` | Metro dev server'dan native bundle — **kamera/AR tam** |
+| 🔬 **Expo Go (iOS + Android, native)** | ![Expo Go QR](apk-retailex-expo-go-qr.png) | `exps://metro.retailex.app` | HTTPS Metro native bundle — **kamera/AR tam** |
 
 **Nasıl kullanılır:**
 
 - **Web için:** Telefon kamerasıyla `apk-retailex-qr.png` okut → Safari’de açılır.
 - **Native için (kamera, AR, barkod):**
   1. Telefona **Expo Go** yükle (App Store / Play Store).
-  2. `apk-retailex-eas-update-qr.png` dosyasını telefona gönder (AirDrop / iCloud / mail).
-  3. **Expo Go içinden** QR’ı aç → kamera ile okut.
+  2. `apk-retailex-expo-go-qr.png` dosyasını telefona gönder (AirDrop / iCloud / mail).
+  3. **Expo Go içinden** QR’ı aç → kamera ile okut (`exps://metro.retailex.app`).
   4. Native bundle iner, uygulama açılır. Aynı Wi-Fi gerekmez.
+  5. Manuel URL: Expo Go → **Enter URL manually** → `exps://metro.retailex.app`
 
 > **Not:** `apk.retailex.app` web SPA; native bundle Expo sunucusundadır (EAS Update). Detaylar: [`DOKPLOY.md`](./DOKPLOY.md).
 

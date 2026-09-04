@@ -19,7 +19,7 @@ Kaynak: [ferhatdeveloper/M10APP](https://github.com/ferhatdeveloper/M10APP) · d
 |-----|----------------|-------------|
 | **iOS Safari (web demo)** | `https://apk.retailex.app` | Dokploy’daki SPA. Touch + safe-area odaklı. |
 | Ana ekrana ekle | Safari → Paylaş → **Ana Ekrana Ekle** | PWA benzeri tam ekran; ikon `apple-touch-icon`. |
-| **Expo Go (native)** | `exp://apk.retailex.app:8081` | Metro dev server’dan native bundle indirir. **Kamera / barkod / AR tam native.** |
+| **Expo Go (native)** | `exps://metro.retailex.app` | HTTPS Metro’dan native bundle. **Kamera / barkod / AR tam native.** |
 | **EAS Update (alternatif)** | `exps://u.expo.dev/.../manifest?...` | EAS Update ile native bundle (asset HMAC bazen sorunlu) |
 
 ### DNS (sen ekleyeceksin)
@@ -59,47 +59,43 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 13. Deploy / Rebuild.
 14. iPhone Safari’de `https://apk.retailex.app` aç; kilit simgesi / geçerli sertifika kontrol et.
 
-#### Servis 2: `m10-metro` (yeni — Expo Go native bundle)
+#### Servis 2: `m10-metro` (Expo Go native bundle)
 
-> EXFINPDKS'te (`exp.exfinpdks.com:8081`) kullanılan kalıplı yapı.
-> QR: `exp://apk.retailex.app:8081`
+> Canlı adres: `https://metro.retailex.app` (Traefik 443 → container 8081).
+> **QR: `exps://metro.retailex.app`** — `exp://` kullanma (HTTP; 308 redirect + kapalı `:8081` yüzünden Expo Go düşer).
 
-**EXFINPDKS pattern'i (referans):**
+**Zorunlu env (Dokploy panelinde de aynı değerler olmalı):**
 
 | Env | Değer | Açıklama |
 |-----|-------|----------|
-| `PUBLIC_HOST` | `apk.retailex.app` | Manifest içindeki public hostname |
-| `EXPO_PACKAGER_HOSTNAME` | `apk.retailex.app` | Aynı |
-| `EXPO_PACKAGER_PROXY_URL` | `https://apk.retailex.app:443` | HTTPS proxy adresi |
-| `EXPO_PORT` | `8081` | Metro port |
-| `METRO_TRAEFIK_ENABLE` | `false` | Traefik proxy yok, Metro doğrudan dinler |
+| `PUBLIC_HOST` | `metro.retailex.app` | Manifest içindeki public hostname |
+| `EXPO_PACKAGER_HOSTNAME` | `metro.retailex.app` | Aynı |
+| `EXPO_PACKAGER_PROXY_URL` | `https://metro.retailex.app` | Bundle/asset URL’leri 443 üzerinden (port yazma) |
+| `EXPO_PORT` | `8081` | Container içi Metro portu |
 
-**Compose yöntemi (önerilen, EXFINPDKS ile aynı):**
+`EXPO_PACKAGER_PROXY_URL` yoksa Expo, `https://metro.retailex.app:8081/...` üretir. **8081 public değil** — Expo Go bundle’ı indiremez.
 
-1. Aynı projede → **Create Service** → **Application** → **Compose**.
-2. **Repository:** `ferhatdeveloper/M10APP`.
-3. **Branch:** `master`.
-4. **Compose file:** `docker-compose.yml`.
-5. **Service:** `m10-metro` seç.
-6. **Port:** `8081` (sadece bu port açık, Traefik host-based rule ile).
-7. **Environment variables:** yukarıdaki tablo (zaten `docker-compose.yml`'de tanımlı).
-8. **Host binding:** Dokploy panelinde `apk.retailex.app` host'unu bu servise yönlendir.
-9. Deploy.
-
-**Dockerfile yöntemi (Compose yoksa):**
+**Dockerfile yöntemi (önerilen — mevcut canlı servis böyle):**
 
 1. **Create Service** → **Application** → **Dockerfile**.
-2. **Dockerfile path:** `Dockerfile.metro`.
-3. **Port:** `8081`.
-4. **Environment variables** yukarıdaki tablo.
-5. Deploy.
+2. **Repository:** `ferhatdeveloper/M10APP`, branch `master`.
+3. **Dockerfile path:** `Dockerfile.metro` (kök `Dockerfile` web/nginx içindir, Metro değil).
+4. **Port:** `8081` (Traefik bu porta HTTPS 443 ile bağlanır).
+5. **Domains:** `metro.retailex.app` + Let’s Encrypt HTTPS. HTTP→HTTPS redirect açık.
+6. Yukarıdaki env’leri ekle, Deploy / Rebuild.
+
+**Compose yöntemi:**
+
+1. Aynı projede → **Create Service** → **Compose**.
+2. **Compose file:** `docker-compose.yml`, servis `m10-metro`.
+3. Domain: `metro.retailex.app` → container `8081`.
 
 **Domain / Host yapısı (Dokploy'da):**
 
 | Service | Host | Port | Yönlendirme |
 |---------|------|------|-------------|
 | `m10-web` | `apk.retailex.app` | 443 → 80 | Traefik HTTPS (Let's Encrypt) |
-| `m10-metro` | `apk.retailex.app` | 8081 | Metro doğrudan (HTTP) |
+| `m10-metro` | `metro.retailex.app` | 443 → 8081 | Traefik HTTPS → Metro |
 
 ### DNS (Metro için)
 
@@ -187,7 +183,7 @@ npm run update:list
 | Dosya | Kodlanan string | Ne olur? |
 |-------|-----------------|----------|
 | `apk-retailex-qr.png` | `https://apk.retailex.app` | Telefon kamerası / Safari → **web** |
-| `apk-retailex-expo-go-qr.png` | `exp://apk.retailex.app:8081` | Expo Go → **Metro dev server** (kamera/AR tam) |
+| `apk-retailex-expo-go-qr.png` | `exps://metro.retailex.app` | Expo Go → **HTTPS Metro** (kamera/AR tam) |
 | `apk-retailex-eas-update-qr.png` | `exps://u.expo.dev/.../manifest?...` | Alternatif: EAS Update manifest (asset HMAC sorunlu olabilir) |
 | `apk-retailex-expo-go-android-intent-qr.png` | Android intent → host.exp.exponent | Eski deneme — **kullanma** |
 
@@ -242,9 +238,9 @@ Geliştirme akışı:
 | Build | Compose (`docker-compose.yml`) **veya** Dockerfile (`Dockerfile.metro`) |
 | Service | `m10-metro` |
 | Port | `8081` |
-| Domain | Opsiyonel (Yöntem C: `metro.apk.retailex.app`) |
-| Env | `EXPO_PACKAGER_HOSTNAME=apk.retailex.app`, `EXPO_PACKAGER_PROXY_URL=https://apk.retailex.app:443` |
-| QR | `exp://apk.retailex.app:8081` |
+| Domain | `metro.retailex.app` (443 → 8081) |
+| Env | `EXPO_PACKAGER_HOSTNAME=metro.retailex.app`, `EXPO_PACKAGER_PROXY_URL=https://metro.retailex.app` |
+| QR | `exps://metro.retailex.app` |
 | Restart | unless-stopped |
 
 Yerel kontrol: `npm run web:export` veya `docker compose up --build`.

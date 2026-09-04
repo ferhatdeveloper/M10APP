@@ -1,10 +1,10 @@
 # M10 — Expo Metro dev server (Expo Go native bundle)
 #
-# EXFINPDKS pattern'i ile aynı: node_modules + kaynak kodu container'a
-# kopyala, ardından `expo start` çalıştır. Traefik bu container'ın 8081
-# portunu doğrudan dışarıya açar; Metro kendi kendine WebSocket ile bağlanır.
+# Gerçek yayın: Traefik HTTPS 443 → container:8081 (metro.retailex.app).
+# 8081 dışarıya açık değil. Manifest URL'leri EXPO_PACKAGER_PROXY_URL ile
+# https://metro.retailex.app olmalı; aksi halde Expo Go :8081'e gider ve düşer.
 #
-# QR: exp://apk.retailex.app:8081
+# QR: exps://metro.retailex.app
 FROM node:22-alpine
 WORKDIR /app
 
@@ -14,10 +14,16 @@ COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps --no-audit --no-fund
 
 COPY . .
+RUN chmod +x scripts/start-metro.sh
 
-# Metro dev server'ı başlat. Host 0.0.0.0 ile dışarıdan erişilebilir.
-# --non-interactive: container içinde soru sorma.
-CMD ["npx", "expo", "start", \
-     "--host", "0.0.0.0", \
-     "--port", "8081", \
-     "--non-interactive"]
+ENV CI=1
+ENV EXPO_NO_TELEMETRY=1
+ENV EXPO_NO_INTERACTIVE=1
+ENV PUBLIC_HOST=metro.retailex.app
+ENV EXPO_PACKAGER_HOSTNAME=metro.retailex.app
+ENV EXPO_PACKAGER_PROXY_URL=https://metro.retailex.app
+ENV EXPO_PORT=8081
+
+EXPOSE 8081
+
+CMD ["scripts/start-metro.sh"]

@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "web:export": "expo export --platform web --output-dir web-dist",
     "dokploy:build": "docker build -t m10-web .",
+    "qr:expo-go": "node scripts/generate-expo-go-qr.js",
     "generate-icons": "node scripts/generate-icons.js",
     "update:publish": "eas update --branch production --message \"Update via eas update\"",
     "update:list": "eas update:list --branch production"
