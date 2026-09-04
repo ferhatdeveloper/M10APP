@@ -17,12 +17,11 @@
   <code>exp://72.60.182.107:8081</code>
 </p>
 
-1. Telefona **Expo Go SDK 54** yükle — **App Store / Play Store**.
-   - Store’daki Expo Go **SDK 54**’tür. SDK 55 / 56 / **57** (`eas go`, expo.dev/go, TestFlight) bu projeyi açmaz.
-   - **iPhone’da “SDK 57” diyorsa:** Expo Go 57 yüklü (Android’de Play Store 54 olduğu için orada uyarı yok). Expo Go’yu sil → App Store’dan tekrar yükle.
-2. QR’ı **Expo Go kamerasıyla** okut (iPhone’un kendi kamerası `exp://` açmaz / yanlış yere gidebilir).
+1. Telefona **Expo Go SDK 57** yükle.
+   - **iPhone:** App Store Expo Go artık yalnızca SDK 57 (eski sürüm yüklenemez).
+   - **Android:** Play Store hâlâ 54 ise Expo Go’yu güncelle veya [expo.dev/go](https://expo.dev/go?sdkVersion=57&platform=android) (SDK 57).
+2. QR’ı **Expo Go kamerasıyla** okut (iPhone’un kendi kamerası `exp://` açmaz).
 3. Olmazsa Expo Go → **Enter URL manually** → `exp://72.60.182.107:8081`
-   - GitHub `master` QR’ı (`exp://apk.retailex.app:8081`) iPhone’da bozuktur — kullanma.
 
 Kamera, barkod ve AR native çalışır. Aynı Wi-Fi gerekmez.
 
@@ -47,7 +46,7 @@ Kamera, barkod ve AR native çalışır. Aynı Wi-Fi gerekmez.
 
 | Katman | Teknoloji |
 |---|---|
-| Çatı | Expo SDK 54, React Native 0.81.5, React 19.1, yeni mimari (newArchEnabled) |
+| Çatı | Expo SDK 57, React Native 0.86.3, React 19.2, yeni mimari (newArchEnabled) |
 | Web export | Metro bundler, single-page, statik nginx'e derleniyor (`web-dist`) |
 | Yönlendirme | `@react-navigation/native-stack` + `bottom-tabs` (native), `react-router` (web kalıntı) |
 | UI | React Native primitives + `lucide-react-native` ikonlar + özel tema |

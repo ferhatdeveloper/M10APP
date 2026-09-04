@@ -19,7 +19,7 @@ Kaynak: [ferhatdeveloper/M10APP](https://github.com/ferhatdeveloper/M10APP) · d
 |-----|----------------|-------------|
 | **iOS Safari (web demo)** | `https://apk.retailex.app` | Dokploy’daki SPA. Touch + safe-area odaklı. |
 | Ana ekrana ekle | Safari → Paylaş → **Ana Ekrana Ekle** | PWA benzeri tam ekran; ikon `apple-touch-icon`. |
-| **Expo Go (native)** | `exp://72.60.182.107:8081` | Metro native bundle, **SDK 54** (HTTP/IP — TLS yok). Store Expo Go kullan; SDK 57 değil. |
+| **Expo Go (native)** | `exp://72.60.182.107:8081` | Metro native bundle, **SDK 57** (HTTP/IP — TLS yok). iPhone Expo Go 57. |
 | **EAS Update (alternatif)** | `exps://u.expo.dev/.../manifest?...` | EAS Update ile native bundle (asset HMAC bazen sorunlu) |
 
 ### DNS (sen ekleyeceksin)
@@ -213,7 +213,7 @@ Geliştirme akışı:
 
 | Alan | Değer |
 |------|-------|
-| SDK | Expo **54** |
+| SDK | Expo **57** |
 | iOS `deploymentTarget` | **15.1** |
 | `bundleIdentifier` | `com.m10.app` |
 | `supportsTablet` | `true` |
