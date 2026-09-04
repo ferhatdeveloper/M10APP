@@ -17,7 +17,7 @@
   <code>exp://72.60.182.107:8081</code>
 </p>
 
-**iPhone Expo Go 57’de uygulama içi QR kamerası yok.** iPhone **Kamera** ile okutma: ekranda “Kamera” kalır ve `npx expo login` hatası çıkar (imzasız Metro).
+**iPhone Expo Go 57’de uygulama içi QR kamerası yok.** Safari, iPhone **Kamera** ve Notlar’daki `exp://` linki **aynı deep link** — hepsi imzasız Metro’da `npx expo login` der.
 
 1. Telefonda **Expo Go**’yu aç (App Store, SDK 57).
 2. Alt menüde **Home**.
