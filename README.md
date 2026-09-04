@@ -17,7 +17,8 @@
   <code>exp://72.60.182.107:8081</code>
 </p>
 
-1. Telefona **Expo Go** yükle (App Store / Play Store).
+1. Telefona **Expo Go SDK 54** yükle — **App Store / Play Store**.
+   - Store’daki Expo Go **SDK 54**’tür. SDK 55 / 56 / **57** (`eas go`, expo.dev/go) bu projeyi açmaz.
 2. Yukarıdaki QR’ı **Expo Go kamerasıyla** okut (telefonun kendi kamerası `exp://` açmaz).
 3. Olmazsa Expo Go → **Enter URL manually** → `exp://72.60.182.107:8081`
 

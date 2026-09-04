@@ -1,5 +1,6 @@
 # M10 — Expo Metro (Expo Go native bundle)
-# QR: exp://metro.retailex.app:8081
+# Expo SDK 54 — App Store Expo Go. SDK 57 değil.
+# QR: exp://72.60.182.107:8081
 # Dokploy: domain 443 + published port 8081 (host)
 FROM node:22-alpine
 WORKDIR /app
@@ -11,7 +12,7 @@ RUN npm ci --legacy-peer-deps --no-audit --no-fund
 
 COPY . .
 RUN chmod +x scripts/start-metro.sh scripts/patch-expo-anonymous-manifest.js
-# Expo Go signed-manifest 500 in CI: serve anonymous unsigned manifest.
+# Best-effort (EXFIN --offline is the real 500 fix). Nested @expo/cli is OK.
 RUN node scripts/patch-expo-anonymous-manifest.js
 
 ENV CI=1

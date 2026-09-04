@@ -20,6 +20,7 @@ export EXPO_PACKAGER_PROXY_URL="${EXPO_PACKAGER_PROXY_URL:-http://${PUBLIC_HOST}
 echo "Metro public host: $PUBLIC_HOST"
 echo "EXPO_PACKAGER_PROXY_URL: $EXPO_PACKAGER_PROXY_URL"
 echo "EXPO_OFFLINE=$EXPO_OFFLINE"
+echo "Expo SDK: 54 (App Store Expo Go — not 57)"
 echo "Expo Go QR: exp://${PUBLIC_HOST}:${EXPO_PORT}"
 
 if [ -f scripts/patch-expo-anonymous-manifest.js ]; then
