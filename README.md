@@ -18,9 +18,11 @@
 </p>
 
 1. Telefona **Expo Go SDK 54** yükle — **App Store / Play Store**.
-   - Store’daki Expo Go **SDK 54**’tür. SDK 55 / 56 / **57** (`eas go`, expo.dev/go) bu projeyi açmaz.
-2. Yukarıdaki QR’ı **Expo Go kamerasıyla** okut (telefonun kendi kamerası `exp://` açmaz).
+   - Store’daki Expo Go **SDK 54**’tür. SDK 55 / 56 / **57** (`eas go`, expo.dev/go, TestFlight) bu projeyi açmaz.
+   - **iPhone’da “SDK 57” diyorsa:** Expo Go 57 yüklü (Android’de Play Store 54 olduğu için orada uyarı yok). Expo Go’yu sil → App Store’dan tekrar yükle.
+2. QR’ı **Expo Go kamerasıyla** okut (iPhone’un kendi kamerası `exp://` açmaz / yanlış yere gidebilir).
 3. Olmazsa Expo Go → **Enter URL manually** → `exp://72.60.182.107:8081`
+   - GitHub `master` QR’ı (`exp://apk.retailex.app:8081`) iPhone’da bozuktur — kullanma.
 
 Kamera, barkod ve AR native çalışır. Aynı Wi-Fi gerekmez.
 
