@@ -29,7 +29,7 @@
 
 Eski kayıtlı **M10** (SDK 54) varsa sil. GitHub master / `u.expo.dev` kullanma.
 
-iPhone Kamerası veya Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Aynı Expo hesabının **EXPO_TOKEN** değeri Dokploy `m10-metro` env’sine eklenmeli — adımlar: [`DOKPLOY.md`](./DOKPLOY.md#expo-token-ios-57). Token’ı sohbete yapıştırma.
+Safari / Kamera / Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Aynı Expo hesabının **EXPO_TOKEN** değeri Dokploy `m10-metro` env’sine eklenmeli — adımlar: [`DOKPLOY.md`](./DOKPLOY.md#expo-token-ios-57). Token’ı sohbete yapıştırma.
 
 **Android:** Play Store 54 Expo Go bu projeyi açamaz → [SDK 57](https://expo.dev/go?sdkVersion=57&platform=android).
 
