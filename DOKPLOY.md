@@ -90,7 +90,7 @@ iPhone **Kamera** veya Expo Go **Enter URL** `npx expo login` diyorsa manifesto 
 4. `EXPO_TOKEN` = o token. Kaydet.
 5. **Deploy** yetmezse **Stop** sonra **Start** (Reload çoğu zaman eski process’i bırakır).
 
-Token varken `scripts/start-metro.sh` `--offline` kapatır ve expo-root imzası üretir. Token yoksa imzasız 200 devam eder; iOS 57 App Store onu açmaz.
+Token varken `scripts/start-metro.sh` `--offline` kapatır ve expo-root imzası üretir. Token yoksa imzasız 200 devam eder (Android hâlâ açar). iOS App Store Expo Go 57 imzasızı açmaz — [Expo changelog](https://expo.dev/changelog/expo-go-57-login).
 
 Komut: **`npx expo start --offline --port 8081`** (`--host lan` kullanma — Expo CLI v6’da `--offline` ile çakışır ve imza 500 üretir). Token varsa script `npx expo start --port 8081` çalıştırır.
 
