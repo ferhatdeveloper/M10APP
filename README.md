@@ -9,17 +9,17 @@
 ## Expo Go — telefonla aç
 
 <p align="center">
-  <img src="apk-retailex-expo-go-qr.png" alt="Expo Go QR exps://metro.retailex.app" width="280" />
+  <img src="apk-retailex-expo-go-qr.png" alt="Expo Go QR exp://metro.retailex.app:8081" width="280" />
 </p>
 
 <p align="center">
   <b>Expo Go içinden oku</b><br />
-  <code>exps://metro.retailex.app</code>
+  <code>exp://metro.retailex.app:8081</code>
 </p>
 
 1. Telefona **Expo Go** yükle (App Store / Play Store).
-2. Yukarıdaki QR’ı **Expo Go kamerasıyla** okut (telefonun kendi kamerası `exps://` açmaz).
-3. Olmazsa Expo Go → **Enter URL manually** → `exps://metro.retailex.app`
+2. Yukarıdaki QR’ı **Expo Go kamerasıyla** okut (telefonun kendi kamerası `exp://` açmaz).
+3. Olmazsa Expo Go → **Enter URL manually** → `exp://metro.retailex.app:8081`
 
 Kamera, barkod ve AR native çalışır. Aynı Wi-Fi gerekmez.
 

@@ -2,7 +2,7 @@
 const { execFileSync } = require('child_process')
 const path = require('path')
 
-const url = process.env.EXPO_GO_URL || 'exps://metro.retailex.app'
+const url = process.env.EXPO_GO_URL || 'exp://metro.retailex.app:8081'
 const root = path.join(__dirname, '..')
 const files = ['apk-retailex-expo-go-qr.png', 'expo-go-qr.png']
 
