@@ -5,7 +5,7 @@ Bu servis **iki kanaldan** yayın yapar:
 | Kanal | Adres | İçerik | Çalıştıran |
 |-------|-------|--------|------------|
 | **Web** (Dokploy) | `https://apk.retailex.app` | Statik web SPA (`expo export --platform web` → nginx) | iOS Safari, Android tarayıcı |
-| **Native (Metro)** | `exp://72.60.182.107:8081` | Canlı Metro, **SDK 57** | iPhone Expo Go 57 |
+| **Native (Metro)** | `exp://metro.retailex.app` | Canlı Metro, **SDK 57**, Traefik HTTPS 443 | iPhone Expo Go 57 |
 | **EAS Update (eski)** | `https://u.expo.dev/<projectId>?...&runtime-version=1.0.0` | Production update **SDK 54** — iPhone Expo Go **açmaz** | Kullanma |
 
 Kaynak: [ferhatdeveloper/M10APP](https://github.com/ferhatdeveloper/M10APP) · dal `master`.
@@ -20,7 +20,7 @@ Kaynak: [ferhatdeveloper/M10APP](https://github.com/ferhatdeveloper/M10APP) · d
 |-----|----------------|-------------|
 | **iOS Safari (web demo)** | `https://apk.retailex.app` | Dokploy’daki SPA. Touch + safe-area odaklı. |
 | Ana ekrana ekle | Safari → Paylaş → **Ana Ekrana Ekle** | PWA benzeri tam ekran; ikon `apple-touch-icon`. |
-| **Expo Go (native)** | `exp://72.60.182.107:8081` | Metro native bundle, **SDK 57** (HTTP/IP — TLS yok). iPhone Expo Go 57. |
+| **Expo Go (native)** | `exp://metro.retailex.app` | Metro native bundle, **SDK 57**, `https://metro.retailex.app:443`. Android host: `exp://72.60.182.107:8081`. |
 | **EAS Update (alternatif)** | `exps://u.expo.dev/.../manifest?...` | EAS Update ile native bundle (asset HMAC bazen sorunlu) |
 
 ### DNS (sen ekleyeceksin)
@@ -62,8 +62,9 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 
 #### Servis 2: `m10-metro` (Expo Go native bundle)
 
-> Canlı adres: `https://metro.retailex.app` (Traefik 443 → container 8081).
-> **QR: `exp://72.60.182.107:8081`** — domain kullanma (`metro.retailex.app` HTTPS/HSTS → TLS hatası).
+> Canlı adres: `https://metro.retailex.app` (Traefik websecure + Let’s Encrypt → container 8081).
+> **QR: `exp://metro.retailex.app`** (EXFIN gibi portsuz). Android host: `exp://72.60.182.107:8081`.
+> `EXPO_PACKAGER_PROXY_URL` **`https://metro.retailex.app:443`** — asla `https://…:8081` değil.
 
 **Zorunlu env (EXFINPDKS compose kalıbı — Dokploy panelinde de aynı):**
 
@@ -74,10 +75,10 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 | `EXPO_TOKEN` | (opsiyonel) | iOS Expo Go 57 imzalı manifesto için aynı Expo hesabının access token’ı |
 | `EXPO_NO_DOTENV` | `1` | `.env` okuma yok |
 | `EXPO_DEVTOOLS_LISTEN_ADDRESS` | `0.0.0.0` | Metro tüm arayüzlerde dinler |
-| `PUBLIC_HOST` | `72.60.182.107` | Manifest hostname (IP — TLS/HSTS yok) |
-| `EXPO_PACKAGER_HOSTNAME` | `72.60.182.107` | Aynı |
-| `REACT_NATIVE_PACKAGER_HOSTNAME` | `72.60.182.107` | Aynı |
-| `EXPO_PACKAGER_PROXY_URL` | `http://72.60.182.107:8081` | Manifest/bundle URL’leri düz HTTP IP |
+| `PUBLIC_HOST` | `metro.retailex.app` | Manifest hostname (Traefik HTTPS) |
+| `EXPO_PACKAGER_HOSTNAME` | `metro.retailex.app` | Aynı |
+| `REACT_NATIVE_PACKAGER_HOSTNAME` | `metro.retailex.app` | Aynı |
+| `EXPO_PACKAGER_PROXY_URL` | `https://metro.retailex.app:443` | Manifest/bundle URL’leri HTTPS 443 |
 | `EXPO_PORT` | `8081` | Container içi Metro portu |
 
 ### EXPO_TOKEN (iOS 57)
@@ -99,12 +100,14 @@ Aynı Dokploy projesindeki şablon compose **idle** bırakılmalı (`:8081` çak
 | | EXFIN `expo-checkin-metro` | M10 `m10-metro` |
 |--|--|--|
 | Komut | `npx expo start --offline --port 8081` | Aynı (`EXPO_TOKEN` yoksa) |
+| Image | `node:22-bookworm-slim` | Aynı |
 | `EXPO_OFFLINE` / `CI` | `1` | `1` |
-| `EXPO_TOKEN` / `expo login` | **yok** | **yok** |
-| Proxy | `https://exp.exfinpdks.com:443` (Traefik) | `http://72.60.182.107:8081` (TLS/HSTS yok) |
+| `EXPO_TOKEN` / `expo login` | **yok** | **yok** (iOS 57 hâlâ ister) |
+| Proxy | `https://exp.exfinpdks.com:443` (Traefik) | `https://metro.retailex.app:443` (Traefik) |
+| Kaynak | `SOURCE_TGZ_URL` (başka uygulama — M10’da **yok**) | GitHub `ferhatdeveloper/M10APP` @ `master` |
 | Proje SDK | Eski check-in uygulaması (**54 dönemi**) | **57** (iPhone Go 57) |
 
-EXFIN’de sihirli bir imza yoktu. O dönemde iPhone Expo Go **54** imzasız `--offline` Metro’yu açıyordu; web `https://exp.exfinpdks.com` + `exp://` QR. App Store Go artık **57** ve [giriş istiyor](https://expo.dev/changelog/expo-go-57-login). EXFIN bayraklarını kopyalamak iOS 57 login’ini kaldırmaz. `metro.retailex.app:443` PROXY yapmak eski TLS hatasını geri getirir — QR `exp://72.60.182.107:8081` kalır. Web önizleme: `https://apk.retailex.app`.
+EXFIN’de sihirli bir imza yoktu. O dönemde iPhone Expo Go **54** imzasız `--offline` Metro’yu açıyordu; web `https://exp.exfinpdks.com` + `exp://` QR. App Store Go artık **57** ve [giriş istiyor](https://expo.dev/changelog/expo-go-57-login). `metro.retailex.app` domain’i iOS 57 login’ini **kaldırmaz** — imzalı manifesto için `EXPO_TOKEN` gerekir. Web önizleme: `https://apk.retailex.app`.
 
 Komut: **`npx expo start --offline --port 8081`** (`--host lan` kullanma — Expo CLI v6’da `--offline` ile çakışır ve imza 500 üretir). Token varsa script `npx expo start --port 8081` çalıştırır.
 
@@ -218,9 +221,9 @@ npm run update:list
 | Dosya | Kodlanan string | Ne olur? |
 |-------|-----------------|----------|
 | `apk-retailex-qr.png` | `https://apk.retailex.app` | Telefon kamerası / Safari → **web** |
-| `apk-retailex-expo-go-qr.png` | `exp://72.60.182.107:8081` | Expo Go → Metro (kamera/AR tam) |
-| `apk-retailex-eas-update-qr.png` | `exp://72.60.182.107:8081` | Eski EAS (SDK 54) QR’si — iPhone’da açılmaz; Metro’ya yönlendirildi |
-| `apk-retailex-expo-go-android-intent-qr.png` | Android intent → host.exp.exponent | Eski deneme — **kullanma** |
+| `apk-retailex-expo-go-qr.png` | `exp://metro.retailex.app` | Expo Go → Metro HTTPS 443 (EXFIN portsuz QR) |
+| `apk-retailex-eas-update-qr.png` | `exp://metro.retailex.app` | Eski EAS (SDK 54) QR’si — Metro domain’e yönlendirildi |
+| `apk-retailex-expo-go-android-intent-qr.png` | `exp://72.60.182.107:8081` | Android host publish 8081 |
 
 ---
 
@@ -274,9 +277,9 @@ Geliştirme akışı:
 | Service | `m10-metro` |
 | Port | `8081` |
 | Domain | `metro.retailex.app` (443 → 8081) |
-| Env | `EXPO_OFFLINE=1`, `EXPO_PACKAGER_HOSTNAME=72.60.182.107`, `EXPO_PACKAGER_PROXY_URL=http://72.60.182.107:8081` |
+| Env | `EXPO_OFFLINE=1`, `PUBLIC_HOST=metro.retailex.app`, `EXPO_PACKAGER_PROXY_URL=https://metro.retailex.app:443` |
 | Start | `npx expo start --offline --port 8081` |
-| QR | `exp://72.60.182.107:8081` |
+| QR | `exp://metro.retailex.app` / `exp://72.60.182.107:8081` |
 | Restart | unless-stopped |
 
 Yerel kontrol: `npm run web:export` veya `docker compose up --build`.

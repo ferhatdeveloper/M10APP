@@ -9,12 +9,13 @@
 ## Expo Go — telefonla aç
 
 <p align="center">
-  <img src="apk-retailex-expo-go-qr.png" alt="Expo Go QR exp://72.60.182.107:8081" width="280" />
+  <img src="apk-retailex-expo-go-qr.png" alt="Expo Go QR exp://metro.retailex.app" width="280" />
 </p>
 
 <p align="center">
   <b>Kamera yok — URL’yi elle gir</b><br />
-  <code>exp://72.60.182.107:8081</code>
+  <code>exp://metro.retailex.app</code><br />
+  Android host: <code>exp://72.60.182.107:8081</code>
 </p>
 
 **iPhone Expo Go 57’de uygulama içi QR kamerası yok.** Safari, iPhone **Kamera** ve Notlar’daki `exp://` linki **aynı deep link** — hepsi imzasız Metro’da `npx expo login` der.
@@ -23,7 +24,8 @@
 2. Alt menüde **Home**.
 3. Sağ üst **avatar** → Expo hesabına **giriş yap** (iOS 57 zorunlu).
 4. Home’da aşağı kaydır → **Enter URL manually** (bazen **+** veya URL kutusu).
-   - Kutu: `exp://` — yaz: `exp://72.60.182.107:8081`
+   - Kutu: `exp://` — yaz: `exp://metro.retailex.app`
+   - Android: `exp://72.60.182.107:8081`
    - **Connect** / klavyede **Go**.
 5. Görmüyorsan: girişten sonra Home’da **Development servers** listesine bak; yoksa adresi **Notlar**’a yapıştırıp mavi `exp://…` satırına dokun (Kamera ile aynı deep link).
 
@@ -31,7 +33,7 @@ Eski kayıtlı **M10** (SDK 54) varsa sil. GitHub master / `u.expo.dev` kullanma
 
 Safari / Kamera / Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Aynı Expo hesabının **EXPO_TOKEN** değeri Dokploy `m10-metro` env’sine eklenmeli — adımlar: [`DOKPLOY.md`](./DOKPLOY.md#expo-token-ios-57). Token’ı sohbete yapıştırma.
 
-**EXFINPDKS örneği login sormuyordu** çünkü o Metro **SDK 54 / eski Expo Go** + `https://exp.exfinpdks.com` idi; `EXPO_TOKEN` yoktu, komut da `--offline`. Aynı bayraklar M10’da duruyor. iPhone App Store Go **57** artık imzasızda giriş ister — EXFIN kalıbı bunu kaldırmaz.
+**EXFINPDKS örneği login sormuyordu** çünkü o Metro **SDK 54 / eski Expo Go** + `https://exp.exfinpdks.com` idi; `EXPO_TOKEN` yoktu, komut da `--offline`. M10 aynı HTTPS kalıbını `metro.retailex.app:443` ile kullanır. iPhone App Store Go **57** imzasızda giriş ister — domain / Traefik bunu kaldırmaz. iOS için `EXPO_TOKEN` gerekir.
 
 **Android login sormaz, iPhone sorar:** Metro her iki platforma **aynı imzasız SDK 57** manifestini verir. [Expo](https://expo.dev/changelog/expo-go-57-login): giriş zorunluluğu **yalnızca iOS App Store Expo Go 57**; Android’e sonra gelecek. Play Store Expo Go hâlâ 54/eski istemci olduğu için imzasızı açar. iPhone’u Android gibi yapmak (tokensız) **mümkün değil**. 54’e geri alınmaz (iPhone Go 57 onu reddeder). Android şu an tokensız kalır.
 
@@ -48,7 +50,7 @@ Safari / Kamera / Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Ay
 
 </details>
 
-> Native bundle: `exp://72.60.182.107:8081` (Dokploy Metro, HTTP — TLS yok). Detay: [`DOKPLOY.md`](./DOKPLOY.md).
+> Native bundle: `exp://metro.retailex.app` (Traefik HTTPS 443, EXFIN kalıbı). Android host: `exp://72.60.182.107:8081`. Detay: [`DOKPLOY.md`](./DOKPLOY.md).
 
 ---
 

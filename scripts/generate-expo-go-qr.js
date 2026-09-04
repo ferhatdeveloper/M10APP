@@ -2,19 +2,21 @@
 const { execFileSync } = require('child_process')
 const path = require('path')
 
-const url = process.env.EXPO_GO_URL || 'exp://72.60.182.107:8081'
+const domainUrl = process.env.EXPO_GO_URL || 'exp://metro.retailex.app'
+const ipUrl = process.env.EXPO_GO_IP_URL || 'exp://72.60.182.107:8081'
 const root = path.join(__dirname, '..')
-// EAS QR (u.expo.dev SDK 54) iPhone Expo Go 57'de açılmaz — Metro URL'sine çek.
+
 const files = [
-  'apk-retailex-expo-go-qr.png',
-  'expo-go-qr.png',
-  'apk-retailex-eas-update-qr.png',
+  ['apk-retailex-expo-go-qr.png', domainUrl],
+  ['expo-go-qr.png', domainUrl],
+  ['apk-retailex-eas-update-qr.png', domainUrl],
+  ['apk-retailex-expo-go-android-intent-qr.png', ipUrl],
 ]
 
-for (const file of files) {
+for (const [file, url] of files) {
   execFileSync('npx', ['--yes', 'qrcode@1.5.4', '-w', '512', url, '-o', file], {
     cwd: root,
     stdio: 'inherit',
   })
+  console.log(`${file}: ${url}`)
 }
-console.log(`Expo Go QR: ${url}`)
