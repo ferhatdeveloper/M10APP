@@ -31,6 +31,8 @@ Eski kayıtlı **M10** (SDK 54) varsa sil. GitHub master / `u.expo.dev` kullanma
 
 Safari / Kamera / Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Aynı Expo hesabının **EXPO_TOKEN** değeri Dokploy `m10-metro` env’sine eklenmeli — adımlar: [`DOKPLOY.md`](./DOKPLOY.md#expo-token-ios-57). Token’ı sohbete yapıştırma.
 
+**EXFINPDKS örneği login sormuyordu** çünkü o Metro **SDK 54 / eski Expo Go** + `https://exp.exfinpdks.com` idi; `EXPO_TOKEN` yoktu, komut da `--offline`. Aynı bayraklar M10’da duruyor. iPhone App Store Go **57** artık imzasızda giriş ister — EXFIN kalıbı bunu kaldırmaz.
+
 **Android login sormaz, iPhone sorar:** Metro her iki platforma **aynı imzasız SDK 57** manifestini verir. [Expo](https://expo.dev/changelog/expo-go-57-login): giriş zorunluluğu **yalnızca iOS App Store Expo Go 57**; Android’e sonra gelecek. Play Store Expo Go hâlâ 54/eski istemci olduğu için imzasızı açar. iPhone’u Android gibi yapmak (tokensız) **mümkün değil**. 54’e geri alınmaz (iPhone Go 57 onu reddeder). Android şu an tokensız kalır.
 
 **Android:** Play Store hâlâ 54 ise proje 57 olduğu için uyumsuzluk çıkabilir → [SDK 57](https://expo.dev/go?sdkVersion=57&platform=android).

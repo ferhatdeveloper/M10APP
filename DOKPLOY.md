@@ -92,6 +92,20 @@ iPhone **Kamera** veya Expo Go **Enter URL** `npx expo login` diyorsa manifesto 
 
 Token varken `scripts/start-metro.sh` `--offline` kapatır ve expo-root imzası üretir. Token yoksa imzasız 200 devam eder (Android hâlâ açar). iOS App Store Expo Go 57 imzasızı açmaz — [Expo changelog](https://expo.dev/changelog/expo-go-57-login).
 
+### EXFINPDKS (`expo-checkin-metro`) neden login istemedi?
+
+Aynı Dokploy projesindeki şablon compose **idle** bırakılmalı (`:8081` çakışır, başka uygulama tgz indirir). Okunan env:
+
+| | EXFIN `expo-checkin-metro` | M10 `m10-metro` |
+|--|--|--|
+| Komut | `npx expo start --offline --port 8081` | Aynı (`EXPO_TOKEN` yoksa) |
+| `EXPO_OFFLINE` / `CI` | `1` | `1` |
+| `EXPO_TOKEN` / `expo login` | **yok** | **yok** |
+| Proxy | `https://exp.exfinpdks.com:443` (Traefik) | `http://72.60.182.107:8081` (TLS/HSTS yok) |
+| Proje SDK | Eski check-in uygulaması (**54 dönemi**) | **57** (iPhone Go 57) |
+
+EXFIN’de sihirli bir imza yoktu. O dönemde iPhone Expo Go **54** imzasız `--offline` Metro’yu açıyordu; web `https://exp.exfinpdks.com` + `exp://` QR. App Store Go artık **57** ve [giriş istiyor](https://expo.dev/changelog/expo-go-57-login). EXFIN bayraklarını kopyalamak iOS 57 login’ini kaldırmaz. `metro.retailex.app:443` PROXY yapmak eski TLS hatasını geri getirir — QR `exp://72.60.182.107:8081` kalır. Web önizleme: `https://apk.retailex.app`.
+
 Komut: **`npx expo start --offline --port 8081`** (`--host lan` kullanma — Expo CLI v6’da `--offline` ile çakışır ve imza 500 üretir). Token varsa script `npx expo start --port 8081` çalıştırır.
 
 `EXPO_PACKAGER_PROXY_URL` yoksa Expo yanlış porta düşer. **8081 host publish** şart — aksi halde Expo Go timeout verir. Host portları: `8081`, `19000`, `19001`.
