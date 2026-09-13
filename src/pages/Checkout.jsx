@@ -59,15 +59,19 @@ export default function Checkout() {
   const addr = user.address
   const canSubmit = !belowMin && !submitting && (when === 'now' || Boolean(slot))
 
-  const submit = () => {
+  const submit = async () => {
     if (!canSubmit) return
     setSubmitting(true)
-    const order = placeOrder({
-      payment,
-      schedule: when === 'now' ? 'الآن' : slot,
-      note: note.trim(),
-    })
-    navigate(`/track/${order.id}`)
+    try {
+      const order = await placeOrder({
+        payment,
+        schedule: when === 'now' ? 'الآن' : slot,
+        note: note.trim(),
+      })
+      if (order?.id) navigate(`/track/${order.id}`)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (

@@ -14,7 +14,9 @@ export function orderStep(createdAt, now = Date.now(), status) {
   if (status === 'delivered') return 3
   if (status === 'onway') return 2
   if (status === 'preparing') return 1
-  if (status === 'confirmed') return 0
+  if (status === 'confirmed' || status === 'pending' || status === 'converted' || status === 'demo') return 0
+  // API kaynaklı siparişlerde zaman simülasyonu yok — status beklenir
+  if (!createdAt) return 0
   const age = (now - createdAt) / 1000
   if (age < 20) return 0
   if (age < 50) return 1

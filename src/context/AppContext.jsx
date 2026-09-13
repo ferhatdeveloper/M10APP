@@ -28,7 +28,17 @@ import {
   user as seedUser,
   DEMO_ACCOUNTS,
 } from '../data/mock.js'
-import { fetchTenantProducts, fetchTenantRegistry, tenantRestBase, getDefaultTenantCode } from '../api/retailex.js'
+import {
+  fetchTenantProducts,
+  fetchTenantRegistry,
+  tenantRestBase,
+  getDefaultTenantCode,
+  submitWebOrder,
+  fetchWebOrders,
+  updateWebOrderStatus,
+  mapWebOrderToApp,
+  encodeShippingAddress,
+} from '../api/retailex.js'
 import { scheduleLocalDemo } from '../utils/push'
 
 const AppContext = createContext(null)
@@ -157,6 +167,9 @@ export function AppProvider({ children }) {
   const [catalogSource, setCatalogSource] = useState('pending') // pending | retailex-api | seed-fallback | error
   const [catalogError, setCatalogError] = useState(null)
   const [retailexBaseUrl, setRetailexBaseUrl] = useState(() => tenantRestBase(getDefaultTenantCode()))
+  const [ordersSource, setOrdersSource] = useState('local') // local | retailex-api | error
+  const [ordersError, setOrdersError] = useState(null)
+  const [ordersSyncing, setOrdersSyncing] = useState(false)
 
   const [simulateOffline, setSimulateOffline] = useState(false)
   const [demoMode, setDemoMode] = useState('customer') // customer | admin | courier
@@ -451,6 +464,66 @@ export function AppProvider({ children }) {
     }
   }, [hydrated, isOffline])
 
+  const refreshOrdersFromApi = async ({ quiet = false } = {}) => {
+    if (isOffline) return null
+    const tenantCode = getDefaultTenantCode()
+    const base = retailexBaseUrl || tenantRestBase(tenantCode)
+    if (!quiet) setOrdersSyncing(true)
+    try {
+      const rows = await fetchWebOrders({ tenantCode, baseUrl: base, limit: 100 })
+      const mapped = rows.map((r) => mapWebOrderToApp(r, { defaultStoreId: DEFAULT_STORE_ID }))
+      setOrders((prev) => {
+        const byKey = new Map()
+        for (const o of prev) {
+          if (o?.id) byKey.set(o.id, o)
+          if (o?.retailexId) byKey.set(o.retailexId, o)
+          if (o?.orderNo) byKey.set(o.orderNo, o)
+        }
+        const merged = mapped.map((o) => {
+          const local = byKey.get(o.id) || byKey.get(o.retailexId) || byKey.get(o.orderNo)
+          if (!local) return o
+          return {
+            ...o,
+            rating: local.rating || o.rating,
+            walletPaid: local.walletPaid ?? o.walletPaid,
+            cardLast4: local.cardLast4 ?? o.cardLast4,
+            slot: local.slot ?? o.slot,
+            pointsEarned: local.pointsEarned ?? o.pointsEarned,
+          }
+        })
+        persist('m10-orders', merged)
+        return merged
+      })
+      setOrdersSource('retailex-api')
+      setOrdersError(null)
+      return mapped
+    } catch (e) {
+      const msg = e?.message || String(e)
+      setOrdersError(msg)
+      setOrdersSource((prev) => (prev === 'retailex-api' ? 'retailex-api' : 'error'))
+      return null
+    } finally {
+      if (!quiet) setOrdersSyncing(false)
+    }
+  }
+
+  // Siparişleri RetailEX eticaret_web_orders üzerinden senkronize et
+  useEffect(() => {
+    if (!hydrated || isOffline) return undefined
+    let cancelled = false
+    ;(async () => {
+      if (!cancelled) await refreshOrdersFromApi({ quiet: true })
+    })()
+    const tmr = setInterval(() => {
+      if (!cancelled) refreshOrdersFromApi({ quiet: true })
+    }, 15000)
+    return () => {
+      cancelled = true
+      clearInterval(tmr)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, isOffline, retailexBaseUrl])
+
   useEffect(() => {
     let cancelled = false
     let sub
@@ -609,16 +682,27 @@ export function AppProvider({ children }) {
     return true
   }
 
-  const cancelOrder = (orderId) => {
+  const cancelOrder = async (orderId) => {
+    const existing = orders.find((o) => o.id === orderId || o.retailexId === orderId)
     setOrders((prev) => {
       const next = prev.map((o) =>
-        o.id === orderId && o.status !== 'cancelled'
+        (o.id === orderId || o.retailexId === orderId) && o.status !== 'cancelled'
           ? { ...o, status: 'cancelled', cancelledAt: Date.now() }
           : o,
       )
       persist('m10-orders', next)
       return next
     })
+    if (existing?.retailexId && !isOffline) {
+      try {
+        await updateWebOrderStatus(existing.retailexId, 'cancelled', {
+          tenantCode: getDefaultTenantCode(),
+          baseUrl: retailexBaseUrl,
+        })
+      } catch (e) {
+        console.warn('[M10] cancelOrder API failed', e?.message)
+      }
+    }
   }
 
   const rateOrder = (orderId, { storeStars, courierStars, comment, answers } = {}) => {
@@ -849,12 +933,27 @@ export function AppProvider({ children }) {
     return req
   }
 
-  const adminSetOrderStatus = (orderId, status) => {
+  const adminSetOrderStatus = async (orderId, status) => {
+    const existing = orders.find((o) => o.id === orderId || o.retailexId === orderId)
     setOrders((prev) => {
-      const next = prev.map((o) => (o.id === orderId ? { ...o, status, adminUpdatedAt: Date.now() } : o))
+      const next = prev.map((o) =>
+        o.id === orderId || o.retailexId === orderId
+          ? { ...o, status, adminUpdatedAt: Date.now() }
+          : o,
+      )
       persist('m10-orders', next)
       return next
     })
+    if (existing?.retailexId && !isOffline) {
+      try {
+        await updateWebOrderStatus(existing.retailexId, status, {
+          tenantCode: getDefaultTenantCode(),
+          baseUrl: retailexBaseUrl,
+        })
+      } catch (e) {
+        console.warn('[M10] adminSetOrderStatus API failed', e?.message)
+      }
+    }
   }
 
   const adminToggleStock = (storeId, productId) => {
@@ -1065,52 +1164,121 @@ export function AppProvider({ children }) {
     })
   }
 
-  const placeOrder = ({ payment, schedule, note, slot, cardLast4, paymentMethod, walletPaid }) => {
+  const placeOrder = async ({ payment, schedule, note, slot, cardLast4, paymentMethod, walletPaid, fulfillment }) => {
     try {
       if (isOffline) return null
-      const fee = cartFee
+      const fee = fulfillment === 'pickup' ? 0 : cartFee
       const discount = cartDiscount
-      const method = paymentMethod || (payment === 'card' || payment === 'wallet' || payment === 'apple' || payment === 'google' ? payment : 'cash')
+      const method =
+        paymentMethod ||
+        (payment === 'card' || payment === 'wallet' || payment === 'apple' || payment === 'google' ? payment : 'cash')
       let paidFromWallet = 0
+      const payable = Math.max(0, cartTotal + fee - discount)
       if (method === 'wallet' || walletPaid) {
-        paidFromWallet = Math.min(walletBalance, cartPayable)
-        if (paidFromWallet < cartPayable && method === 'wallet') return null
+        paidFromWallet = Math.min(walletBalance, payable)
+        if (paidFromWallet < payable && method === 'wallet') return null
         const nextBal = walletBalance - paidFromWallet
         setWalletBalance(nextBal)
         persist('m10-wallet', nextBal)
       }
       const addrCoords = coordsForAddress(user.address) || { lat: 33.3152, lng: 44.3661 }
-      const order = {
-        id: `M10-${Date.now().toString().slice(-7)}`,
-        createdAt: Date.now(),
-        items: cart,
-        storeId: cart[0]?.storeId,
-        total: cartPayable,
-        subtotal: cartTotal,
-        fee,
-        discount,
-        payment: payment || method,
-        paymentMethod: method,
-        schedule: schedule || 'now',
-        slot: slot || null,
-        cardLast4: cardLast4 || null,
-        walletPaid: paidFromWallet || 0,
-        note,
-        address: {
-          ...(user.address || {}),
-          lat: user.address?.lat ?? addrCoords.lat,
-          lng: user.address?.lng ?? addrCoords.lng,
-        },
-        status: 'confirmed',
-        coupon: coupon || null,
-        pointsEarned: Math.round(cartTotal / 1000),
-        paymentStatus: method === 'cash' ? 'cod' : 'paid',
+      const address = {
+        ...(user.address || {}),
+        lat: user.address?.lat ?? addrCoords.lat,
+        lng: user.address?.lng ?? addrCoords.lng,
       }
-      const next = [order, ...orders]
+      const storeId = resolveStoreId(cart[0]?.storeId) || DEFAULT_STORE_ID
+      const apiItems = cart.map((line) => {
+        const p = getLiveProduct(line.storeId, line.productId)
+        const code =
+          p?.code ||
+          String(line.productId || '')
+            .toUpperCase()
+            .replace(/-/g, '_')
+        const price = Number(p?.price) || 0
+        const qty = Number(line.qty) || 1
+        return {
+          code,
+          name: p?.names?.tr || p?.name || line.productId,
+          product_id: p?.retailexId || undefined,
+          quantity: qty,
+          price,
+          line_total: price * qty,
+          unit: p?.unit || 'Adet',
+        }
+      })
+
+      const tenantCode = getDefaultTenantCode()
+      const base = retailexBaseUrl || tenantRestBase(tenantCode)
+      const submitResult = await submitWebOrder(
+        {
+          tenant_code: tenantCode,
+          demo_mode: false,
+          customer_name: user?.name || user?.phone || 'Kuçoglu Müşteri',
+          customer_phone: user?.phone || null,
+          customer_email: user?.email || null,
+          shipping_address: encodeShippingAddress(address),
+          payment_provider: method,
+          payment_status: method === 'cash' ? 'cod' : 'paid',
+          currency: 'IQD',
+          subtotal: cartTotal,
+          total: payable,
+          notes: [note, fulfillment ? `fulfillment=${fulfillment}` : null, schedule ? `schedule=${schedule}` : null]
+            .filter(Boolean)
+            .join(' · ') || 'Kuçoglu mobil sipariş',
+          items: apiItems,
+        },
+        { tenantCode, baseUrl: base },
+      )
+
+      // Yeni kaydı çek veya yerel map oluştur
+      let remoteRow = null
+      try {
+        const rows = await fetchWebOrders({ tenantCode, baseUrl: base, limit: 5 })
+        remoteRow = rows.find((r) => r.id === submitResult.order_id || r.order_no === submitResult.order_no) || null
+      } catch {
+        remoteRow = null
+      }
+
+      const order = remoteRow
+        ? mapWebOrderToApp(remoteRow, { defaultStoreId: storeId })
+        : {
+            id: submitResult.order_no || submitResult.order_id,
+            retailexId: submitResult.order_id,
+            orderNo: submitResult.order_no,
+            createdAt: Date.now(),
+            items: cart.map((c) => ({ ...c })),
+            storeId,
+            total: payable,
+            subtotal: cartTotal,
+            fee,
+            discount,
+            payment: payment || method,
+            paymentMethod: method,
+            schedule: schedule || 'now',
+            slot: slot || null,
+            cardLast4: cardLast4 || null,
+            walletPaid: paidFromWallet || 0,
+            note,
+            address,
+            status: 'confirmed',
+            coupon: coupon || null,
+            pointsEarned: Math.round(cartTotal / 1000),
+            paymentStatus: method === 'cash' ? 'cod' : 'paid',
+            source: 'retailex-api',
+            salesFicheId: submitResult.sales_fiche_id || null,
+            salesFicheNo: submitResult.sales_fiche_no || null,
+          }
+
+      // API status converted → confirmed göster
+      if (order.status === 'confirmed' || !order.status) order.status = 'confirmed'
+
+      const next = [order, ...orders.filter((o) => o.id !== order.id && o.retailexId !== order.retailexId)]
       persist('m10-orders', next)
       setOrders(next)
+      setOrdersSource('retailex-api')
       setUser((u) => {
-        const updated = { ...u, points: (u.points || 0) + order.pointsEarned }
+        const updated = { ...u, points: (u.points || 0) + (order.pointsEarned || Math.round(cartTotal / 1000)) }
         persistUser(updated)
         return updated
       })
@@ -1135,7 +1303,7 @@ export function AppProvider({ children }) {
       try {
         if (user?.pushEnabled) {
           scheduleLocalDemo({
-            title: 'M10',
+            title: 'Kuçoglu',
             body: order.id,
             seconds: 0,
           }).catch(() => {})
@@ -1151,6 +1319,7 @@ export function AppProvider({ children }) {
       return order
     } catch (e) {
       console.warn('[M10] placeOrder crashed', e?.message, e?.stack)
+      setOrdersError(e?.message || String(e))
       return null
     }
   }
@@ -1368,6 +1537,10 @@ export function AppProvider({ children }) {
       toggleFavorite,
       orders,
       placeOrder,
+      refreshOrdersFromApi,
+      ordersSource,
+      ordersError,
+      ordersSyncing,
       user,
       setUser: updateUser,
       addresses,
@@ -1493,6 +1666,9 @@ export function AppProvider({ children }) {
       retailexBaseUrl,
       simulateOffline,
       demoMode,
+      ordersSource,
+      ordersError,
+      ordersSyncing,
     ],
   )
 

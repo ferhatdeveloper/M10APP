@@ -33,7 +33,7 @@ export default function OrderTrackingScreen({ navigation, route }) {
   const { id } = route.params
   const { orders, cancelOrder, reorder } = useApp()
   const { t, lang, isRTL } = useI18n()
-  const order = orders.find((o) => o.id === id)
+  const order = orders.find((o) => o.id === id || o.orderNo === id || o.retailexId === id)
   const [now, setNow] = useState(Date.now())
   const [simProgress, setSimProgress] = useState(0.12)
   const [courierStage, setCourierStage] = useState('searching') // searching | assigned | enroute | arriving | delivered
@@ -57,6 +57,7 @@ export default function OrderTrackingScreen({ navigation, route }) {
   const etaMin = Math.max(0, etaMax(store) - Math.floor((now - (order?.createdAt || now)) / 60000))
   const cancelled = order?.status === 'cancelled'
   const delivered = !cancelled && step >= 3
+  const liveApiOrder = order?.source === 'retailex-api'
 
   const destination = useMemo(
     () => (order ? coordsForAddress(order.address) : null),
@@ -64,10 +65,18 @@ export default function OrderTrackingScreen({ navigation, route }) {
   )
   const storeCoords = useMemo(() => (store ? coordsForStore(store) : null), [store?.id])
 
-  // Stage machine: searching -> assigned (after 6s) -> enroute (after 10s) -> arriving (after etaMin) -> delivered
+  // Canlı API: stage = gerçek status; aksi halde demo zaman makinesi
   useEffect(() => {
-    if (!order || cancelled || delivered) {
-      if (delivered) setCourierStage('delivered')
+    if (!order || cancelled) return undefined
+    if (liveApiOrder) {
+      if (delivered || order.status === 'delivered') setCourierStage('delivered')
+      else if (order.status === 'onway') setCourierStage('enroute')
+      else if (order.status === 'preparing') setCourierStage('assigned')
+      else setCourierStage('searching')
+      return undefined
+    }
+    if (delivered) {
+      setCourierStage('delivered')
       return undefined
     }
     if (courierStage === 'searching') {
@@ -79,7 +88,7 @@ export default function OrderTrackingScreen({ navigation, route }) {
       return () => clearTimeout(tmr)
     }
     return undefined
-  }, [order?.id, cancelled, delivered, courierStage])
+  }, [order?.id, order?.status, cancelled, delivered, courierStage, liveApiOrder])
 
   // Simulate courier moving toward destination once enroute
   useEffect(() => {
@@ -88,6 +97,10 @@ export default function OrderTrackingScreen({ navigation, route }) {
       return undefined
     }
     if (courierStage === 'searching' || courierStage === 'assigned') {
+      return undefined
+    }
+    if (liveApiOrder) {
+      setSimProgress(order.status === 'onway' ? 0.65 : 0.35)
       return undefined
     }
     const base = step <= 0 ? 0.08 : step === 1 ? 0.28 : 0.55
@@ -100,7 +113,7 @@ export default function OrderTrackingScreen({ navigation, route }) {
       })
     }, 1200)
     return () => clearInterval(tmr)
-  }, [order?.id, cancelled, delivered, step, courierStage])
+  }, [order?.id, order?.status, cancelled, delivered, step, courierStage, liveApiOrder])
 
   // Auto-open survey once delivered
   useEffect(() => {

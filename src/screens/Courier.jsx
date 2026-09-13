@@ -105,7 +105,7 @@ export default function CourierScreen({ navigation }) {
                       key={`${o.id}-${item.productId}`}
                       style={{ fontWeight: '600', textAlign: isRTL ? 'right' : 'left', fontSize: 13 }}
                     >
-                      {item.qty}× {productName(p, lang) || item.productId}
+                      {item.qty}× {productName(p, lang) || item.name || item.productId}
                     </Text>
                   )
                 })}

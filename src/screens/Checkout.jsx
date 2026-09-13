@@ -101,7 +101,7 @@ export default function CheckoutScreen({ navigation }) {
 
   const retry = () => setPayState('idle')
 
-  const submit = () => {
+  const submit = async () => {
     if (!canSubmit()) return
     let order
     try {
@@ -116,40 +116,43 @@ export default function CheckoutScreen({ navigation }) {
       }
       if (digitalPay) {
         setPayState('confirming')
+        try {
+          order = await placeOrder(payload)
+        } catch (e) {
+          console.warn('[M10] placeOrder crashed', e?.message, e?.stack)
+          setPayState('fail')
+          return
+        }
+        if (!order) {
+          setPayState('fail')
+          return
+        }
+        setPayState('success')
         setTimeout(() => {
           try {
-            order = placeOrder(payload)
+            navigation.replace('Track', { id: order.id })
           } catch (e) {
-            console.warn('[M10] placeOrder crashed', e?.message, e?.stack)
-            setPayState('fail')
-            return
+            console.warn('[M10] nav to Track failed', e?.message)
           }
-          if (!order) {
-            setPayState('fail')
-            return
-          }
-          setPayState('success')
-          setTimeout(() => {
-            try {
-              navigation.replace('Track', { id: order.id })
-            } catch (e) {
-              console.warn('[M10] nav to Track failed', e?.message)
-            }
-          }, 700)
-        }, 900)
+        }, 700)
         return
       }
-      order = placeOrder(payload)
+      setPayState('confirming')
+      order = await placeOrder(payload)
     } catch (e) {
       console.warn('[M10] placeOrder crashed', e?.message, e?.stack)
+      setPayState('fail')
       return
     }
     if (order) {
+      setPayState('idle')
       try {
         navigation.replace('Track', { id: order.id })
       } catch (e) {
         console.warn('[M10] nav to Track failed', e?.message)
       }
+    } else {
+      setPayState('fail')
     }
   }
 
