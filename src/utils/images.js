@@ -1,4 +1,4 @@
-export const logoImg = require('../../assets/m10-logo.png')
+export const logoImg = require('../../assets/kucoglu-logo.png')
 export const promoImg = require('../../assets/promo-banner.png')
 
 /** Stable grocery photo used when a product image is missing or fails to load */
@@ -34,7 +34,14 @@ export function src(path, aisle) {
   if (!path) return aisle ? aisleFallback(aisle) : fallbackProductImg
   if (typeof path !== 'string') return path
   if (path.includes('promo-banner') || path === '/promo-banner.png') return promoImg
-  if (path.includes('m10-logo') || path === '/m10-logo.png') return logoImg
+  if (
+    path.includes('kucoglu-logo') ||
+    path.includes('m10-logo') ||
+    path === '/kucoglu-logo.png' ||
+    path === '/m10-logo.png'
+  ) {
+    return logoImg
+  }
   if (path.startsWith('http')) return { uri: path }
   return { uri: path }
 }

@@ -1,30 +1,31 @@
-import Svg, { Path, Rect } from 'react-native-svg'
-import { colors } from '../theme'
-import { LOGO_H, LOGO_PATH, LOGO_VB, LOGO_W } from '../assets/logoPath'
+import { Image } from 'react-native'
 
-const ASPECT = LOGO_W / LOGO_H
+const LOGO = require('../../assets/kucoglu-logo.png')
+/** Native asset size: 727×539 */
+const ASPECT = 727 / 539
 
 /**
- * M10 wordmark traced from the original logo bitmap (same letterforms, no font swap).
+ * Kuçoglu Restaurant mark (black ground + beige wordmark).
  * `size` = height in px; width follows brand aspect.
- * `onBrand` = transparent bg for red app bars (white mark only).
+ * `onBrand` = no extra chrome — sits flush on black app bars.
  */
 export default function Logo({ size = 44, rounded = true, onBrand = false }) {
   const height = size
   const width = Math.round(size * ASPECT)
-  const bg = onBrand ? 'transparent' : colors.red
 
   return (
-    <Svg
-      width={width}
-      height={height}
-      viewBox={LOGO_VB}
-      accessibilityLabel="M10"
+    <Image
+      source={LOGO}
+      style={{
+        width,
+        height,
+        borderRadius: rounded && !onBrand ? 10 : 0,
+        backgroundColor: 'transparent',
+      }}
+      resizeMode="contain"
+      accessibilityLabel="KUÇ OGLU RESTAURANT"
       accessibilityRole="image"
       pointerEvents="none"
-    >
-      <Rect width={LOGO_W} height={LOGO_H} rx={rounded && !onBrand ? 28 : 0} fill={bg} />
-      <Path d={LOGO_PATH} fill="#FFFFFF" fillRule="evenodd" />
-    </Svg>
+    />
   )
 }

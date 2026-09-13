@@ -28,6 +28,7 @@ import {
   user as seedUser,
   DEMO_ACCOUNTS,
 } from '../data/mock.js'
+import { fetchTenantProducts, fetchTenantRegistry, tenantRestBase, getDefaultTenantCode } from '../api/retailex.js'
 import { scheduleLocalDemo } from '../utils/push'
 
 const AppContext = createContext(null)
@@ -143,7 +144,8 @@ export function AppProvider({ children }) {
   const [butlerJobs, setButlerJobs] = useState([])
   const [returns, setReturns] = useState([])
   const [storeOverrides, setStoreOverrides] = useState({})
-  const [liveCatalog, setLiveCatalog] = useState(cloneCatalog)
+  const [liveCatalog, setLiveCatalog] = useState([]) // API-first: seed ile doldurma; RetailEX yükler
+
   const [liveAisles, setLiveAisles] = useState(seedLiveAisles)
   const [liveCampaigns, setLiveCampaigns] = useState(seedLiveCampaigns)
   const [liveStores, setLiveStores] = useState(seedLiveStores)
@@ -152,6 +154,10 @@ export function AppProvider({ children }) {
   const [productReviews, setProductReviews] = useState([]) // user-submitted reviews
   const [courierChats, setCourierChats] = useState({}) // { orderId: [{ from, text, ts }] }
   const [isOffline, setIsOffline] = useState(false)
+  const [catalogSource, setCatalogSource] = useState('pending') // pending | retailex-api | seed-fallback | error
+  const [catalogError, setCatalogError] = useState(null)
+  const [retailexBaseUrl, setRetailexBaseUrl] = useState(() => tenantRestBase(getDefaultTenantCode()))
+
   const [simulateOffline, setSimulateOffline] = useState(false)
   const [demoMode, setDemoMode] = useState('customer') // customer | admin | courier
   const closeDemoDone = useRef(false)
@@ -337,12 +343,17 @@ export function AppProvider({ children }) {
       const storedChats = await load('m10-courier-chats', {})
       if (storedChats && typeof storedChats === 'object') setCourierChats(storedChats)
       const storedCatalog = await load('m10-admin-catalog', null)
-      if (Array.isArray(storedCatalog) && storedCatalog.length) {
-        const ids = new Set(storedCatalog.map((p) => p.id))
-        const missing = seedCatalog.filter((p) => !ids.has(p.id)).map((p) => ({ ...p, disabled: false }))
-        setLiveCatalog([...storedCatalog, ...missing])
+      // API-first: kalıcı cache yalnızca önceki RetailEX cevabıysa (source işaretli) kullan
+      const cachedFromApi =
+        Array.isArray(storedCatalog) &&
+        storedCatalog.length &&
+        storedCatalog.some((p) => p?.source === 'retailex-api' || String(p?.code || '').startsWith('KO_'))
+      if (cachedFromApi) {
+        setLiveCatalog(storedCatalog.map((p) => ({ ...p, disabled: false })))
+        setCatalogSource('retailex-api')
       } else {
-        setLiveCatalog(cloneCatalog())
+        setLiveCatalog([])
+        setCatalogSource('pending')
       }
       const storedAisles = await load('m10-admin-aisles', null)
       setLiveAisles(Array.isArray(storedAisles) && storedAisles.length ? storedAisles : seedLiveAisles())
@@ -374,8 +385,7 @@ export function AppProvider({ children }) {
       const closeDemo = await load('m10-close-demo', { done: false, pending: false })
       closeDemoDone.current = !!closeDemo?.done
       closeDemoPending.current = !!closeDemo?.pending && !closeDemo?.done
-      // Light catalog cache for offline UX (compact product snapshot)
-      const cacheSource = Array.isArray(storedCatalog) && storedCatalog.length ? storedCatalog : seedCatalog
+      const cacheSource = Array.isArray(storedCatalog) && storedCatalog.length ? storedCatalog : []
       persist('m10-catalog-cache', {
         at: Date.now(),
         storeIds: seedStores.map((s) => s.id),
@@ -395,6 +405,51 @@ export function AppProvider({ children }) {
       setHydrated(true)
     })()
   }, [])
+
+  // Gerçek RetailEX API (kucoglu). Varsayılan: https://api.retailex.app/kucoglu
+  // EXPO_PUBLIC_ALLOW_CATALOG_FALLBACK=1 ise API fail'de lokal seed'e düşer; aksi halde hata durumu.
+  useEffect(() => {
+    if (!hydrated || isOffline) return undefined
+    let cancelled = false
+    const allowFallback =
+      typeof process !== 'undefined' &&
+      String(process.env?.EXPO_PUBLIC_ALLOW_CATALOG_FALLBACK || '') === '1'
+    ;(async () => {
+      const tenantCode = getDefaultTenantCode()
+      let base = tenantRestBase(tenantCode)
+      try {
+        const tenant = await fetchTenantRegistry(tenantCode)
+        if (cancelled) return
+        if (tenant?.rest_base_url) {
+          base = String(tenant.rest_base_url).replace(/\/+$/, '')
+        }
+        setRetailexBaseUrl(base)
+        if (tenant && tenant.is_active === false) {
+          throw new Error(`Tenant ${tenantCode} is_active=false`)
+        }
+        const remote = await fetchTenantProducts(tenantCode, { baseUrl: base })
+        if (cancelled) return
+        if (!remote.length) throw new Error('RetailEX returned 0 products')
+        setLiveCatalog(remote.map((p) => ({ ...p, disabled: false })))
+        persist('m10-admin-catalog', remote)
+        setCatalogSource('retailex-api')
+        setCatalogError(null)
+      } catch (e) {
+        if (cancelled) return
+        const msg = e?.message || String(e)
+        setCatalogError(msg)
+        if (allowFallback) {
+          setLiveCatalog(cloneCatalog())
+          setCatalogSource('seed-fallback')
+        } else {
+          setCatalogSource('error')
+        }
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [hydrated, isOffline])
 
   useEffect(() => {
     let cancelled = false
@@ -1383,6 +1438,9 @@ export function AppProvider({ children }) {
       isAdminAccess,
       courierUpdateOrder,
       isOffline,
+      catalogSource,
+      catalogError,
+      retailexBaseUrl,
       setOfflineSim,
       simulateOffline,
       demoMode,
@@ -1430,6 +1488,9 @@ export function AppProvider({ children }) {
       adminUnlocked,
       isAdminAccess,
       isOffline,
+      catalogSource,
+      catalogError,
+      retailexBaseUrl,
       simulateOffline,
       demoMode,
     ],

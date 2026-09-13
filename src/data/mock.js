@@ -1,3 +1,7 @@
+import { buildKucogluCatalog, kucogluStore, KUCOGLU_STORE_ID } from './kucogluCatalog.js'
+
+export { KUCOGLU_STORE_ID }
+
 export const formatIQD = (n, lang = 'ar') => {
   const loc = lang === 'en' ? 'en-US' : lang === 'tr' ? 'tr-TR' : 'ar-IQ'
   const num = Number(n).toLocaleString(loc)
@@ -81,12 +85,12 @@ export const modes = [
 
 export const aisles = [
   { id: 'offers' },
-  { id: 'ready' },
+  { id: 'meat', nameTr: 'Et', nameEn: 'Meat', nameAr: 'اللحوم' },
+  { id: 'ready', nameTr: 'Tavuk', nameEn: 'Chicken', nameAr: 'دجاج' },
+  { id: 'drinks', nameTr: 'İçecekler', nameEn: 'Drinks', nameAr: 'مشروبات' },
   { id: 'dairy' },
   { id: 'coldcuts', nameTr: 'Şarküteri', nameEn: 'Cold Cuts', nameAr: 'لحوم باردة' },
-  { id: 'meat', nameTr: 'Et ve şarküteri', nameEn: 'Meats & Deli', nameAr: 'لحوم ومقبلات' },
   { id: 'bakery' },
-  { id: 'drinks' },
   { id: 'pantry' },
   { id: 'produce' },
   { id: 'snacks' },
@@ -98,8 +102,8 @@ export const aisles = [
 
 export const categories = aisles
 
-/** Aisle order for Toters Fresh–style sectioned browsing (no “offers” chip row) */
-export const shopAisles = aisles.filter((a) => a.id !== 'offers')
+/** Kuç Oglu menü reyonları (et / tavuk / içecek) */
+export const shopAisles = aisles.filter((a) => ['meat', 'ready', 'drinks'].includes(a.id))
 
 export const filters = [
   { id: 'offers' },
@@ -157,7 +161,7 @@ export const bannerSub = (b, lang) =>
 
 export const dealSkus = () => catalog.filter((p) => p.oldPrice)
 
-export const DEFAULT_STORE_ID = 'm10-dora-mechanic'
+export const DEFAULT_STORE_ID = KUCOGLU_STORE_ID
 
 export const LEGACY_STORE_IDS = {
   'm10-golden': 'm10-dora-mechanic',
@@ -165,6 +169,7 @@ export const LEGACY_STORE_IDS = {
   'm10-erbil': 'm10-dora-carsi',
   'm10-karrada': 'm10-seyyidiye',
   'm10-ankawa': 'm10-zeyyune',
+  kucoglu: KUCOGLU_STORE_ID,
 }
 
 const normPlace = (s) =>
@@ -175,6 +180,7 @@ const normPlace = (s) =>
     .trim()
 
 export const stores = [
+  kucogluStore,
   {
     id: 'm10-dora-mechanic',
     name: 'M10 دورا ميكانيك',
@@ -311,7 +317,7 @@ const n = (ar, en, tr) => ({ ar, en, tr })
 
 const v = (id, ar, en, tr, price) => ({ id, labelAr: ar, labelEn: en, labelTr: tr, price })
 
-export const catalog = [
+const legacyM10Catalog = [
   {
     id: 'mm-apples',
     aisle: 'produce',
@@ -1842,6 +1848,10 @@ export const catalog = [
   sku: p.sku || p.id,
 }))
 
+/** Aktif katalog: Kuç Oglu menü (görsellerle). Eski M10 kataloğu legacyM10Catalog’ta. */
+export const catalog = buildKucogluCatalog()
+export { legacyM10Catalog }
+
 /** Approximate lat/lng for demo map pins (Erbil / Baghdad areas) */
 export const AREA_COORDS = {
   ankawa: { lat: 36.2305, lng: 44.0092 },
@@ -1858,10 +1868,14 @@ export const AREA_COORDS = {
   السعيدية: { lat: 33.3125, lng: 44.398 },
   zeyyune: { lat: 33.34, lng: 44.41 },
   الزيونة: { lat: 33.34, lng: 44.41 },
+  duhok: { lat: 36.8554609, lng: 42.9784602 },
+  dohuk: { lat: 36.8554609, lng: 42.9784602 },
+  دهوك: { lat: 36.8554609, lng: 42.9784602 },
+  kucoglu: { lat: 36.8554609, lng: 42.9784602 },
 }
 
-export const DEFAULT_DEST = { lat: 33.3152, lng: 44.3661 }
-export const DEFAULT_STORE_COORDS = { lat: 33.2612, lng: 44.3801 }
+export const DEFAULT_DEST = { lat: 36.8554609, lng: 42.9784602 }
+export const DEFAULT_STORE_COORDS = { lat: 36.8554609, lng: 42.9784602 }
 
 export const coordsForAddress = (address) => {
   if (address?.lat != null && address?.lng != null) {

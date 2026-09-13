@@ -18,18 +18,19 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
   return (
     <View
       style={{
-        backgroundColor: colors.red,
+        backgroundColor: '#000000',
         paddingTop: insets.top,
       }}
     >
-      <StatusBar barStyle="light-content" backgroundColor={colors.red} />
+      <StatusBar barStyle="light-content" backgroundColor="#000000" />
       <View
         style={{
           paddingHorizontal: 16,
-          paddingVertical: 10,
+          paddingVertical: 8,
           flexDirection: isRTL ? 'row-reverse' : 'row',
           alignItems: 'center',
           gap: 10,
+          minHeight: 52,
         }}
       >
         {onBack ? (
@@ -47,7 +48,7 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
             <Chevron size={22} color="#fff" />
           </Pressable>
         ) : (
-          <Logo size={36} onBrand />
+          <Logo size={44} onBrand />
         )}
         <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
           {showLocation ? (

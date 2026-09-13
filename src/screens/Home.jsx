@@ -175,6 +175,9 @@ export default function HomeScreen({ navigation }) {
     liveCampaigns,
     liveStores,
     liveCatalog,
+    catalogSource,
+    catalogError,
+    retailexBaseUrl,
   } = useApp()
   const { t, lang, isRTL } = useI18n()
   const [chip, setChip] = useState(null)
@@ -231,6 +234,37 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={[]}>
       <TopBar showLocation onLocation={() => go('Addresses')} onBell={() => go('Notifications')} />
+      {catalogSource === 'pending' || catalogSource === 'error' || catalogSource === 'seed-fallback' ? (
+        <View
+          style={{
+            marginHorizontal: 16,
+            marginTop: 8,
+            padding: 12,
+            borderRadius: 12,
+            backgroundColor: catalogSource === 'error' ? '#3F1D1D' : '#1B140C',
+            borderWidth: 1,
+            borderColor: catalogSource === 'error' ? '#C75B44' : '#D6A36B',
+          }}
+        >
+          <Text style={{ color: '#FFCF99', fontWeight: '700', fontSize: 13, textAlign: isRTL ? 'right' : 'left' }}>
+            {catalogSource === 'pending'
+              ? 'RetailEX API bağlanıyor…'
+              : catalogSource === 'seed-fallback'
+                ? 'API yok — geçici yerel katalog'
+                : 'RetailEX API bağlanamadı'}
+          </Text>
+          {catalogSource === 'error' && catalogError ? (
+            <Text style={{ color: '#E8D5C4', fontSize: 11, marginTop: 4, textAlign: isRTL ? 'right' : 'left' }}>
+              {String(catalogError).slice(0, 160)}
+            </Text>
+          ) : null}
+          {retailexBaseUrl ? (
+            <Text style={{ color: '#A89080', fontSize: 10, marginTop: 4, textAlign: isRTL ? 'right' : 'left' }}>
+              {retailexBaseUrl}
+            </Text>
+          ) : null}
+        </View>
+      ) : null}
       <ScrollView contentContainerStyle={{ paddingBottom: cartCount ? 100 : 24 }}>
         <View style={{ marginHorizontal: 16, marginTop: 4 }}>
           <SearchField
