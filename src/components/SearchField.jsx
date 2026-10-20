@@ -20,6 +20,7 @@ export default function SearchField({
   onSubmitEditing,
   isRTL = false,
   autoFocus = false,
+  compact = false,
 }) {
   const [focused, setFocused] = useState(false)
   const showClear = mode === 'input' && Boolean(String(value || '').length)
@@ -27,18 +28,23 @@ export default function SearchField({
   const row = {
     flexDirection: isRTL ? 'row-reverse' : 'row',
     alignItems: 'center',
-    gap: 10,
-    backgroundColor: '#fff',
+    gap: compact ? 8 : 10,
+    backgroundColor: compact ? colors.bg : '#fff',
     borderRadius: radiusPill,
-    paddingHorizontal: 14,
-    paddingVertical: mode === 'pressable' ? 13 : 4,
-    minHeight: 50,
+    paddingHorizontal: compact ? 12 : 14,
+    paddingVertical: mode === 'pressable' ? (compact ? 0 : 13) : 4,
+    minHeight: compact ? 38 : 50,
+    height: compact && mode === 'pressable' ? 38 : undefined,
     borderWidth: focused ? 1.5 : 1,
     borderColor: focused ? colors.red : colors.line,
-    ...shadow.soft,
-    ...(Platform.OS === 'web'
-      ? { boxShadow: focused ? '0 4px 18px rgba(227,30,36,0.12)' : '0 3px 12px rgba(22,22,22,0.06)' }
-      : null),
+    ...(compact
+      ? { shadowOpacity: 0, elevation: 0 }
+      : {
+          ...shadow.soft,
+          ...(Platform.OS === 'web'
+            ? { boxShadow: focused ? '0 4px 18px rgba(227,30,36,0.12)' : '0 3px 12px rgba(22,22,22,0.06)' }
+            : null),
+        }),
   }
 
   const scanBtn = onScan ? (
@@ -47,9 +53,9 @@ export default function SearchField({
       accessibilityRole="button"
       accessibilityLabel="scan"
       style={{
-        width: 38,
-        height: 38,
-        borderRadius: 19,
+        width: compact ? 30 : 38,
+        height: compact ? 30 : 38,
+        borderRadius: compact ? 15 : 19,
         backgroundColor: colors.redSoft,
         alignItems: 'center',
         justifyContent: 'center',
@@ -57,26 +63,38 @@ export default function SearchField({
         borderColor: 'rgba(227,30,36,0.18)',
       }}
     >
-      <ScanBarcode size={18} color={colors.red} strokeWidth={2.2} />
+      <ScanBarcode size={compact ? 15 : 18} color={colors.red} strokeWidth={2.2} />
     </SoftPress>
   ) : null
 
   if (mode === 'pressable') {
     return (
       <SoftPress onPress={onPress} style={row}>
-        <View
+        {compact ? (
+          <Search size={16} color={colors.muted} strokeWidth={2.2} />
+        ) : (
+          <View
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: 17,
+              backgroundColor: colors.bg,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Search size={17} color={colors.muted} />
+          </View>
+        )}
+        <Text
           style={{
-            width: 34,
-            height: 34,
-            borderRadius: 17,
-            backgroundColor: colors.bg,
-            alignItems: 'center',
-            justifyContent: 'center',
+            flex: 1,
+            color: colors.muted,
+            fontWeight: compact ? '500' : '600',
+            fontSize: compact ? 13 : 15,
           }}
+          numberOfLines={1}
         >
-          <Search size={17} color={colors.muted} />
-        </View>
-        <Text style={{ flex: 1, color: colors.muted, fontWeight: '600', fontSize: 15 }} numberOfLines={1}>
           {placeholder}
         </Text>
         {scanBtn}

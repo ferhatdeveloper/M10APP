@@ -18,37 +18,38 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
   return (
     <View
       style={{
-        backgroundColor: '#000000',
+        backgroundColor: colors.red,
         paddingTop: insets.top,
       }}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#000000" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.red} />
       <View
         style={{
-          paddingHorizontal: 16,
-          paddingVertical: 8,
+          paddingHorizontal: 12,
+          paddingVertical: 6,
           flexDirection: isRTL ? 'row-reverse' : 'row',
           alignItems: 'center',
-          gap: 10,
-          minHeight: 52,
+          gap: 8,
+          minHeight: 44,
         }}
       >
         {onBack ? (
           <Pressable
             onPress={onBack}
+            hitSlop={6}
             style={{
-              width: 40,
-              height: 40,
-              borderRadius: 12,
+              width: 32,
+              height: 32,
+              borderRadius: 10,
               backgroundColor: 'rgba(255,255,255,0.18)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Chevron size={22} color="#fff" />
+            <Chevron size={18} color="#fff" />
           </Pressable>
         ) : (
-          <Logo size={44} onBrand />
+          <Logo size={28} onBrand />
         )}
         <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
           {showLocation ? (
@@ -57,17 +58,18 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
               style={{
                 flexDirection: isRTL ? 'row-reverse' : 'row',
                 alignItems: 'center',
-                gap: 6,
+                gap: 4,
                 maxWidth: '100%',
               }}
             >
               <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
                 <Text
                   style={{
-                    fontSize: 11,
+                    fontSize: 10,
                     fontWeight: '700',
                     color: 'rgba(255,255,255,0.8)',
                     textAlign: isRTL ? 'right' : 'left',
+                    lineHeight: 13,
                   }}
                   numberOfLines={1}
                 >
@@ -76,25 +78,28 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
                 <Text
                   numberOfLines={1}
                   style={{
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: '800',
                     color: '#fff',
                     textAlign: isRTL ? 'right' : 'left',
+                    lineHeight: 16,
+                    marginTop: 1,
                   }}
                 >
                   {user.address.area}، {user.address.city}
                 </Text>
               </View>
-              <MapPin size={16} color={colors.yellow} />
+              <MapPin size={14} color={colors.yellow} />
             </Pressable>
           ) : (
             <Text
               style={{
-                fontSize: 17,
+                fontSize: 15,
                 fontWeight: '800',
                 color: '#fff',
                 textAlign: isRTL ? 'right' : 'left',
               }}
+              numberOfLines={1}
             >
               {title || t('appName')}
             </Text>
@@ -104,32 +109,33 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
         {onBell ? (
           <Pressable
             onPress={onBell}
+            hitSlop={6}
             style={{
-              width: 40,
-              height: 40,
-              borderRadius: 12,
+              width: 32,
+              height: 32,
+              borderRadius: 10,
               backgroundColor: 'rgba(255,255,255,0.18)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Bell size={20} color="#fff" />
+            <Bell size={16} color="#fff" />
             {unreadCount > 0 ? (
               <View
                 style={{
                   position: 'absolute',
-                  top: 6,
-                  right: 6,
-                  minWidth: 16,
-                  height: 16,
-                  borderRadius: 8,
+                  top: 2,
+                  right: 2,
+                  minWidth: 14,
+                  height: 14,
+                  borderRadius: 7,
                   backgroundColor: colors.yellow,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  paddingHorizontal: 4,
+                  paddingHorizontal: 3,
                 }}
               >
-                <Text style={{ color: colors.ink, fontSize: 9, fontWeight: '800' }}>
+                <Text style={{ color: colors.ink, fontSize: 8, fontWeight: '800' }}>
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </Text>
               </View>

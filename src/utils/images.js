@@ -1,5 +1,9 @@
+import { nescafeBannerDataUri } from './nescafeBannerData'
+
 export const logoImg = require('../../assets/kucoglu-logo.png')
 export const promoImg = require('../../assets/promo-banner.png')
+/** Data-URI — Android release bazen drawable require’ı boyamıyor; data URI her zaman yüklenir */
+export const nescafeBannerImg = { uri: nescafeBannerDataUri }
 
 /** Stable grocery photo used when a product image is missing or fails to load */
 const FALLBACK_GROCERY =

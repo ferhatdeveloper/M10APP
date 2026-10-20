@@ -39,6 +39,7 @@ import {
   mapWebOrderToApp,
   encodeShippingAddress,
 } from '../api/retailex.js'
+import { getMartProduct } from '../data/martProducts'
 import { scheduleLocalDemo } from '../utils/push'
 
 const AppContext = createContext(null)
@@ -188,7 +189,12 @@ export function AppProvider({ children }) {
     return applyStoreOverrides(storeId, liveCatalog.filter((p) => !p.disabled))
   }
 
-  const getLiveProduct = (storeId, productId) => getLiveProducts(storeId).find((p) => p.id === productId)
+  const getLiveProduct = (storeId, productId) => {
+    const fromStore = getLiveProducts(storeId).find((p) => p.id === productId)
+    if (fromStore) return fromStore
+    // Home mart katalog ürünleri (Migros demo) — sepete eklenebilsin
+    return getMartProduct(productId)
+  }
 
   const getLiveFlyer = (id) => {
     const c = liveCampaigns.find((x) => x.id === id)
@@ -605,11 +611,11 @@ export function AppProvider({ children }) {
 
   const addToCart = (storeId, productId, qty = 1, opts = {}) => {
     const store = getLiveStore(storeId)
-    const product = getLiveProduct(storeId, productId)
+    const product = opts.product || getLiveProduct(storeId, productId)
     if (!store || store.comingSoon || !product) return false
     const oKey = `${resolveStoreId(storeId)}:${productId}`
     const stockOverride = storeOverrides[oKey]?.stock
-    const stocked = { ...product, stock: stockOverride != null ? stockOverride : product.stock }
+    const stocked = { ...product, stock: stockOverride != null ? stockOverride : product.stock ?? 99 }
     if (!isInStock(stocked)) return false
     const variantId = opts.variantId || null
     const unitPrice = opts.unitPrice != null ? opts.unitPrice : product.price

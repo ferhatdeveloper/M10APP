@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { ActivityIndicator, ScrollView, Text, TextInput, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Banknote, Check, CreditCard, MapPin, Smartphone, Wallet } from 'lucide-react-native'
 import TopBar from '../components/TopBar'
 import SoftPress from '../components/SoftPress'
@@ -9,7 +9,10 @@ import { useI18n } from '../context/I18nContext'
 import { DELIVERY_SLOTS, formatIQD, generateDeliverySlots, linePrice, productName } from '../data/mock'
 import { colors, radius, shadow } from '../theme'
 
+const ACCENT = '#E31E24' // app bar kırmızısı
+
 export default function CheckoutScreen({ navigation }) {
+  const insets = useSafeAreaInsets()
   const {
     cart,
     cartStore,
@@ -159,7 +162,44 @@ export default function CheckoutScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={[]}>
       <TopBar title={t('checkout')} onBack={() => navigation.goBack()} />
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 28 }}>
+      <ScrollView contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 120 + insets.bottom }}>
+        {/* Sipariş öncesi onay — ürün listesi */}
+        <View
+          style={{
+            backgroundColor: colors.card,
+            borderRadius: radius,
+            padding: 14,
+            borderWidth: 1,
+            borderColor: colors.line,
+          }}
+        >
+          <Text style={{ fontWeight: '800', marginBottom: 10, textAlign: isRTL ? 'right' : 'left' }}>
+            {t('orderSummary')}
+          </Text>
+          {cart.map((line) => {
+            const p = getLiveProduct(line.storeId, line.productId)
+            if (!p) return null
+            return (
+              <View
+                key={`${line.productId}-${line.variantId || 'x'}`}
+                style={{
+                  flexDirection: isRTL ? 'row-reverse' : 'row',
+                  justifyContent: 'space-between',
+                  marginBottom: 8,
+                  gap: 8,
+                }}
+              >
+                <Text style={{ flex: 1, fontWeight: '600', color: colors.ink, fontSize: 13 }} numberOfLines={1}>
+                  {line.qty}× {productName(p, lang)}
+                </Text>
+                <Text style={{ fontWeight: '700', color: colors.ink, fontSize: 13 }}>
+                  {formatIQD(linePrice(line) * line.qty, lang)}
+                </Text>
+              </View>
+            )
+          })}
+        </View>
+
         {isOffline ? (
           <View style={{ backgroundColor: colors.ink, borderRadius: radius, padding: 12 }}>
             <Text style={{ color: colors.yellow, fontWeight: '800' }}>{t('offlineCheckout')}</Text>
@@ -558,16 +598,36 @@ export default function CheckoutScreen({ navigation }) {
           <SummaryRow label={t('total')} value={formatIQD(effectivePayable, lang)} isRTL={isRTL} bold />
         </View>
 
+      </ScrollView>
+
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          paddingHorizontal: 12,
+          paddingTop: 10,
+          paddingBottom: Math.max(insets.bottom, 10),
+          backgroundColor: '#fff',
+          borderTopWidth: 1,
+          borderTopColor: '#EEE',
+          ...shadow.soft,
+        }}
+      >
+        <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+          <Text style={{ color: colors.muted, fontWeight: '600', fontSize: 13 }}>{t('total')}</Text>
+          <Text style={{ fontWeight: '900', fontSize: 16, color: colors.ink }}>{formatIQD(effectivePayable, lang)}</Text>
+        </View>
         <SoftPress
           disabled={!canSubmit()}
           onPress={submit}
           style={{
-            backgroundColor: colors.red,
+            backgroundColor: ACCENT,
             opacity: canSubmit() ? 1 : 0.5,
-            borderRadius: 16,
-            padding: 16,
+            borderRadius: 14,
+            paddingVertical: 15,
             alignItems: 'center',
-            ...shadow.soft,
           }}
         >
           <Text style={{ color: '#fff', fontWeight: '800', fontSize: 15 }}>
@@ -576,7 +636,7 @@ export default function CheckoutScreen({ navigation }) {
               : `${t('confirmOrder')} · ${formatIQD(effectivePayable, lang)}`}
           </Text>
         </SoftPress>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -72,7 +73,12 @@ function Tabs() {
       <Tab.Screen
         name="HomeTab"
         component={HomeScreen}
-        options={{ tabBarLabel: t('home'), tabBarIcon: ({ color }) => <Home size={22} color={color} /> }}
+        options={{
+          tabBarLabel: t('home'),
+          tabBarIcon: ({ color }) => <Home size={22} color={color} />,
+          // Mart klonu: ana ekranda tab bar gizle — yeni uygulama hissi
+          tabBarStyle: { display: 'none' },
+        }}
       />
       <Tab.Screen
         name="SearchTab"
@@ -101,8 +107,15 @@ function Tabs() {
 export default function RootNavigator() {
   const { lang } = useI18n()
   const { isCourier, hydrated } = useApp()
+  const [forceReady, setForceReady] = useState(false)
 
-  if (!hydrated) {
+  // Splash/loading safety: 2 saniye sonra zorla devam et (demo için).
+  useEffect(() => {
+    const t = setTimeout(() => setForceReady(true), 2000)
+    return () => clearTimeout(t)
+  }, [])
+
+  if (!hydrated && !forceReady) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg }}>
         <ActivityIndicator color={colors.red} size="large" />
