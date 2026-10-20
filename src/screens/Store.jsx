@@ -1,21 +1,27 @@
 import { useMemo, useState } from 'react'
-import { Image, ScrollView, Text, TextInput, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Image, ScrollView, StatusBar, Text, TextInput, View } from 'react-native'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
+  ChevronLeft,
   Gift,
   LayoutGrid,
   Percent,
   RotateCcw,
   Search,
-  ShoppingBag,
   Star,
   Store as StoreIcon,
   Truck,
 } from 'lucide-react-native'
-import TopBar from '../components/TopBar'
 import ProductCard from '../components/ProductCard'
 import Logo from '../components/Logo'
 import SoftPress from '../components/SoftPress'
+import TopBar from '../components/TopBar'
+
+const STORE_HERO = {
+  uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80',
+}
+const MART_RED = '#E31E24'
+const MART_ORANGE = '#FF5A00'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
 import {
@@ -30,6 +36,7 @@ import { colors, shadow } from '../theme'
 
 export default function StoreScreen({ navigation, route }) {
   const { id, aisle: aisleParam } = route.params
+  const insets = useSafeAreaInsets()
   const { cartCount, cartStore, cartTotal, favorites, toggleFavorite, orders, getLiveStore, getLiveProducts, liveAisles, liveCatalog } =
     useApp()
   const store = getLiveStore(id)
@@ -88,8 +95,13 @@ export default function StoreScreen({ navigation, route }) {
 
   if (!store) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }}>
-        <TopBar title={t('storeMissing')} onBack={() => navigation.goBack()} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <View style={{ paddingTop: insets.top + 8, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <SoftPress onPress={() => navigation.goBack()} style={{ width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: '#EEE', alignItems: 'center', justifyContent: 'center' }}>
+            <ChevronLeft size={20} color="#212121" />
+          </SoftPress>
+          <Text style={{ fontWeight: '800', fontSize: 16 }}>{t('storeMissing')}</Text>
+        </View>
       </SafeAreaView>
     )
   }
@@ -108,8 +120,9 @@ export default function StoreScreen({ navigation, route }) {
   ]
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={[]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} edges={[]}>
       <TopBar title={name} onBack={() => navigation.goBack()} />
+
       <ScrollView contentContainerStyle={{ paddingBottom: thisStore ? 150 : 80 }}>
         {store.comingSoon ? (
           <View style={{ width: '100%', height: 168, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
@@ -129,7 +142,7 @@ export default function StoreScreen({ navigation, route }) {
             </View>
           </View>
         ) : (
-          <Image source={src(store.cover)} style={{ width: '100%', height: 168 }} />
+          <Image source={STORE_HERO} style={{ width: '100%', height: 168 }} resizeMode="cover" />
         )}
         {store.comingSoon ? null : (
           <SoftPress
@@ -504,22 +517,33 @@ export default function StoreScreen({ navigation, route }) {
             left: 16,
             right: 16,
             bottom: 62,
-            backgroundColor: colors.ink,
-            borderRadius: 18,
-            padding: 13,
+            backgroundColor: MART_RED,
+            borderRadius: 16,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
             flexDirection: isRTL ? 'row-reverse' : 'row',
-            justifyContent: 'space-between',
             alignItems: 'center',
             ...shadow.float,
           }}
         >
-          <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 6 }}>
-            <ShoppingBag size={16} color="#fff" />
-            <Text style={{ color: '#fff', fontWeight: '800' }}>{formatIQD(cartTotal, lang)}</Text>
+          <View
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 12,
+              backgroundColor: 'rgba(0,0,0,0.22)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Text style={{ color: '#fff', fontWeight: '900', fontSize: 15 }}>{cartCount}</Text>
           </View>
-          <View style={{ backgroundColor: colors.red, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10 }}>
-            <Text style={{ color: '#fff', fontWeight: '800' }}>{t('viewCart')}</Text>
-          </View>
+          <Text style={{ flex: 1, textAlign: 'center', color: '#fff', fontWeight: '800', fontSize: 16 }}>
+            {t('viewCart')}
+          </Text>
+          <Text style={{ color: '#fff', fontWeight: '800', fontSize: 15, paddingHorizontal: 8 }}>
+            {formatIQD(cartTotal, lang)}
+          </Text>
         </SoftPress>
       ) : null}
     </SafeAreaView>

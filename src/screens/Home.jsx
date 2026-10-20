@@ -1,663 +1,613 @@
+/**
+ * M10 Mart — Talabat Mart yoğun Home
+ * Görseller: Migros Sanal Market ürün CDN (demo)
+ * App bar: orijinal TopBar + beyaz M10 Logo
+ */
 import { useMemo, useState } from 'react'
-import { Image, ScrollView, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import {
-  Gift,
-  ListChecks,
-  Percent,
-  ShoppingBag,
-  Sparkles,
-  Star,
-  Tag,
-  Timer,
-  Truck,
-} from 'lucide-react-native'
+  Dimensions,
+  Image,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Snowflake } from 'lucide-react-native'
+import SoftPress from '../components/SoftPress'
 import TopBar from '../components/TopBar'
 import SearchField from '../components/SearchField'
-import StoreCard from '../components/StoreCard'
-import ProductCard from '../components/ProductCard'
-import Logo from '../components/Logo'
-import ProductImage from '../components/ProductImage'
-import SoftPress from '../components/SoftPress'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
+import { DEFAULT_STORE_ID, formatIQD, getNearestStore } from '../data/mock'
+import { nescafeBannerImg } from '../utils/images'
 import {
-  DEFAULT_STORE_ID,
-  flyerKicker,
-  flyerSub,
-  flyerTitle,
-  filters,
-  filterStores,
-  formatIQD,
-  getNearestStore,
-  notifTitle,
-  productName,
-  recommendProducts,
-  stories,
-  storyTitle,
-  storeName,
-} from '../data/mock'
-import { aisleFallback, src } from '../utils/images'
-import { colors, shadow } from '../theme'
+  BEVERAGES,
+  BEST_SELLERS,
+  BRANDS,
+  BUY_AGAIN,
+  CATEGORIES,
+  CATEGORIES_PAGE2,
+  CLEANING,
+  DAIRY,
+  EXPLORE,
+  LOGO_BRANDS,
+  NESCAFE_ROW,
+  PROMOS,
+  SNACKS,
+  TOP_SAVERS,
+  WORLD,
+} from '../data/martCatalog'
 
-const filterIcon = {
-  offers: Percent,
-  freeDelivery: Truck,
-  topRated: Star,
-  new: Sparkles,
-  under30: Timer,
+const { width: W } = Dimensions.get('window')
+const PAD = 16
+const GAP = 10
+
+const C = {
+  bg: '#FFFFFF',
+  ink: '#212121',
+  muted: '#757575',
+  soft: '#F5F5F5',
+  line: '#EEEEEE',
+  cream: '#F5EFE6',
+  orange: '#FF5A00',
+  red: '#E31E24',
+  green: '#1B7A3D',
+  lime: '#C6F400',
 }
 
-/** Pair products into columns [top, bottom] for synced 2-row horizontal scroll */
-function pairColumns(products) {
-  const cols = []
-  for (let i = 0; i < products.length; i += 2) {
-    cols.push([products[i], products[i + 1] || null])
-  }
-  return cols
-}
+const label = (p, lang) => p.names?.[lang] || p.names?.en || p.name || ''
 
-function aisleTitle(a, lang, t) {
-  return (lang === 'tr' && a.nameTr) || (lang === 'en' && a.nameEn) || a.nameAr || t(`cats.${a.id}`)
-}
-
-function AktuelFlyer({ flyer, lang, t, isRTL, onPress, catalog }) {
-  const skuMap = Object.fromEntries((catalog || []).map((p) => [p.id, p]))
-  const skus = (flyer.skus || flyer.productIds || []).map((id) => skuMap[id]).filter(Boolean)
+function AddBtn({ onPress, size = 32 }) {
   return (
     <SoftPress
-      accessibilityRole="button"
-      accessibilityLabel={t('weeklyFlyer')}
       onPress={onPress}
+      hitSlop={8}
       style={{
-        marginHorizontal: 16,
-        marginBottom: 12,
+        width: size,
+        height: size,
+        borderRadius: size / 2,
         backgroundColor: '#fff',
-        borderRadius: 18,
-        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
         borderWidth: 1,
-        borderColor: colors.line,
-        ...shadow.card,
+        borderColor: 'rgba(0,0,0,0.06)',
+        shadowColor: '#000',
+        shadowOpacity: 0.14,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
+        elevation: 4,
       }}
     >
-      <View pointerEvents="none">
-        <View
-          style={{
-            backgroundColor: colors.ink,
-            paddingHorizontal: 14,
-            paddingVertical: 12,
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: colors.yellow, fontWeight: '900', fontSize: 11, letterSpacing: 0.8 }}>
-              {flyerKicker(flyer, lang)}
-            </Text>
-            <Text style={{ color: '#fff', fontWeight: '800', fontSize: 18, marginTop: 2 }}>{t('weeklyFlyer')}</Text>
-          </View>
-          <Logo size={40} onBrand />
-        </View>
-        <View style={{ padding: 14, backgroundColor: '#FFFEF6' }}>
-          <Text style={{ fontWeight: '900', fontSize: 20, color: colors.ink }}>{flyerTitle(flyer, lang)}</Text>
-          <Text style={{ color: colors.muted, marginTop: 4, fontSize: 13 }}>{flyerSub(flyer, lang)}</Text>
-          <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
-            {skus.map((p) => (
-              <View
-                key={p.id}
-                style={{
-                  flexDirection: isRTL ? 'row-reverse' : 'row',
-                  alignItems: 'center',
-                  gap: 8,
-                  backgroundColor: '#fff',
-                  borderRadius: 12,
-                  padding: 8,
-                  borderWidth: 1,
-                  borderColor: colors.line,
-                  minWidth: '46%',
-                  flexGrow: 1,
-                }}
-              >
-                <ProductImage uri={p.image} aisle={p.aisle} style={{ width: 44, height: 44, borderRadius: 8 }} />
-                <View style={{ flex: 1 }}>
-                  <Text numberOfLines={1} style={{ fontWeight: '700', fontSize: 12 }}>
-                    {productName(p, lang)}
-                  </Text>
-                  <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
-                    <View style={{ backgroundColor: colors.yellow, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 }}>
-                      <Text style={{ fontWeight: '900', fontSize: 11, color: colors.ink }}>{formatIQD(p.price, lang)}</Text>
-                    </View>
-                    {p.oldPrice ? (
-                      <Text style={{ color: colors.muted, fontSize: 10, textDecorationLine: 'line-through' }}>
-                        {formatIQD(p.oldPrice, lang)}
-                      </Text>
-                    ) : null}
-                  </View>
-                </View>
-              </View>
-            ))}
-          </View>
-        </View>
-        <View
-          style={{
-            backgroundColor: colors.red,
-            paddingVertical: 12,
-            paddingHorizontal: 14,
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Text style={{ color: '#fff', fontWeight: '800', fontSize: 14 }}>{t('cats.deals')}</Text>
-          <Text style={{ color: '#fff', fontWeight: '800', fontSize: 14 }}>{t('viewAll')} →</Text>
-        </View>
-      </View>
+      <Text style={{ color: C.orange, fontWeight: '900', fontSize: size * 0.55, marginTop: -1 }}>+</Text>
     </SoftPress>
   )
 }
 
-export default function HomeScreen({ navigation }) {
-  const {
-    cartCount,
-    cartTotal,
-    cartStore,
-    user,
-    seenStories,
-    notifications,
-    markNotificationRead,
-    plusActive,
-    orders,
-    favorites,
-    getLiveProducts,
-    getLiveStore,
-    liveAisles,
-    liveCampaigns,
-    liveStores,
-    liveCatalog,
-  } = useApp()
-  const { t, lang, isRTL } = useI18n()
-  const [chip, setChip] = useState(null)
-  const go = (name, params) => navigation.navigate(name, params)
-
-  const nearest = useMemo(() => {
-    const n = getNearestStore(user?.address)
-    return n ? getLiveStore(n.id) || n : null
-  }, [user?.address, getLiveStore])
-  const catalogStore = nearest
-  const storeId = catalogStore?.id || DEFAULT_STORE_ID
-  const openFlyer = (flyerId = 'week') => go('Flyer', { id: flyerId, storeId })
-  const activeFlyers = useMemo(
-    () => liveCampaigns.filter((c) => c.active !== false).map((c) => ({ ...c, skus: c.productIds || c.skus || [] })),
-    [liveCampaigns],
-  )
-  const visibleAisles = useMemo(() => liveAisles.filter((a) => a.enabled !== false), [liveAisles])
-
-  const storeProducts = useMemo(() => {
-    let list = getLiveProducts(storeId)
-    if (chip === 'offers') list = list.filter((p) => p.oldPrice)
-    return list
-  }, [storeId, chip, getLiveProducts, liveCatalog])
-
-  const aisleGroups = useMemo(() => {
-    const shop = visibleAisles.filter((a) => a.id !== 'offers')
-    return shop
-      .map((a) => ({
-        id: a.id,
-        title: aisleTitle(a, lang, t),
-        products: storeProducts.filter((p) => p.aisle === a.id).slice(0, 12),
-      }))
-      .filter((g) => g.products.length > 0)
-  }, [visibleAisles, storeProducts, lang, t])
-
-  const forYou = useMemo(
-    () => recommendProducts(storeId, { orders, favorites, limit: 6, products: getLiveProducts(storeId) }),
-    [storeId, orders, favorites, getLiveProducts, liveCatalog],
-  )
-
-  const promoProducts = useMemo(() => {
-    const list = getLiveProducts(storeId)
-    return list.filter(
-      (p) =>
-        p.oldPrice ||
-        p.promo ||
-        p.discount ||
-        p.offer ||
-        p.campaign ||
-        p.deals,
-    )
-  }, [storeId, getLiveProducts, liveCatalog])
-
+function SectionTitle({ title, action, onAction }) {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg }} edges={[]}>
-      <TopBar showLocation onLocation={() => go('Addresses')} onBell={() => go('Notifications')} />
-      <ScrollView contentContainerStyle={{ paddingBottom: cartCount ? 100 : 24 }}>
-        <View style={{ marginHorizontal: 16, marginTop: 4 }}>
-          <SearchField
-            mode="pressable"
-            isRTL={isRTL}
-            placeholder={t('searchPlaceholder')}
-            onPress={() => navigation.navigate('SearchTab')}
-            onScan={() => navigation.navigate('Scan')}
-          />
-        </View>
-
-        {(() => {
-          const latest = notifications.find((n) => !n.read)
-          if (!latest) return null
-          return (
-            <SoftPress
-              onPress={() => {
-                markNotificationRead(latest.id)
-                if (latest.storyId === 's-aktuel') openFlyer('week')
-                else if (latest.storyId) go('Story', { id: latest.storyId })
-                else if (latest.cta?.screen) go(latest.cta.screen, latest.cta.params)
-                else go('Notifications')
-              }}
-              style={{
-                marginHorizontal: 16,
-                marginTop: 14,
-                backgroundColor: colors.ink,
-                borderRadius: 14,
-                paddingHorizontal: 14,
-                paddingVertical: 12,
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-                alignItems: 'center',
-                gap: 10,
-                ...shadow.soft,
-              }}
-            >
-              <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: colors.red }} />
-              <Text style={{ flex: 1, color: '#fff', fontWeight: '700', fontSize: 13 }} numberOfLines={1}>
-                {notifTitle(latest, lang)}
-              </Text>
-              <Text style={{ color: colors.yellow, fontWeight: '800', fontSize: 12 }}>{t('notifications')}</Text>
-            </SoftPress>
-          )
-        })()}
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 16 }} contentContainerStyle={{ paddingHorizontal: 16 }}>
-          {stories.map((s) => {
-            const seen = seenStories?.includes(s.id)
-            return (
-              <SoftPress
-                key={s.id}
-                onPress={() => (s.id === 's-aktuel' ? openFlyer('week') : go('Story', { id: s.id }))}
-                style={{
-                  width: 132,
-                  height: 220,
-                  borderRadius: 18,
-                  overflow: 'hidden',
-                  marginRight: 10,
-                  borderWidth: 2.5,
-                  borderColor: seen ? colors.line : colors.red,
-                  backgroundColor: colors.ink,
-                  ...shadow.soft,
-                }}
-              >
-                {s.image ? (
-                  <Image
-                    source={src(s.image)}
-                    resizeMode="cover"
-                    style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }}
-                  />
-                ) : null}
-                <View
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    padding: 10,
-                    backgroundColor: 'rgba(0,0,0,0.45)',
-                  }}
-                >
-                  <Text style={{ color: colors.yellow, fontWeight: '800', fontSize: 10 }}>M10</Text>
-                  <Text style={{ color: '#fff', fontWeight: '800', fontSize: 13 }} numberOfLines={2}>
-                    {storyTitle(s, lang)}
-                  </Text>
-                </View>
-              </SoftPress>
-            )
-          })}
-        </ScrollView>
-
-        <View style={{ marginTop: 16 }}>
-          {activeFlyers.slice(0, 1).map((f) => (
-            <AktuelFlyer
-              key={f.id}
-              flyer={f}
-              catalog={storeProducts}
-              lang={lang}
-              t={t}
-              isRTL={isRTL}
-              onPress={() => openFlyer(f.id)}
-            />
-          ))}
-        </View>
-
-        <SoftPress
-          onPress={() => go('Campaigns')}
-          style={{
-            marginHorizontal: 16,
-            marginTop: 10,
-            backgroundColor: '#fff',
-            borderRadius: 14,
-            padding: 14,
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderWidth: 1,
-            borderColor: colors.line,
-            borderLeftWidth: 3,
-            borderLeftColor: colors.red,
-            ...shadow.soft,
-          }}
-        >
-          <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 10 }}>
-            <Tag size={18} color={colors.red} strokeWidth={2.5} />
-            <Text style={{ color: colors.ink, fontWeight: '900', fontSize: 14 }}>
-              {t('campaignsTitle') || 'Campaigns'}
-            </Text>
-          </View>
-          <Text style={{ color: colors.red, fontWeight: '800', fontSize: 12 }}>
-            {t('campaignsViewAll') || 'View all'} →
-          </Text>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: PAD, marginBottom: 12 }}>
+      <Text style={{ fontSize: 18, fontWeight: '800', color: C.ink, letterSpacing: -0.2 }}>{title}</Text>
+      {action ? (
+        <SoftPress onPress={onAction}>
+          <Text style={{ fontSize: 13, fontWeight: '600', color: C.ink, textDecorationLine: 'underline' }}>{action}</Text>
         </SoftPress>
+      ) : null}
+    </View>
+  )
+}
 
-        <SoftPress
-          onPress={() => go('Plus')}
-          style={{
-            marginHorizontal: 16,
-            marginTop: 4,
-            backgroundColor: colors.ink,
-            borderRadius: 16,
-            padding: 14,
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            gap: 10,
-            ...shadow.soft,
-          }}
-        >
-          <View style={{ backgroundColor: colors.yellow, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 }}>
-            <Text style={{ fontWeight: '900', color: colors.ink, fontSize: 12 }}>M10+</Text>
-          </View>
-          <Text style={{ flex: 1, fontWeight: '700', fontSize: 13, color: '#fff' }}>
-            {plusActive ? t('plusMember') : t('plusHomeCta')}
-          </Text>
-          <Text style={{ color: colors.yellow, fontWeight: '800', fontSize: 13 }}>
-            {plusActive ? t('plusMember') : t('plusSubscribe')}
-          </Text>
-        </SoftPress>
+function BrandCard({ item, w, h, onPress }) {
+  return (
+    <SoftPress
+      onPress={onPress}
+      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: C.cream }}
+    >
+      <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 2, fontSize: 17, fontWeight: '800', color: C.ink }}>
+        {item.name}
+      </Text>
+      <Image
+        source={item.image}
+        style={{ position: 'absolute', left: 20, right: 20, top: 44, bottom: 36 }}
+        resizeMode="contain"
+      />
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 34,
+          backgroundColor: item.accent || C.orange,
+          borderTopLeftRadius: 36,
+          borderTopRightRadius: 36,
+        }}
+      />
+      <View
+        style={{
+          position: 'absolute',
+          right: 14,
+          top: h * 0.42,
+          width: 9,
+          height: 9,
+          backgroundColor: C.orange,
+          transform: [{ rotate: '45deg' }],
+        }}
+      />
+    </SoftPress>
+  )
+}
 
-        <SoftPress
-          onPress={() => go('Rewards')}
-          style={{
-            marginHorizontal: 16,
-            marginTop: 10,
-            backgroundColor: '#fff',
-            borderRadius: 14,
-            padding: 13,
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            gap: 10,
-            borderLeftWidth: 3,
-            borderLeftColor: colors.red,
-            ...shadow.soft,
-          }}
-        >
-          <Gift size={18} color={colors.red} />
-          <Text style={{ flex: 1, fontWeight: '700', fontSize: 13 }}>{t('loyaltyBanner')}</Text>
-          <Text style={{ color: colors.red, fontWeight: '800', fontSize: 13 }}>{t('loginCta')}</Text>
-        </SoftPress>
-
-        <SoftPress
-          onPress={() => go('Lists')}
-          style={{
-            marginHorizontal: 16,
-            marginTop: 10,
-            backgroundColor: '#fff',
-            borderRadius: 14,
-            padding: 13,
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            alignItems: 'center',
-            gap: 10,
-            borderWidth: 1,
-            borderColor: colors.line,
-            ...shadow.soft,
-          }}
-        >
-          <ListChecks size={18} color={colors.red} />
-          <Text style={{ flex: 1, fontWeight: '700', fontSize: 13 }}>{t('listsHomeCta')}</Text>
-          <Text style={{ color: colors.red, fontWeight: '800', fontSize: 13 }}>{t('viewAll')}</Text>
-        </SoftPress>
-
-        {forYou.length ? (
-          <View style={{ marginTop: 18 }}>
-            <View
-              style={{
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                marginBottom: 10,
-                paddingHorizontal: 16,
-              }}
-            >
-              <Text style={{ fontSize: 17, fontWeight: '800' }}>{t('forYou')}</Text>
-              <Text style={{ color: colors.muted, fontSize: 12 }}>{t('forYouHint')}</Text>
-            </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              decelerationRate="fast"
-              snapToInterval={162}
-              snapToAlignment="start"
-              contentContainerStyle={{
-                paddingHorizontal: 16,
-                gap: 12,
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-              }}
-            >
-              {forYou.map((product) => (
-                <ProductCard key={`fy-${product.id}`} product={product} storeId={storeId} compact />
-              ))}
-            </ScrollView>
-          </View>
-        ) : null}
-
-        {promoProducts.length ? (
-          <View style={{ marginTop: 18 }}>
-            <View
-              style={{
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                marginBottom: 10,
-                paddingHorizontal: 16,
-              }}
-            >
-              <Text style={{ fontSize: 17, fontWeight: '800', color: colors.ink }}>{t('promoDeals')}</Text>
-              <SoftPress onPress={() => go('Store', { id: storeId, aisle: 'offers' })}>
-                <Text style={{ color: colors.red, fontWeight: '800', fontSize: 12 }}>{t('viewAll')}</Text>
-              </SoftPress>
-            </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              decelerationRate="fast"
-              snapToInterval={162}
-              snapToAlignment="start"
-              contentContainerStyle={{
-                paddingHorizontal: 16,
-                gap: 12,
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-              }}
-            >
-              {promoProducts.map((product) => (
-                <ProductCard key={`promo-${product.id}`} product={product} storeId={storeId} compact />
-              ))}
-            </ScrollView>
-          </View>
-        ) : null}
-
-        <Text style={{ fontWeight: '800', fontSize: 17, marginTop: 20, marginHorizontal: 16 }}>{t('sections')}</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 12, gap: 14 }}>
-          {visibleAisles.map((a) => (
-            <SoftPress
-              key={a.id}
-              onPress={() => go('Store', { id: storeId, aisle: a.id })}
-              style={{ width: 78, alignItems: 'center' }}
-            >
-              <View
-                style={{
-                  width: 68,
-                  height: 68,
-                  borderRadius: 34,
-                  overflow: 'hidden',
-                  borderWidth: 2,
-                  borderColor: '#fff',
-                  backgroundColor: colors.line,
-                  ...shadow.soft,
-                }}
-              >
-                <Image source={aisleFallback(a.id)} style={{ width: '100%', height: '100%' }} />
-              </View>
-              <Text style={{ fontSize: 11, fontWeight: '700', marginTop: 7, textAlign: 'center' }}>
-                {aisleTitle(a, lang, t)}
-              </Text>
-            </SoftPress>
-          ))}
-        </ScrollView>
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, gap: 8 }}>
-          {filters.map((f) => {
-            const on = chip === f.id
-            const Icon = filterIcon[f.id]
-            return (
-              <SoftPress
-                key={f.id}
-                onPress={() => setChip(on ? null : f.id)}
-                style={{
-                  backgroundColor: on ? colors.red : '#fff',
-                  borderWidth: on ? 0 : 1,
-                  borderColor: colors.line,
-                  borderRadius: 999,
-                  paddingHorizontal: 14,
-                  paddingVertical: 9,
-                  flexDirection: isRTL ? 'row-reverse' : 'row',
-                  alignItems: 'center',
-                  gap: 6,
-                  ...(on ? shadow.soft : null),
-                }}
-              >
-                {Icon ? <Icon size={14} color={on ? '#fff' : colors.red} /> : null}
-                <Text style={{ fontWeight: '800', fontSize: 12, color: on ? '#fff' : colors.ink }}>
-                  {t(`filters.${f.id}`)}
-                </Text>
-              </SoftPress>
-            )
-          })}
-        </ScrollView>
-
-        <View style={{ marginTop: 18 }}>
+function ProductChip({ product, lang, onAdd, width = 118, showSave }) {
+  return (
+    <View style={{ width, marginRight: 12 }}>
+      <View style={{ width, height: width, borderRadius: 16, backgroundColor: C.soft, overflow: 'hidden' }}>
+        <Image source={product.image} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
+        {showSave && product.save ? (
           <View
             style={{
-              paddingHorizontal: 16,
-              flexDirection: isRTL ? 'row-reverse' : 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 10,
+              position: 'absolute',
+              top: 8,
+              left: 8,
+              backgroundColor: C.lime,
+              borderRadius: 6,
+              paddingHorizontal: 6,
+              paddingVertical: 3,
             }}
           >
-            <Text style={{ fontSize: 17, fontWeight: '800' }}>{t('ourBranches')}</Text>
-            <Text style={{ color: colors.muted }}>{t('storesCount', { n: filterStores(liveStores, 'all', chip).length })}</Text>
+            <Text style={{ fontSize: 10, fontWeight: '800', color: C.ink }}>Save {product.save}%</Text>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16 }}>
-            {filterStores(liveStores, 'all', chip).map((s) => (
-              <StoreCard
-                key={s.id}
-                store={s}
-                compact
-                onPress={() => go('Store', { id: s.id })}
-              />
+        ) : null}
+        <View style={{ position: 'absolute', right: 8, bottom: 8 }}>
+          <AddBtn onPress={onAdd} size={30} />
+        </View>
+      </View>
+      <Text numberOfLines={2} style={{ marginTop: 8, fontSize: 13, fontWeight: '700', color: C.ink, lineHeight: 17, minHeight: 34 }}>
+        {label(product, lang)}
+      </Text>
+      <Text style={{ marginTop: 2, fontSize: 14, fontWeight: '800', color: C.ink }}>{formatIQD(product.price, lang)}</Text>
+      {product.old ? (
+        <Text style={{ fontSize: 11, color: C.muted, textDecorationLine: 'line-through' }}>{formatIQD(product.old, lang)}</Text>
+      ) : null}
+    </View>
+  )
+}
+
+function ProductRow({ title, action, onAction, products, lang, onAdd, showSave }) {
+  return (
+    <View style={{ marginTop: 22 }}>
+      <SectionTitle title={title} action={action} onAction={onAction} />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD }}>
+        {products.map((p) => (
+          <ProductChip key={p.id} product={p} lang={lang} onAdd={() => onAdd(p)} showSave={showSave} />
+        ))}
+      </ScrollView>
+    </View>
+  )
+}
+
+/** Talabat-style category tile: 3 ürün kolajı — beyaz zemin (Migros beyaz arka planıyla kaynansın) */
+function CategoryTile({ item, size, lang, onPress }) {
+  const imgs = item.images?.length ? item.images : [item.image]
+  const pad = 4
+  return (
+    <SoftPress onPress={onPress} style={{ width: size, alignItems: 'center' }}>
+      <View
+        style={{
+          width: size,
+          height: size,
+          borderRadius: 16,
+          backgroundColor: '#FFFFFF',
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: '#EEEEEE',
+        }}
+      >
+        {imgs.length >= 3 ? (
+          <View style={{ flex: 1, flexDirection: 'row', padding: pad }}>
+            <View style={{ flex: 1.2, marginRight: 2, justifyContent: 'center' }}>
+              <Image source={imgs[0]} style={{ width: '100%', height: '92%' }} resizeMode="contain" />
+            </View>
+            <View style={{ flex: 1, justifyContent: 'space-between', paddingVertical: 2 }}>
+              <Image source={imgs[1]} style={{ width: '100%', height: '48%' }} resizeMode="contain" />
+              <Image source={imgs[2]} style={{ width: '100%', height: '48%' }} resizeMode="contain" />
+            </View>
+          </View>
+        ) : (
+          <Image source={imgs[0]} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
+        )}
+        {item.snow ? (
+          <View style={{ position: 'absolute', top: 6, right: 6 }}>
+            <Snowflake size={13} color={C.orange} fill={C.orange} />
+          </View>
+        ) : null}
+      </View>
+      <Text
+        numberOfLines={2}
+        style={{
+          marginTop: 6,
+          fontSize: 11,
+          fontWeight: '700',
+          color: C.ink,
+          textAlign: 'center',
+          lineHeight: 14,
+          minHeight: 28,
+        }}
+      >
+        {label(item, lang)}
+      </Text>
+    </SoftPress>
+  )
+}
+
+/** 3×4 paging grid + bottom pill indicator (Talabat Shop by category) */
+function CategoryPager({ pages, lang, onPress }) {
+  const [page, setPage] = useState(0)
+  const pageW = W
+  const tile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
+  const rowH = tile + 36
+  const gridH = rowH * 3 + 4
+
+  return (
+    <View>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        decelerationRate="fast"
+        onMomentumScrollEnd={(e) => {
+          const x = e.nativeEvent.contentOffset.x
+          setPage(Math.round(x / pageW))
+        }}
+      >
+        {pages.map((cats, pi) => (
+          <View key={`catpage-${pi}`} style={{ width: pageW, paddingHorizontal: PAD }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: GAP, minHeight: gridH }}>
+              {cats.map((c) => (
+                <CategoryTile key={c.id} item={c} size={tile} lang={lang} onPress={onPress} />
+              ))}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, gap: 0 }}>
+        <View
+          style={{
+            width: 36,
+            height: 4,
+            borderRadius: 2,
+            backgroundColor: '#E0E0E0',
+            overflow: 'hidden',
+            flexDirection: 'row',
+          }}
+        >
+          <View
+            style={{
+              width: 18,
+              height: 4,
+              borderRadius: 2,
+              backgroundColor: C.ink,
+              marginLeft: page === 0 ? 0 : 18,
+            }}
+          />
+        </View>
+      </View>
+    </View>
+  )
+}
+
+export default function HomeScreen({ navigation }) {
+  const insets = useSafeAreaInsets()
+  const { lang, t, isRTL } = useI18n()
+  const { addToCart, cartCount, cartTotal, user } = useApp()
+  const storeId = useMemo(() => getNearestStore(user?.address)?.id || DEFAULT_STORE_ID, [user?.address])
+  const remain = Math.max(0, 7000 - (cartTotal || 0))
+
+  const brandW = 148
+  const brandH = 200
+  const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
+  const exploreW = Math.floor((W - PAD * 2 - GAP) / 2)
+  const categoryPages = useMemo(() => [CATEGORIES, CATEGORIES_PAGE2], [])
+
+  const go = (screen, params) => navigation.navigate(screen, params)
+  const goStore = () => navigation.navigate('Store', { id: storeId })
+  const goSearch = () => navigation.navigate('SearchTab')
+  const onAdd = (p) => {
+    if (!p?.id) return
+    const img = typeof p.image === 'string' ? p.image : p.image?.uri
+    const name = p.names?.tr || p.names?.en || p.name || p.id
+    addToCart(storeId, p.id, 1, {
+      unitPrice: p.price,
+      product: {
+        id: p.id,
+        nameTr: name,
+        nameEn: p.names?.en || name,
+        nameAr: p.names?.ar || name,
+        names: p.names,
+        price: p.price,
+        image: img,
+        aisle: 'produce',
+        stock: 99,
+      },
+    })
+  }
+
+  const L = {
+    viewAll: lang === 'tr' ? 'Tümü' : lang === 'ar' ? 'عرض الكل' : 'View all',
+    buyAgain: lang === 'tr' ? 'Tekrar al' : lang === 'ar' ? 'اشترِ مجدداً' : 'Buy again',
+    best: lang === 'tr' ? 'Yakınındaki en çok satanlar 🔥' : lang === 'ar' ? 'الأكثر مبيعاً قربك 🔥' : 'Best sellers near you 🔥',
+    shopCat: lang === 'tr' ? 'Kategoriye göre alışveriş' : lang === 'ar' ? 'تسوّق حسب القسم' : 'Shop by category',
+    shopBrand: lang === 'tr' ? 'Markaya göre alışveriş' : lang === 'ar' ? 'تسوّق حسب العلامة' : 'Shop by brand',
+    world: lang === 'tr' ? 'Dünyadan lezzetler' : lang === 'ar' ? 'من حول العالم' : 'Around the world',
+    savers: lang === 'tr' ? 'En iyi fırsatlar' : lang === 'ar' ? 'أفضل العروض' : 'Top savers',
+    dairy: lang === 'tr' ? 'Süt ve yumurta' : lang === 'ar' ? 'ألبان وبيض' : 'Dairy & eggs',
+    snacks: lang === 'tr' ? 'Atıştırmalıklar' : lang === 'ar' ? 'سناكات' : 'Snacks',
+    drinks: lang === 'tr' ? 'İçecekler' : lang === 'ar' ? 'مشروبات' : 'Beverages',
+    clean: lang === 'tr' ? 'Temizlik' : lang === 'ar' ? 'منظفات' : 'Care & clean',
+    nescafe: 'NESCAFÉ',
+    explore: lang === 'tr' ? "Mart'ı keşfet" : lang === 'ar' ? 'استكشف Mart' : 'Explore Mart',
+    min:
+      remain > 0
+        ? lang === 'tr'
+          ? `${formatIQD(remain, lang)} daha ekle`
+          : lang === 'ar'
+            ? `أضف ${formatIQD(remain, lang)}`
+            : `Add ${formatIQD(remain, lang)} more`
+        : null,
+    viewCart: lang === 'tr' ? 'Sepeti gör' : lang === 'ar' ? 'عرض السلة' : 'View cart',
+    yourCart: lang === 'tr' ? 'Sepetin' : lang === 'ar' ? 'سلتك' : 'Your cart',
+  }
+
+  return (
+    <View style={{ flex: 1, backgroundColor: C.bg }}>
+      <TopBar
+        showLocation
+        onLocation={() => go('Addresses')}
+        onBell={() => go('Notifications')}
+        onProfile={() => go('ProfileTab')}
+      />
+      <View style={{ paddingHorizontal: PAD, paddingTop: 6, paddingBottom: 2, backgroundColor: C.bg }}>
+        <SearchField
+          mode="pressable"
+          compact
+          onPress={goSearch}
+          placeholder={t('searchPlaceholder') || t('search') || L.explore}
+          isRTL={isRTL}
+        />
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 110 + insets.bottom }}>
+        {/* Marka kartları */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 8 }}>
+          {BRANDS.map((b) => (
+            <BrandCard key={b.id} item={b} w={brandW} h={brandH} onPress={goStore} />
+          ))}
+        </ScrollView>
+
+        <ProductRow title={L.buyAgain} action={L.viewAll} onAction={goStore} products={BUY_AGAIN} lang={lang} onAdd={onAdd} />
+
+        {/* Talabat Shop by category — 3×4 + sayfa göstergesi */}
+        <View style={{ marginTop: 22 }}>
+          <SectionTitle title={L.shopCat} />
+          <CategoryPager pages={categoryPages} lang={lang} onPress={goStore} />
+        </View>
+
+        {/* Marka ↔ kategori arası çift promo */}
+        <View style={{ marginTop: 16, paddingHorizontal: PAD, flexDirection: 'row', gap: GAP }}>
+          <SoftPress onPress={goStore} style={{ flex: 1, height: 118, borderRadius: 14, overflow: 'hidden', backgroundColor: C.soft }}>
+            <Image source={require('../../assets/mart-clone/promo_bakery.png')} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+          </SoftPress>
+          <SoftPress onPress={goStore} style={{ flex: 1, height: 118, borderRadius: 14, overflow: 'hidden', backgroundColor: '#0A6CBA' }}>
+            <Image source={require('../../assets/mart-clone/promo_hs.png')} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+          </SoftPress>
+        </View>
+
+        {/* Marka logoları — 2×4 */}
+        <View style={{ marginTop: 18 }}>
+          <SectionTitle title={L.shopBrand} action={L.viewAll} onAction={goStore} />
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: PAD, gap: GAP }}>
+            {LOGO_BRANDS.map((b) => (
+              <SoftPress
+                key={b.id}
+                onPress={goStore}
+                style={{
+                  width: logoTile,
+                  height: logoTile * 0.85,
+                  borderRadius: 14,
+                  backgroundColor: '#fff',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: C.line,
+                  overflow: 'hidden',
+                  padding: 8,
+                }}
+              >
+                <Image source={b.image} style={{ width: '70%', height: '55%' }} resizeMode="contain" />
+                <Text style={{ marginTop: 4, fontSize: 11, fontWeight: '700', color: C.ink }} numberOfLines={1}>
+                  {b.name}
+                </Text>
+              </SoftPress>
+            ))}
+          </View>
+        </View>
+
+        <View style={{ marginTop: 22 }}>
+          <SectionTitle title={L.world} />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD }}>
+            {WORLD.map((w) => (
+              <SoftPress key={w.id} onPress={goStore} style={{ alignItems: 'center', marginRight: 16, width: 80 }}>
+                <View
+                  style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: 36,
+                    backgroundColor: w.bg,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    borderColor: C.line,
+                  }}
+                >
+                  <Text style={{ fontSize: 32 }}>{w.flag}</Text>
+                </View>
+                <Text style={{ marginTop: 6, fontSize: 12, fontWeight: '700', color: C.ink }}>{label(w, lang)}</Text>
+              </SoftPress>
             ))}
           </ScrollView>
         </View>
 
-        {aisleGroups.map((group) => (
-          <View key={group.id} style={{ marginTop: 18 }}>
-            <View
+        <ProductRow title={L.best} action={L.viewAll} onAction={goStore} products={BEST_SELLERS} lang={lang} onAdd={onAdd} />
+
+        {/* NESCAFÉ — Talabat yapısı: full banner + ürün şeridi */}
+        <View style={{ marginTop: 22 }}>
+          <SoftPress
+            onPress={goStore}
+            style={{
+              marginHorizontal: PAD,
+              borderRadius: 16,
+              overflow: 'hidden',
+              backgroundColor: '#87CEEB',
+            }}
+          >
+            <Image
+              source={nescafeBannerImg}
               style={{
-                paddingHorizontal: 16,
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 10,
+                width: W - PAD * 2,
+                height: Math.round((W - PAD * 2) * (303 / 800)),
               }}
-            >
-              <Text style={{ fontSize: 17, fontWeight: '800', color: colors.ink, flex: 1, textAlign: isRTL ? 'right' : 'left' }}>
-                {group.title}
-              </Text>
-              <SoftPress onPress={() => go('Store', { id: storeId, aisle: group.id })}>
-                <Text style={{ color: colors.red, fontWeight: '800', fontSize: 12 }}>{t('viewAll')}</Text>
-              </SoftPress>
-            </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              decelerationRate="fast"
-              snapToInterval={162}
-              snapToAlignment="start"
-              contentContainerStyle={{
-                paddingHorizontal: 16,
-                gap: 12,
-                flexDirection: isRTL ? 'row-reverse' : 'row',
-              }}
-            >
-              {pairColumns(group.products).map((col) => (
-                <View key={`${group.id}-${col[0].id}`} style={{ width: 150, gap: 10 }}>
-                  <ProductCard product={col[0]} storeId={storeId} compact />
-                  {col[1] ? <ProductCard product={col[1]} storeId={storeId} compact /> : null}
-                </View>
-              ))}
-            </ScrollView>
+              resizeMode="cover"
+            />
+          </SoftPress>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 12 }}
+          >
+            {NESCAFE_ROW.map((p) => (
+              <ProductChip key={p.id} product={p} lang={lang} onAdd={() => onAdd(p)} width={118} />
+            ))}
+          </ScrollView>
+        </View>
+
+        <ProductRow title={L.savers} action={L.viewAll} onAction={goStore} products={TOP_SAVERS} lang={lang} onAdd={onAdd} showSave />
+
+        <SoftPress onPress={goStore} style={{ marginHorizontal: PAD, marginTop: 22, height: 120, borderRadius: 16, overflow: 'hidden', backgroundColor: '#0D47A1' }}>
+          <Image source={PROMOS[1].image} style={{ position: 'absolute', right: 0, bottom: 0, width: 150, height: 120 }} resizeMode="contain" />
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16, maxWidth: '58%' }}>
+            <Text style={{ color: '#fff', fontWeight: '900', fontSize: 18 }}>{PROMOS[1].title}</Text>
+            <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, marginTop: 4 }}>{PROMOS[1].sub}</Text>
           </View>
-        ))}
+        </SoftPress>
+
+        <ProductRow title={L.dairy} action={L.viewAll} onAction={goStore} products={DAIRY} lang={lang} onAdd={onAdd} />
+        <ProductRow title={L.snacks} action={L.viewAll} onAction={goStore} products={SNACKS} lang={lang} onAdd={onAdd} />
+
+        <SoftPress
+          onPress={goStore}
+          style={{
+            marginHorizontal: PAD,
+            marginTop: 22,
+            height: 120,
+            borderRadius: 16,
+            overflow: 'hidden',
+            backgroundColor: C.orange,
+            flexDirection: 'row',
+          }}
+        >
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16, backgroundColor: '#fff' }}>
+            <Text style={{ color: C.ink, fontWeight: '900', fontSize: 12 }}>M10 mart</Text>
+            <Text style={{ color: C.orange, fontWeight: '900', fontSize: 22, marginTop: 4 }}>HOT DEALS</Text>
+            <Text style={{ color: C.ink, fontWeight: '800', fontSize: 13, marginTop: 2 }}>{PROMOS[2].sub}</Text>
+          </View>
+          <View style={{ flex: 1, backgroundColor: C.orange, alignItems: 'center', justifyContent: 'center' }}>
+            <Image source={PROMOS[2].image} style={{ width: 110, height: 110 }} resizeMode="contain" />
+          </View>
+        </SoftPress>
+
+        <ProductRow title={L.drinks} action={L.viewAll} onAction={goStore} products={BEVERAGES} lang={lang} onAdd={onAdd} />
+        <ProductRow title={L.clean} action={L.viewAll} onAction={goStore} products={CLEANING} lang={lang} onAdd={onAdd} showSave />
+
+        <View style={{ marginTop: 22, marginBottom: 20 }}>
+          <SectionTitle title={L.explore} />
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: PAD, justifyContent: 'space-between' }}>
+            {EXPLORE.map((p) => (
+              <View key={p.id} style={{ width: exploreW, marginBottom: 14 }}>
+                <View style={{ width: exploreW, height: exploreW * 0.85, borderRadius: 16, backgroundColor: C.soft, overflow: 'hidden' }}>
+                  <Image source={p.image} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
+                  <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
+                    <AddBtn onPress={() => onAdd(p)} size={34} />
+                  </View>
+                </View>
+                <Text numberOfLines={2} style={{ marginTop: 8, fontSize: 13, fontWeight: '700', color: C.ink }}>
+                  {label(p, lang)}
+                </Text>
+                <Text style={{ marginTop: 2, fontSize: 14, fontWeight: '800', color: C.ink }}>{formatIQD(p.price, lang)}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
       </ScrollView>
 
       {cartCount > 0 ? (
-        <SoftPress
-          onPress={() => go('Cart')}
+        <View
           style={{
             position: 'absolute',
-            left: 16,
-            right: 16,
-            bottom: 12,
-            backgroundColor: colors.ink,
-            borderRadius: 18,
-            padding: 13,
-            flexDirection: isRTL ? 'row-reverse' : 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            ...shadow.float,
+            left: 12,
+            right: 12,
+            bottom: Math.max(insets.bottom, 8) + 4,
           }}
         >
-          <View>
-            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 6 }}>
-              <ShoppingBag size={16} color="#fff" />
-              <Text style={{ color: '#fff', fontWeight: '800' }}>
-                {t('yourCart')} · {cartCount}
-              </Text>
-            </View>
-            <Text style={{ color: '#bbb', marginTop: 2 }}>
-              {storeName(cartStore, lang)} · {formatIQD(cartTotal, lang)}
+          {remain > 0 && L.min ? (
+            <Text
+              numberOfLines={1}
+              style={{
+                textAlign: 'center',
+                fontSize: 11,
+                fontWeight: '600',
+                color: C.muted,
+                marginBottom: 6,
+              }}
+            >
+              {L.min}
             </Text>
-          </View>
-          <View style={{ backgroundColor: colors.red, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10 }}>
-            <Text style={{ color: '#fff', fontWeight: '800' }}>{t('viewCart')}</Text>
-          </View>
-        </SoftPress>
+          ) : null}
+          <SoftPress
+            onPress={() => go('Cart')}
+            style={{
+              backgroundColor: C.red,
+              borderRadius: 16,
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              shadowColor: '#000',
+              shadowOpacity: 0.22,
+              shadowRadius: 14,
+              shadowOffset: { width: 0, height: 6 },
+              elevation: 10,
+            }}
+          >
+            <View
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 12,
+                backgroundColor: 'rgba(0,0,0,0.22)',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={{ color: '#fff', fontWeight: '900', fontSize: 15 }}>{cartCount}</Text>
+            </View>
+            <Text style={{ flex: 1, textAlign: 'center', color: '#fff', fontWeight: '800', fontSize: 16 }}>
+              {L.viewCart}
+            </Text>
+            <Text style={{ color: '#fff', fontWeight: '800', fontSize: 15, paddingRight: 8 }}>
+              {formatIQD(cartTotal, lang)}
+            </Text>
+          </SoftPress>
+        </View>
       ) : null}
-    </SafeAreaView>
+    </View>
   )
 }

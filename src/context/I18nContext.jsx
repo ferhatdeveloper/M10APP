@@ -25,6 +25,9 @@ export function I18nProvider({ children }) {
       }
       setReady(true)
     })()
+    // Demo safety: 1.5 saniye sonra zorla hazır kabul et
+    const t = setTimeout(() => setReady(true), 1500)
+    return () => clearTimeout(t)
   }, [])
 
   const setLang = async (next) => {

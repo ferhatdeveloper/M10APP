@@ -1,0 +1,1110 @@
+{
+  "scrapedAt": "2026-09-13T20:09:22.401Z",
+  "source": {
+    "en": "https://menu.kucoglu.com/en/",
+    "ar": "https://menu.kucoglu.com/ar/"
+  },
+  "tenant": {
+    "code": "kucoglu",
+    "displayName": "Kuç Oglu",
+    "module": "restaurant"
+  },
+  "store": {
+    "id": "kucoglu-duhok",
+    "name": "كوج أوغلو دهوك",
+    "nameEn": "Kuç Oglu Duhok",
+    "nameTr": "Kuç Oglu Duhok",
+    "city": "دهوك",
+    "cityEn": "Duhok",
+    "cityTr": "Duhok",
+    "area": "Ashty Road",
+    "areaEn": "Ashty Road",
+    "areaTr": "Ashty Road",
+    "phone": "+9647509703030",
+    "logo": "https://menu.kucoglu.restaurant/assets/branch/e0354e292e2f42f0fbe720f0f3870c6dba13fa37d63043afae171eab436f9d02.png",
+    "cover": "https://menu.kucoglu.restaurant/assets/branch/350070b98d6cc8dd7ade992217fac9317b0ddf16d085d80d914fb81c074ab1de.webp"
+  },
+  "categories": [
+    "Meat",
+    "Chicken",
+    "Drinks",
+    "Other"
+  ],
+  "productCount": 23,
+  "products": [
+    {
+      "id": "ko-meat-meal-rice",
+      "code": "KO_MEAT_MEAL_RICE",
+      "aisle": "meat",
+      "category": "Meat",
+      "categoryAr": "اللحوم",
+      "name": "وجبة لحم مع رز",
+      "names": {
+        "en": "Meat Meal & Rice",
+        "ar": "وجبة لحم مع رز",
+        "tr": "Meat Meal & Rice"
+      },
+      "desc": "Meat",
+      "descs": {
+        "ar": "اللحوم",
+        "en": "Meat",
+        "tr": "Meat"
+      },
+      "price": 10000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/350070b98d6cc8dd7ade992217fac9317b0ddf16d085d80d914fb81c074ab1de.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/350070b98d6cc8dd7ade992217fac9317b0ddf16d085d80d914fb81c074ab1de.webp"
+      ],
+      "variants": [
+        {
+          "id": "120g",
+          "labelAr": "120g",
+          "labelEn": "120g",
+          "labelTr": "120g",
+          "price": 10000
+        },
+        {
+          "id": "150g",
+          "labelAr": "150g",
+          "labelEn": "150g",
+          "labelTr": "150g",
+          "price": 13000
+        },
+        {
+          "id": "180g",
+          "labelAr": "180g",
+          "labelEn": "180g",
+          "labelTr": "180g",
+          "price": 16000
+        }
+      ],
+      "popular": true
+    },
+    {
+      "id": "ko-iskender",
+      "code": "KO_ISKENDER",
+      "aisle": "meat",
+      "category": "Meat",
+      "categoryAr": "اللحوم",
+      "name": "إسكندر",
+      "names": {
+        "en": "Iskender",
+        "ar": "إسكندر",
+        "tr": "Iskender"
+      },
+      "desc": "Meat",
+      "descs": {
+        "ar": "اللحوم",
+        "en": "Meat",
+        "tr": "Meat"
+      },
+      "price": 12000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/3b19aac4b3afc24912433b5abf30e098e31c6e71e3172e473679e07527d48b0f.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/3b19aac4b3afc24912433b5abf30e098e31c6e71e3172e473679e07527d48b0f.webp"
+      ],
+      "variants": [
+        {
+          "id": "120g",
+          "labelAr": "120g",
+          "labelEn": "120g",
+          "labelTr": "120g",
+          "price": 12000
+        },
+        {
+          "id": "150g",
+          "labelAr": "150g",
+          "labelEn": "150g",
+          "labelTr": "150g",
+          "price": 15000
+        },
+        {
+          "id": "180g",
+          "labelAr": "180g",
+          "labelEn": "180g",
+          "labelTr": "180g",
+          "price": 17000
+        }
+      ],
+      "popular": true
+    },
+    {
+      "id": "ko-meat-roll",
+      "code": "KO_MEAT_ROLL",
+      "aisle": "meat",
+      "category": "Meat",
+      "categoryAr": "اللحوم",
+      "name": "رول لحم",
+      "names": {
+        "en": "Meat Roll",
+        "ar": "رول لحم",
+        "tr": "Meat Roll"
+      },
+      "desc": "Meat",
+      "descs": {
+        "ar": "اللحوم",
+        "en": "Meat",
+        "tr": "Meat"
+      },
+      "price": 4500,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/393ad472653dd16e59ae93a45b7e4a2411e613f97bb53e9ec7058a8858141452.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/393ad472653dd16e59ae93a45b7e4a2411e613f97bb53e9ec7058a8858141452.webp"
+      ],
+      "variants": [
+        {
+          "id": "70g",
+          "labelAr": "70g",
+          "labelEn": "70g",
+          "labelTr": "70g",
+          "price": 4500
+        },
+        {
+          "id": "100g",
+          "labelAr": "100g",
+          "labelEn": "100g",
+          "labelTr": "100g",
+          "price": 5500
+        },
+        {
+          "id": "130g",
+          "labelAr": "130g",
+          "labelEn": "130g",
+          "labelTr": "130g",
+          "price": 8500
+        }
+      ],
+      "popular": true
+    },
+    {
+      "id": "ko-meat-doner",
+      "code": "KO_MEAT_DONER",
+      "aisle": "meat",
+      "category": "Meat",
+      "categoryAr": "اللحوم",
+      "name": "دونر لحم",
+      "names": {
+        "en": "Meat Doner",
+        "ar": "دونر لحم",
+        "tr": "Meat Doner"
+      },
+      "desc": "Meat",
+      "descs": {
+        "ar": "اللحوم",
+        "en": "Meat",
+        "tr": "Meat"
+      },
+      "price": 5000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/d3269aae23ec2764e408b8904274bc554dd89f191b0f5f352c3d908b69dc8557.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/d3269aae23ec2764e408b8904274bc554dd89f191b0f5f352c3d908b69dc8557.webp"
+      ],
+      "variants": [
+        {
+          "id": "70g",
+          "labelAr": "70g",
+          "labelEn": "70g",
+          "labelTr": "70g",
+          "price": 5000
+        },
+        {
+          "id": "100g",
+          "labelAr": "100g",
+          "labelEn": "100g",
+          "labelTr": "100g",
+          "price": 6000
+        },
+        {
+          "id": "130g",
+          "labelAr": "130g",
+          "labelEn": "130g",
+          "labelTr": "130g",
+          "price": 8500
+        }
+      ],
+      "popular": true
+    },
+    {
+      "id": "ko-meat-meal",
+      "code": "KO_MEAT_MEAL",
+      "aisle": "meat",
+      "category": "Meat",
+      "categoryAr": "اللحوم",
+      "name": "وجبة لحم",
+      "names": {
+        "en": "Meat Meal",
+        "ar": "وجبة لحم",
+        "tr": "Meat Meal"
+      },
+      "desc": "Meat",
+      "descs": {
+        "ar": "اللحوم",
+        "en": "Meat",
+        "tr": "Meat"
+      },
+      "price": 8000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/9338cab4c39030ea0f90cc0c0153e01f7bbd07b7902cc8fac5157d4fb4a626dd.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/9338cab4c39030ea0f90cc0c0153e01f7bbd07b7902cc8fac5157d4fb4a626dd.webp"
+      ],
+      "variants": [
+        {
+          "id": "120g",
+          "labelAr": "120g",
+          "labelEn": "120g",
+          "labelTr": "120g",
+          "price": 8000
+        },
+        {
+          "id": "150g",
+          "labelAr": "150g",
+          "labelEn": "150g",
+          "labelTr": "150g",
+          "price": 11000
+        },
+        {
+          "id": "180g",
+          "labelAr": "180g",
+          "labelEn": "180g",
+          "labelTr": "180g",
+          "price": 15000
+        }
+      ],
+      "popular": true
+    },
+    {
+      "id": "ko-super-beyti",
+      "code": "KO_SUPER_BEYTI",
+      "aisle": "meat",
+      "category": "Meat",
+      "categoryAr": "اللحوم",
+      "name": "بيتي لحم",
+      "names": {
+        "en": "Super Beyti",
+        "ar": "بيتي لحم",
+        "tr": "Super Beyti"
+      },
+      "desc": "Meat",
+      "descs": {
+        "ar": "اللحوم",
+        "en": "Meat",
+        "tr": "Meat"
+      },
+      "price": 16000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/abb2f3e7e6c3e2bdc948fec7ea48820f6eb7bd15c0b19849c31d0f3655341f91.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/abb2f3e7e6c3e2bdc948fec7ea48820f6eb7bd15c0b19849c31d0f3655341f91.webp"
+      ],
+      "variants": [
+        {
+          "id": "150g",
+          "labelAr": "150g",
+          "labelEn": "150g",
+          "labelTr": "150g",
+          "price": 16000
+        },
+        {
+          "id": "180g",
+          "labelAr": "180g",
+          "labelEn": "180g",
+          "labelTr": "180g",
+          "price": 18000
+        }
+      ],
+      "popular": true
+    },
+    {
+      "id": "ko-chicken-meal-rice",
+      "code": "KO_CHICKEN_MEAL_RICE",
+      "aisle": "ready",
+      "category": "Chicken",
+      "categoryAr": "الدجاج",
+      "name": "وجبة دجاج مع رز",
+      "names": {
+        "en": "Chicken Meal & Rice",
+        "ar": "وجبة دجاج مع رز",
+        "tr": "Chicken Meal & Rice"
+      },
+      "desc": "Chicken",
+      "descs": {
+        "ar": "الدجاج",
+        "en": "Chicken",
+        "tr": "Chicken"
+      },
+      "price": 8000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/b66195d5abe0e8506f8322abb9dd93023b3c41d1064db575316ffb9a07239890.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/b66195d5abe0e8506f8322abb9dd93023b3c41d1064db575316ffb9a07239890.webp"
+      ],
+      "variants": [
+        {
+          "id": "100g",
+          "labelAr": "100g",
+          "labelEn": "100g",
+          "labelTr": "100g",
+          "price": 8000
+        },
+        {
+          "id": "150g",
+          "labelAr": "150g",
+          "labelEn": "150g",
+          "labelTr": "150g",
+          "price": 10000
+        },
+        {
+          "id": "180g",
+          "labelAr": "180g",
+          "labelEn": "180g",
+          "labelTr": "180g",
+          "price": 12000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-chicken-iskender",
+      "code": "KO_CHICKEN_ISKENDER",
+      "aisle": "ready",
+      "category": "Chicken",
+      "categoryAr": "الدجاج",
+      "name": "إسكندر دجاج",
+      "names": {
+        "en": "Chicken Iskender",
+        "ar": "إسكندر دجاج",
+        "tr": "Chicken Iskender"
+      },
+      "desc": "Chicken",
+      "descs": {
+        "ar": "الدجاج",
+        "en": "Chicken",
+        "tr": "Chicken"
+      },
+      "price": 9000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/1abb7ac4709bb40537f39b1011bf5b4359bde6be8204263aa96f85877c63e863.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/1abb7ac4709bb40537f39b1011bf5b4359bde6be8204263aa96f85877c63e863.webp"
+      ],
+      "variants": [
+        {
+          "id": "120g",
+          "labelAr": "120g",
+          "labelEn": "120g",
+          "labelTr": "120g",
+          "price": 9000
+        },
+        {
+          "id": "150g",
+          "labelAr": "150g",
+          "labelEn": "150g",
+          "labelTr": "150g",
+          "price": 11000
+        },
+        {
+          "id": "180g",
+          "labelAr": "180g",
+          "labelEn": "180g",
+          "labelTr": "180g",
+          "price": 13000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-chicken-roll",
+      "code": "KO_CHICKEN_ROLL",
+      "aisle": "ready",
+      "category": "Chicken",
+      "categoryAr": "الدجاج",
+      "name": "رول دجاج",
+      "names": {
+        "en": "Chicken Roll",
+        "ar": "رول دجاج",
+        "tr": "Chicken Roll"
+      },
+      "desc": "Chicken",
+      "descs": {
+        "ar": "الدجاج",
+        "en": "Chicken",
+        "tr": "Chicken"
+      },
+      "price": 3500,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/64c5e9ef63c23070b834c7900c59f45878dc7b06493aaec95f8280c8450123f2.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/64c5e9ef63c23070b834c7900c59f45878dc7b06493aaec95f8280c8450123f2.webp"
+      ],
+      "variants": [
+        {
+          "id": "70g",
+          "labelAr": "70g",
+          "labelEn": "70g",
+          "labelTr": "70g",
+          "price": 3500
+        },
+        {
+          "id": "100g",
+          "labelAr": "100g",
+          "labelEn": "100g",
+          "labelTr": "100g",
+          "price": 4500
+        },
+        {
+          "id": "130g",
+          "labelAr": "130g",
+          "labelEn": "130g",
+          "labelTr": "130g",
+          "price": 6000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-chicken-doner",
+      "code": "KO_CHICKEN_DONER",
+      "aisle": "ready",
+      "category": "Chicken",
+      "categoryAr": "الدجاج",
+      "name": "دونر دجاج",
+      "names": {
+        "en": "Chicken Doner",
+        "ar": "دونر دجاج",
+        "tr": "Chicken Doner"
+      },
+      "desc": "Chicken",
+      "descs": {
+        "ar": "الدجاج",
+        "en": "Chicken",
+        "tr": "Chicken"
+      },
+      "price": 4000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/f7255d6f7b4181c1d345229989936fa0a9461190e5ee8d599729ca1de2523277.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/f7255d6f7b4181c1d345229989936fa0a9461190e5ee8d599729ca1de2523277.webp"
+      ],
+      "variants": [
+        {
+          "id": "70g",
+          "labelAr": "70g",
+          "labelEn": "70g",
+          "labelTr": "70g",
+          "price": 4000
+        },
+        {
+          "id": "100g",
+          "labelAr": "100g",
+          "labelEn": "100g",
+          "labelTr": "100g",
+          "price": 5000
+        },
+        {
+          "id": "130g",
+          "labelAr": "130g",
+          "labelEn": "130g",
+          "labelTr": "130g",
+          "price": 6500
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-chicken-meal",
+      "code": "KO_CHICKEN_MEAL",
+      "aisle": "ready",
+      "category": "Chicken",
+      "categoryAr": "الدجاج",
+      "name": "وجبة دجاج",
+      "names": {
+        "en": "Chicken Meal",
+        "ar": "وجبة دجاج",
+        "tr": "Chicken Meal"
+      },
+      "desc": "Chicken",
+      "descs": {
+        "ar": "الدجاج",
+        "en": "Chicken",
+        "tr": "Chicken"
+      },
+      "price": 6500,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/80046ede675d51c7cfcf15d6fdd046d89d56e4d5c02a815f9c860595ec56431f.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/80046ede675d51c7cfcf15d6fdd046d89d56e4d5c02a815f9c860595ec56431f.webp"
+      ],
+      "variants": [
+        {
+          "id": "100g",
+          "labelAr": "100g",
+          "labelEn": "100g",
+          "labelTr": "100g",
+          "price": 6500
+        },
+        {
+          "id": "150g",
+          "labelAr": "150g",
+          "labelEn": "150g",
+          "labelTr": "150g",
+          "price": 7500
+        },
+        {
+          "id": "180g",
+          "labelAr": "180g",
+          "labelEn": "180g",
+          "labelTr": "180g",
+          "price": 9000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-chicken-platter",
+      "code": "KO_CHICKEN_PLATTER",
+      "aisle": "ready",
+      "category": "Chicken",
+      "categoryAr": "الدجاج",
+      "name": "صحن دجاج",
+      "names": {
+        "en": "Chicken Platter",
+        "ar": "صحن دجاج",
+        "tr": "Chicken Platter"
+      },
+      "desc": "Chicken",
+      "descs": {
+        "ar": "الدجاج",
+        "en": "Chicken",
+        "tr": "Chicken"
+      },
+      "price": 30000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/26447ceee798af074ffdab92cefa4993615550ff05372d8818199b10986a708c.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/26447ceee798af074ffdab92cefa4993615550ff05372d8818199b10986a708c.webp"
+      ],
+      "variants": [
+        {
+          "id": "1-kg",
+          "labelAr": "1 kg",
+          "labelEn": "1 kg",
+          "labelTr": "1 kg",
+          "price": 30000
+        },
+        {
+          "id": "1-2-kg",
+          "labelAr": "½ kg",
+          "labelEn": "½ kg",
+          "labelTr": "½ kg",
+          "price": 20000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-ayran",
+      "code": "KO_AYRAN",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "عيران",
+      "names": {
+        "en": "Ayran",
+        "ar": "عيران",
+        "tr": "Ayran"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 1000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/eb720d3ae6e4139a0aaf875a4d5373c43de75152360827b00c0d215a49eb59ce.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/eb720d3ae6e4139a0aaf875a4d5373c43de75152360827b00c0d215a49eb59ce.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 1000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-cola",
+      "code": "KO_COLA",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "كولا",
+      "names": {
+        "en": "Cola",
+        "ar": "كولا",
+        "tr": "Cola"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 750,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/d204f393446322f9fdf136ab2c0d607b2bb81e481e46129092d770d3d6a627b7.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/d204f393446322f9fdf136ab2c0d607b2bb81e481e46129092d770d3d6a627b7.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 750
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-fanta",
+      "code": "KO_FANTA",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "فانتا",
+      "names": {
+        "en": "Fanta",
+        "ar": "فانتا",
+        "tr": "Fanta"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 750,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/d8d9b1c0d4032e3babc9af8d0986713f6e4bda2d8e086e581739761fc5487326.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/d8d9b1c0d4032e3babc9af8d0986713f6e4bda2d8e086e581739761fc5487326.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 750
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-sprite",
+      "code": "KO_SPRITE",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "سبرايت",
+      "names": {
+        "en": "Sprite",
+        "ar": "سبرايت",
+        "tr": "Sprite"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 750,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/111a855226ef9fe13736854cfcbbb44e61ef0b286b12c5cfa9fc9000bd17f7ce.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/111a855226ef9fe13736854cfcbbb44e61ef0b286b12c5cfa9fc9000bd17f7ce.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 750
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-cola-fresh",
+      "code": "KO_COLA_FRESH",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "كولا فريش",
+      "names": {
+        "en": "Cola Fresh",
+        "ar": "كولا فريش",
+        "tr": "Cola Fresh"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 1000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/5f1694496ba5af0d3d96d10ddf5adfbce5d0dbe9e796a9143829e12686e96a54.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/5f1694496ba5af0d3d96d10ddf5adfbce5d0dbe9e796a9143829e12686e96a54.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 1000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-cola-zero",
+      "code": "KO_COLA_ZERO",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "كولا زيرو",
+      "names": {
+        "en": "Cola zero",
+        "ar": "كولا زيرو",
+        "tr": "Cola zero"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 750,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/b004d794fb66d22dce2af36f8476ac4e73f1b9223bdd9ca362e87ceb064e94db.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/b004d794fb66d22dce2af36f8476ac4e73f1b9223bdd9ca362e87ceb064e94db.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 750
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-soda-lemon",
+      "code": "KO_SODA_LEMON",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "صودا ليمون",
+      "names": {
+        "en": "Soda Lemon",
+        "ar": "صودا ليمون",
+        "tr": "Soda Lemon"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 1000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/cebd06a6be51abb418f26dc82289194e4797205d09d257bbaac03e607658e0d3.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/cebd06a6be51abb418f26dc82289194e4797205d09d257bbaac03e607658e0d3.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 1000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-soda",
+      "code": "KO_SODA",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "صودا",
+      "names": {
+        "en": "Soda",
+        "ar": "صودا",
+        "tr": "Soda"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 1000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/3b691e238fa4397d43c8d7678f793e61e1d47b020da72d85963ba1fc21c1f9b0.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/3b691e238fa4397d43c8d7678f793e61e1d47b020da72d85963ba1fc21c1f9b0.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 1000
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-water",
+      "code": "KO_WATER",
+      "aisle": "drinks",
+      "category": "Drinks",
+      "categoryAr": "المشروبات",
+      "name": "ماء",
+      "names": {
+        "en": "Water",
+        "ar": "ماء",
+        "tr": "Water"
+      },
+      "desc": "Drinks",
+      "descs": {
+        "ar": "المشروبات",
+        "en": "Drinks",
+        "tr": "Drinks"
+      },
+      "price": 250,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/dfb20ba63ebd878fc639d24f5604d548d08bc08731331459033cef45e0ae2841.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/dfb20ba63ebd878fc639d24f5604d548d08bc08731331459033cef45e0ae2841.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 250
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-sutlac",
+      "code": "KO_SUTLAC",
+      "aisle": "ready",
+      "category": "Other",
+      "categoryAr": "أطباق أخرى",
+      "name": "سوتلاج",
+      "names": {
+        "en": "Sütlaç",
+        "ar": "سوتلاج",
+        "tr": "Sütlaç"
+      },
+      "desc": "Other",
+      "descs": {
+        "ar": "أطباق أخرى",
+        "en": "Other",
+        "tr": "Other"
+      },
+      "price": 2500,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/7476290c12415e498ac239ef5466c3e696f6e0d7e8274580596857450b50130d.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/7476290c12415e498ac239ef5466c3e696f6e0d7e8274580596857450b50130d.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 2500
+        }
+      ],
+      "popular": false
+    },
+    {
+      "id": "ko-fries",
+      "code": "KO_FRIES",
+      "aisle": "ready",
+      "category": "Other",
+      "categoryAr": "أطباق أخرى",
+      "name": "بطاطا مقلية",
+      "names": {
+        "en": "Fries",
+        "ar": "بطاطا مقلية",
+        "tr": "Fries"
+      },
+      "desc": "Other",
+      "descs": {
+        "ar": "أطباق أخرى",
+        "en": "Other",
+        "tr": "Other"
+      },
+      "price": 3000,
+      "currency": "IQD",
+      "stock": 99,
+      "brand": "Kuç Oglu",
+      "unit": "pcs",
+      "unitAmount": 1,
+      "allergens": [],
+      "image": "https://menu.kucoglu.restaurant/assets/branch/dc9d567c8586a04c1de8f161ee6546eea84fa091f8c46d7a74a0e3283bc19244.webp",
+      "images": [
+        "https://menu.kucoglu.restaurant/assets/branch/dc9d567c8586a04c1de8f161ee6546eea84fa091f8c46d7a74a0e3283bc19244.webp"
+      ],
+      "variants": [
+        {
+          "id": "default",
+          "labelAr": "Default",
+          "labelEn": "Default",
+          "labelTr": "Default",
+          "price": 3000
+        }
+      ],
+      "popular": false
+    }
+  ]
+}
