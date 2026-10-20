@@ -1,5 +1,5 @@
 import { Pressable, StatusBar, Text, View } from 'react-native'
-import { Bell, ChevronLeft, ChevronRight, MapPin, Store as StoreIcon } from 'lucide-react-native'
+import { Bell, ChevronLeft, ChevronRight, MapPin, User } from 'lucide-react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useI18n } from '../context/I18nContext'
 import { useApp } from '../context/AppContext'
@@ -7,7 +7,7 @@ import { DEFAULT_STORE_ID, storeName } from '../data/mock'
 import { colors } from '../theme'
 import Logo from './Logo'
 
-export default function TopBar({ title, onBack, showLocation, onLocation, onBell, trailing }) {
+export default function TopBar({ title, onBack, showLocation, onLocation, onBell, onProfile, trailing }) {
   const { t, lang, isRTL } = useI18n()
   const { user, unreadCount, getLiveStore } = useApp()
   const defaultStore = getLiveStore(DEFAULT_STORE_ID)
@@ -106,6 +106,7 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
           )}
         </View>
         {trailing}
+        {/* LTR: Bell → Profile (dış kenar). RTL row-reverse ile yan yana kalır. */}
         {onBell ? (
           <Pressable
             onPress={onBell}
@@ -140,6 +141,24 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
                 </Text>
               </View>
             ) : null}
+          </Pressable>
+        ) : null}
+        {onProfile ? (
+          <Pressable
+            onPress={onProfile}
+            hitSlop={6}
+            accessibilityRole="button"
+            accessibilityLabel="Profile"
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 10,
+              backgroundColor: 'rgba(255,255,255,0.18)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <User size={16} color="#fff" />
           </Pressable>
         ) : null}
       </View>

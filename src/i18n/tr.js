@@ -1,5 +1,5 @@
 export default {
-  appName: 'Kuç Oglu',
+  appName: 'M10',
   tagline: 'Geleneksel lezzet.',
   chooseLanguage: 'Dil seçin',
   continue: 'Devam',

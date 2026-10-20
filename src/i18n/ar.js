@@ -1,5 +1,5 @@
 export default {
-  appName: 'كوج أوغلو',
+  appName: 'M10',
   tagline: 'استمتع بالنكهة الأصيلة.',
   chooseLanguage: 'اختر اللغة',
   continue: 'متابعة',

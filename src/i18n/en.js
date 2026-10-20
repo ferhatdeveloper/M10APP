@@ -1,5 +1,5 @@
 export default {
-  appName: 'Kuç Oglu',
+  appName: 'M10',
   tagline: 'Savor the Tradition.',
   chooseLanguage: 'Choose language',
   continue: 'Continue',

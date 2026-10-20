@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Kuç Oglu",
-    "slug": "kucoglu",
+    "name": "M10",
+    "slug": "m10",
     "version": "1.0.2",
     "sdkVersion": "57.0.0",
     "orientation": "portrait",
@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#E31E24"
     },
     "ios": {
       "supportsTablet": true,

@@ -1,6 +1,6 @@
 import { nescafeBannerDataUri } from './nescafeBannerData'
 
-export const logoImg = require('../../assets/kucoglu-logo.png')
+export const logoImg = require('../../assets/m10-logo.png')
 export const promoImg = require('../../assets/promo-banner.png')
 /** Data-URI — Android release bazen drawable require’ı boyamıyor; data URI her zaman yüklenir */
 export const nescafeBannerImg = { uri: nescafeBannerDataUri }
@@ -38,14 +38,7 @@ export function src(path, aisle) {
   if (!path) return aisle ? aisleFallback(aisle) : fallbackProductImg
   if (typeof path !== 'string') return path
   if (path.includes('promo-banner') || path === '/promo-banner.png') return promoImg
-  if (
-    path.includes('kucoglu-logo') ||
-    path.includes('m10-logo') ||
-    path === '/kucoglu-logo.png' ||
-    path === '/m10-logo.png'
-  ) {
-    return logoImg
-  }
+  if (path.includes('m10-logo') || path === '/m10-logo.png') return logoImg
   if (path.startsWith('http')) return { uri: path }
   return { uri: path }
 }

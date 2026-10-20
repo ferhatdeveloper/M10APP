@@ -363,6 +363,7 @@ export default function HomeScreen({ navigation }) {
         showLocation
         onLocation={() => go('Addresses')}
         onBell={() => go('Notifications')}
+        onProfile={() => go('ProfileTab')}
       />
       <View style={{ paddingHorizontal: PAD, paddingTop: 6, paddingBottom: 2, backgroundColor: C.bg }}>
         <SearchField
