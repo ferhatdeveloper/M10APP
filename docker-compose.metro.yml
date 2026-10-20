@@ -26,6 +26,8 @@ services:
       REACT_NATIVE_PACKAGER_HOSTNAME: metro.retailex.app
       EXPO_PACKAGER_PROXY_URL: https://metro.retailex.app:443
       EXPO_PORT: "8081"
+      # Dokploy Environment panel → container (empty = start-metro.sh uses --offline)
+      EXPO_TOKEN: ${EXPO_TOKEN:-}
     labels:
       - dokploy.managed=true
       - traefik.enable=true
@@ -49,15 +51,10 @@ services:
           echo "npm ci failed — npm install"
           npm install --legacy-peer-deps --no-audit --no-fund
         fi
-        export CI=1 EXPO_NO_TELEMETRY=1 EXPO_NO_DOTENV=1 EXPO_OFFLINE=1
-        export EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-        export PUBLIC_HOST=metro.retailex.app
-        export EXPO_PACKAGER_HOSTNAME=metro.retailex.app
-        export REACT_NATIVE_PACKAGER_HOSTNAME=metro.retailex.app
-        export EXPO_PACKAGER_PROXY_URL=https://metro.retailex.app:443
-        echo "CMD: npx expo start --offline --port 8081"
+        chmod +x scripts/start-metro.sh
+        echo "CMD: scripts/start-metro.sh (EXPO_TOKEN signs; else --offline)"
         echo "QR: exp://metro.retailex.app  /  exp://72.60.182.107:8081"
-        exec npx expo start --offline --port 8081
+        exec scripts/start-metro.sh
     healthcheck:
       test: ["CMD", "curl", "-sf", "http://127.0.0.1:8081/status"]
       interval: 30s
