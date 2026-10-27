@@ -54,13 +54,13 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "f5df0de1-7a05-4d7d-a056-217d9da60e29"
+        "projectId": "dbae6ad8-9339-4ae2-a7a5-7fea2be99386"
       }
     },
-    "owner": "dev.ferhatnas",
+    "owner": "ferhatnas",
     "runtimeVersion": "58.0.0",
     "updates": {
-      "url": "https://u.expo.dev/f5df0de1-7a05-4d7d-a056-217d9da60e29"
+      "url": "https://u.expo.dev/dbae6ad8-9339-4ae2-a7a5-7fea2be99386"
     }
   }
 }
