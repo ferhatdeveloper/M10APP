@@ -95,6 +95,11 @@ function patchGetCodeSigningInfo(src) {
     try {
       return await getCodeSigningInfoAsync_orig(exp, expectSignatureHeader, privateKeyPath);
     } catch (e) {
+      // With EXPO_TOKEN we want a real signed manifest for iOS Expo Go 58 — do not swallow.
+      if (process.env.EXPO_TOKEN) {
+        console.error('patch-expo-anonymous-manifest: codesign failed with EXPO_TOKEN:', e && e.message);
+        throw e; // ANON_CODESIGN_PATCH
+      }
       console.warn('patch-expo-anonymous-manifest: unsigned fallback:', e && e.message);
       return null; // ANON_CODESIGN_PATCH
     }

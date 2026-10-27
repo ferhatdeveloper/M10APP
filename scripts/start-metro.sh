@@ -69,7 +69,12 @@ trap 'kill $WARM_PID 2>/dev/null || true' EXIT INT TERM
 
 if [ -n "${EXPO_TOKEN:-}" ]; then
   unset EXPO_OFFLINE || true
-  echo "EXPO_OFFLINE=0 (EXPO_TOKEN set — sign for iOS Expo Go 58)"
+  export EXPO_OFFLINE=
+  echo "EXPO_OFFLINE unset (EXPO_TOKEN set — sign for iOS Expo Go 58)"
+  # Mint/cache expo-root development cert before Metro (avoids unsigned iOS manifests)
+  if [ -f scripts/prefetch-expo-codesigning.js ]; then
+    node scripts/prefetch-expo-codesigning.js || echo "prefetch-expo-codesigning failed (Metro may stay unsigned)"
+  fi
   exec npx expo start --port "$EXPO_PORT"
 fi
 
