@@ -2,14 +2,7 @@
 export const M = (url) => ({ uri: url })
 
 export const BRANDS = [
-  /** `card`: Talabat tarzı hazır kart (ürün + turuncu tepe, şeffaf kesim) */
-  {
-    id: 'nescafe',
-    name: 'Nescafe',
-    accent: '#C62828',
-    card: require('../../assets/mart-clone/brand_nescafe.png'),
-    image: M('https://images.migrosone.com/sanalmarket/product/03221309/3221309-409c19.jpg'),
-  },
+  /** `card`: sadece Nada / Puck — hazır Talabat kartı */
   {
     id: 'nada',
     name: 'Nada',
@@ -24,6 +17,7 @@ export const BRANDS = [
     card: require('../../assets/mart-clone/brand_puck.png'),
     image: M('https://images.migrosone.com/sanalmarket/product/10300063/10300063-a0216f.jpg'),
   },
+  { id: 'nescafe', name: 'Nescafe', accent: '#C62828', image: M('https://images.migrosone.com/sanalmarket/product/03221309/3221309-409c19.jpg') },
   { id: 'pinar', name: 'Pınar', accent: '#1565C0', image: M('https://images.migrosone.com/sanalmarket/product/11010198/11010198_1-c52501.jpg') },
   { id: 'ulker', name: 'Ülker', accent: '#6A1B9A', image: M('https://images.migrosone.com/sanalmarket/product/07010209/07010209-1747ff.jpg') },
   { id: 'eti', name: 'Eti', accent: '#E65100', image: M('https://images.migrosone.com/sanalmarket/product/07163987/07163987-235c4a.jpg') },

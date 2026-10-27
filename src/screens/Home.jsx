@@ -193,64 +193,62 @@ function FlashSaleBlock({ title, endsInLabel, secondsLeft, isRTL, onPress, produ
   )
 }
 
-/** Flash Sale altı marka kartları — Talabat: ürün turuncu/kırmızı tepe üstünde */
+/** Flash Sale altı marka kartları — Nada/Puck: hazır kart; diğerleri eski kırmızı alt */
 function BrandCard({ item, w, h, onPress }) {
-  // Hazır kart asset’i varsa (Nescafe/Nada/Puck) birebir kullan
   if (item.card) {
     return (
       <SoftPress
         onPress={onPress}
-        style={{ width: w, height: h, marginRight: GAP, borderRadius: 18, overflow: 'hidden', backgroundColor: '#F3EEE6' }}
+        style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: '#F3EEE6' }}
       >
         <Image source={item.card} style={{ width: w, height: h }} resizeMode="cover" />
       </SoftPress>
     )
   }
 
-  const blobW = Math.round(w * 0.92)
-  const blobH = Math.round(h * 0.38)
   return (
     <SoftPress
       onPress={onPress}
-      style={{ width: w, height: h, marginRight: GAP, borderRadius: 18, overflow: 'hidden', backgroundColor: '#F3EEE6' }}
+      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: '#fff' }}
     >
-      <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 3, fontSize: 17, fontWeight: '800', color: C.ink }}>
-        {item.name}
-      </Text>
-      {/* İçte turuncu tepe / pill — tam genişlik şerit değil */}
       <View
         style={{
           position: 'absolute',
-          alignSelf: 'center',
-          left: (w - blobW) / 2,
-          bottom: -blobH * 0.22,
-          width: blobW,
-          height: blobH,
-          borderRadius: blobW / 2,
-          backgroundColor: item.accent || C.red,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 40,
+          backgroundColor: C.red,
+          borderTopLeftRadius: 40,
+          borderTopRightRadius: 40,
           zIndex: 1,
         }}
       />
+      <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 3, fontSize: 17, fontWeight: '800', color: C.ink }}>
+        {item.name}
+      </Text>
+      {/* Beyaz kart + ürün kırmızı üstünde → JPEG beyaz bg erir (transparent hissi) */}
       <Image
         source={item.image}
         style={{
           position: 'absolute',
-          left: 8,
-          right: 8,
-          top: 44,
-          bottom: blobH * 0.18,
+          left: 12,
+          right: 12,
+          top: 46,
+          bottom: 8,
           zIndex: 2,
+          backgroundColor: 'transparent',
         }}
         resizeMode="contain"
       />
       <View
         style={{
           position: 'absolute',
-          right: 16,
-          top: h * 0.4,
-          width: 8,
-          height: 8,
-          backgroundColor: C.orange,
+          right: 14,
+          top: h * 0.42,
+          width: 9,
+          height: 9,
+          backgroundColor: C.lime,
           transform: [{ rotate: '45deg' }],
           zIndex: 3,
         }}
