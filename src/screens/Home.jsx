@@ -193,32 +193,42 @@ function FlashSaleBlock({ title, endsInLabel, secondsLeft, isRTL, onPress, produ
   )
 }
 
-/** Flash Sale altı marka kartları — yan yana kaydırma */
+/** Flash Sale altı marka kartları — ürün kırmızı alanın üstünde (beyaz kutu yok) */
 function BrandCard({ item, w, h, onPress }) {
   return (
     <SoftPress
       onPress={onPress}
-      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: C.cream }}
+      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: '#fff' }}
     >
-      <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 2, fontSize: 17, fontWeight: '800', color: C.ink }}>
-        {item.name}
-      </Text>
-      <Image
-        source={item.image}
-        style={{ position: 'absolute', left: 20, right: 20, top: 44, bottom: 36 }}
-        resizeMode="contain"
-      />
+      {/* Kırmızı “tepe” — ürünün arkasında / altında */}
       <View
         style={{
           position: 'absolute',
           left: 0,
           right: 0,
           bottom: 0,
-          height: 34,
+          height: 48,
           backgroundColor: C.red,
-          borderTopLeftRadius: 36,
-          borderTopRightRadius: 36,
+          borderTopLeftRadius: 44,
+          borderTopRightRadius: 44,
+          zIndex: 1,
         }}
+      />
+      <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 3, fontSize: 17, fontWeight: '800', color: C.ink }}>
+        {item.name}
+      </Text>
+      {/* Ürün kırmızının üstüne biner; kart bg beyaz = JPEG beyazı kaybolur */}
+      <Image
+        source={item.image}
+        style={{
+          position: 'absolute',
+          left: 10,
+          right: 10,
+          top: 46,
+          bottom: 4,
+          zIndex: 2,
+        }}
+        resizeMode="contain"
       />
       <View
         style={{
@@ -229,6 +239,7 @@ function BrandCard({ item, w, h, onPress }) {
           height: 9,
           backgroundColor: C.lime,
           transform: [{ rotate: '45deg' }],
+          zIndex: 3,
         }}
       />
     </SoftPress>
