@@ -3,7 +3,7 @@
  * Görseller: Migros Sanal Market ürün CDN (demo)
  * App bar: orijinal TopBar + beyaz M10 Logo
  */
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Dimensions,
   Image,
@@ -173,44 +173,99 @@ function FlashSaleHeader({ title, endsInLabel, secondsLeft, isRTL, onPress }) {
   )
 }
 
-function BrandCard({ item, w, h, onPress }) {
+/** Tek banner — yatay kaydırma / otomatik geçiş (Talabat hero) */
+function BrandBannerCarousel({ items, onPress }) {
+  const [page, setPage] = useState(0)
+  const scrollRef = useRef(null)
+  const pageRef = useRef(0)
+  const bannerW = W - PAD * 2
+  const bannerH = Math.round(bannerW * 0.42)
+
+  useEffect(() => {
+    if (!items?.length) return undefined
+    const id = setInterval(() => {
+      const next = (pageRef.current + 1) % items.length
+      pageRef.current = next
+      setPage(next)
+      scrollRef.current?.scrollTo({ x: next * W, animated: true })
+    }, 4200)
+    return () => clearInterval(id)
+  }, [items?.length])
+
   return (
-    <SoftPress
-      onPress={onPress}
-      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: C.cream }}
-    >
-      <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 2, fontSize: 17, fontWeight: '800', color: C.ink }}>
-        {item.name}
-      </Text>
-      <Image
-        source={item.image}
-        style={{ position: 'absolute', left: 20, right: 20, top: 44, bottom: 36 }}
-        resizeMode="contain"
-      />
-      <View
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: 34,
-          backgroundColor: C.red,
-          borderTopLeftRadius: 36,
-          borderTopRightRadius: 36,
+    <View style={{ marginTop: 10 }}>
+      <ScrollView
+        ref={scrollRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        decelerationRate="fast"
+        onMomentumScrollEnd={(e) => {
+          const next = Math.round(e.nativeEvent.contentOffset.x / W)
+          pageRef.current = next
+          setPage(next)
         }}
-      />
-      <View
-        style={{
-          position: 'absolute',
-          right: 14,
-          top: h * 0.42,
-          width: 9,
-          height: 9,
-          backgroundColor: C.lime,
-          transform: [{ rotate: '45deg' }],
-        }}
-      />
-    </SoftPress>
+      >
+        {items.map((item) => (
+          <View key={item.id} style={{ width: W, paddingHorizontal: PAD }}>
+            <SoftPress
+              onPress={onPress}
+              style={{
+                width: bannerW,
+                height: bannerH,
+                borderRadius: 18,
+                overflow: 'hidden',
+                backgroundColor: C.cream,
+              }}
+            >
+              <Text
+                style={{
+                  position: 'absolute',
+                  top: 16,
+                  left: 18,
+                  zIndex: 2,
+                  fontSize: 22,
+                  fontWeight: '900',
+                  color: C.ink,
+                }}
+              >
+                {item.name}
+              </Text>
+              <Image
+                source={item.image}
+                style={{ position: 'absolute', right: 18, top: 18, bottom: 28, width: bannerW * 0.42 }}
+                resizeMode="contain"
+              />
+              <View
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: 22,
+                  backgroundColor: C.red,
+                  borderTopLeftRadius: 28,
+                  borderTopRightRadius: 28,
+                }}
+              />
+            </SoftPress>
+          </View>
+        ))}
+      </ScrollView>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, gap: 6 }}>
+        {items.map((item, i) => (
+          <View
+            key={`dot-${item.id}`}
+            style={{
+              width: i === page ? 16 : 6,
+              height: 6,
+              borderRadius: 3,
+              backgroundColor: i === page ? C.lime : C.line,
+            }}
+          />
+        ))}
+      </View>
+    </View>
   )
 }
 
@@ -387,8 +442,6 @@ export default function HomeScreen({ navigation }) {
     return () => clearInterval(id)
   }, [])
 
-  const brandW = 148
-  const brandH = 200
   const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
   const exploreW = Math.floor((W - PAD * 2 - GAP) / 2)
   const categoryPages = useMemo(() => [CATEGORIES, CATEGORIES_PAGE2], [])
@@ -475,12 +528,7 @@ export default function HomeScreen({ navigation }) {
           </ScrollView>
         </View>
 
-        {/* Marka kartları */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 8 }}>
-          {BRANDS.map((b) => (
-            <BrandCard key={b.id} item={b} w={brandW} h={brandH} onPress={goStore} />
-          ))}
-        </ScrollView>
+        <BrandBannerCarousel items={BRANDS} onPress={goStore} />
 
         <ProductRow title={L.buyAgain} action={L.viewAll} onAction={goStore} products={BUY_AGAIN} lang={lang} onAdd={onAdd} />
 
