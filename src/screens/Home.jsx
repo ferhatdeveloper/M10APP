@@ -583,8 +583,8 @@ export default function HomeScreen({ navigation }) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 12 }}
           >
-            {NESCAFE_ROW.map((p) => (
-              <ProductChip key={p.id} product={p} lang={lang} onAdd={() => onAdd(p)} width={118} />
+            {NESCAFE_ROW.map((p, i) => (
+              <ProductChip key={`nescafe-${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} width={118} />
             ))}
           </ScrollView>
         </View>
@@ -630,8 +630,8 @@ export default function HomeScreen({ navigation }) {
         <View style={{ marginTop: 22, marginBottom: 20 }}>
           <SectionTitle title={L.explore} />
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: PAD, justifyContent: 'space-between' }}>
-            {EXPLORE.map((p) => (
-              <View key={p.id} style={{ width: exploreW, marginBottom: 14 }}>
+            {EXPLORE.map((p, i) => (
+              <View key={`explore-${p.id}-${i}`} style={{ width: exploreW, marginBottom: 14 }}>
                 <View style={{ width: exploreW, height: exploreW * 0.85, borderRadius: 16, backgroundColor: C.soft, overflow: 'hidden' }}>
                   <Image source={p.image} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
                   <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
