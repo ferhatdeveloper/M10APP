@@ -36,12 +36,12 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
       <StatusBar barStyle="light-content" />
       <View
         style={{
-          paddingHorizontal: 12,
-          paddingVertical: 6,
+          paddingHorizontal: 14,
+          paddingVertical: 10,
           flexDirection: isRTL ? 'row-reverse' : 'row',
           alignItems: 'center',
-          gap: 8,
-          minHeight: 44,
+          gap: 10,
+          minHeight: 52,
         }}
       >
         {onBack ? (
@@ -49,18 +49,18 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
             onPress={onBack}
             hitSlop={6}
             style={{
-              width: 32,
-              height: 32,
-              borderRadius: 10,
+              width: 36,
+              height: 36,
+              borderRadius: 11,
               backgroundColor: 'rgba(255,255,255,0.18)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Chevron size={18} color="#fff" />
+            <Chevron size={20} color="#fff" />
           </Pressable>
         ) : (
-          <Logo size={28} onBrand />
+          <Logo size={34} onBrand />
         )}
         <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
           {showLocation ? (
@@ -69,18 +69,18 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
               style={{
                 flexDirection: isRTL ? 'row-reverse' : 'row',
                 alignItems: 'center',
-                gap: 4,
+                gap: 5,
                 maxWidth: '100%',
               }}
             >
               <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
                 <Text
                   style={{
-                    fontSize: 10,
+                    fontSize: 11,
                     fontWeight: '700',
                     color: 'rgba(255,255,255,0.8)',
                     textAlign: isRTL ? 'right' : 'left',
-                    lineHeight: 13,
+                    lineHeight: 14,
                   }}
                   numberOfLines={1}
                 >
@@ -89,23 +89,23 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
                 <Text
                   numberOfLines={1}
                   style={{
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: '800',
                     color: '#fff',
                     textAlign: isRTL ? 'right' : 'left',
-                    lineHeight: 16,
+                    lineHeight: 18,
                     marginTop: 1,
                   }}
                 >
                   {addrLine}
                 </Text>
               </View>
-              <MapPin size={14} color={colors.yellow} />
+              <MapPin size={16} color={colors.yellow} />
             </Pressable>
           ) : (
             <Text
               style={{
-                fontSize: 15,
+                fontSize: 16,
                 fontWeight: '800',
                 color: '#fff',
                 textAlign: isRTL ? 'right' : 'left',
@@ -123,31 +123,31 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
             onPress={onBell}
             hitSlop={6}
             style={{
-              width: 32,
-              height: 32,
-              borderRadius: 10,
+              width: 36,
+              height: 36,
+              borderRadius: 11,
               backgroundColor: 'rgba(255,255,255,0.18)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Bell size={16} color="#fff" />
+            <Bell size={18} color="#fff" />
             {unreadCount > 0 ? (
               <View
                 style={{
                   position: 'absolute',
                   top: 2,
                   right: 2,
-                  minWidth: 14,
-                  height: 14,
-                  borderRadius: 7,
+                  minWidth: 15,
+                  height: 15,
+                  borderRadius: 8,
                   backgroundColor: colors.yellow,
                   alignItems: 'center',
                   justifyContent: 'center',
                   paddingHorizontal: 3,
                 }}
               >
-                <Text style={{ color: colors.ink, fontSize: 8, fontWeight: '800' }}>
+                <Text style={{ color: colors.ink, fontSize: 9, fontWeight: '800' }}>
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </Text>
               </View>
@@ -161,15 +161,15 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
             accessibilityRole="button"
             accessibilityLabel="Profile"
             style={{
-              width: 32,
-              height: 32,
-              borderRadius: 10,
+              width: 36,
+              height: 36,
+              borderRadius: 11,
               backgroundColor: 'rgba(255,255,255,0.18)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <User size={16} color="#fff" />
+            <User size={18} color="#fff" />
           </Pressable>
         ) : null}
       </View>
