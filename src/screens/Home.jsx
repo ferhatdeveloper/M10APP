@@ -421,27 +421,33 @@ function DealPromoStrip({ onPress, lang }) {
   )
 }
 
-/** Tek banner — yatay kaydırma / otomatik geçiş (Talabat hero) */
-function BrandBannerCarousel({ items, onPress }) {
+/** Tek slayt promo — ekmek / Head&Shoulders vb. tam genişlik banner */
+const PROMO_SLIDES = [
+  { id: 'bakery', image: require('../../assets/mart-clone/promo_bakery.png'), bg: C.soft },
+  { id: 'hs', image: require('../../assets/mart-clone/promo_hs.png'), bg: '#0A6CBA' },
+  { id: 'pink', image: require('../../assets/mart-clone/promo_pink.png'), bg: '#F8BBD0' },
+  { id: 'american', image: require('../../assets/mart-clone/promo_american.png'), bg: '#E3F2FD' },
+]
+
+function PromoBannerSlider({ onPress }) {
   const [page, setPage] = useState(0)
   const scrollRef = useRef(null)
   const pageRef = useRef(0)
   const bannerW = W - PAD * 2
-  const bannerH = Math.round(bannerW * 0.42)
+  const bannerH = 118
 
   useEffect(() => {
-    if (!items?.length) return undefined
     const id = setInterval(() => {
-      const next = (pageRef.current + 1) % items.length
+      const next = (pageRef.current + 1) % PROMO_SLIDES.length
       pageRef.current = next
       setPage(next)
       scrollRef.current?.scrollTo({ x: next * W, animated: true })
     }, 4200)
     return () => clearInterval(id)
-  }, [items?.length])
+  }, [])
 
   return (
-    <View style={{ marginTop: 10 }}>
+    <View style={{ marginTop: 16 }}>
       <ScrollView
         ref={scrollRef}
         horizontal
@@ -454,56 +460,27 @@ function BrandBannerCarousel({ items, onPress }) {
           setPage(next)
         }}
       >
-        {items.map((item) => (
+        {PROMO_SLIDES.map((item) => (
           <View key={item.id} style={{ width: W, paddingHorizontal: PAD }}>
             <SoftPress
               onPress={onPress}
               style={{
                 width: bannerW,
                 height: bannerH,
-                borderRadius: 18,
+                borderRadius: 14,
                 overflow: 'hidden',
-                backgroundColor: C.cream,
+                backgroundColor: item.bg,
               }}
             >
-              <Text
-                style={{
-                  position: 'absolute',
-                  top: 16,
-                  left: 18,
-                  zIndex: 2,
-                  fontSize: 22,
-                  fontWeight: '900',
-                  color: C.ink,
-                }}
-              >
-                {item.name}
-              </Text>
-              <Image
-                source={item.image}
-                style={{ position: 'absolute', right: 18, top: 18, bottom: 28, width: bannerW * 0.42 }}
-                resizeMode="contain"
-              />
-              <View
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  height: 22,
-                  backgroundColor: C.red,
-                  borderTopLeftRadius: 28,
-                  borderTopRightRadius: 28,
-                }}
-              />
+              <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
             </SoftPress>
           </View>
         ))}
       </ScrollView>
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, gap: 6 }}>
-        {items.map((item, i) => (
+        {PROMO_SLIDES.map((item, i) => (
           <View
-            key={`dot-${item.id}`}
+            key={`promo-dot-${item.id}`}
             style={{
               width: i === page ? 16 : 6,
               height: 6,
@@ -692,6 +669,7 @@ export default function HomeScreen({ navigation }) {
 
   const brandW = 148
   const brandH = 200
+  const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
   const exploreW = Math.floor((W - PAD * 2 - GAP) / 2)
   const categoryPages = useMemo(() => [CATEGORIES, CATEGORIES_PAGE2], [])
   const flashProducts = useMemo(() => TOP_SAVERS.slice(0, 8), [])
@@ -799,20 +777,37 @@ export default function HomeScreen({ navigation }) {
         {/* Talabat deal cards — kategori altına kaydırılabilir dikey promo */}
         <DealPromoStrip onPress={goStore} lang={lang} />
 
-        {/* Marka ↔ kategori arası çift promo */}
-        <View style={{ marginTop: 16, paddingHorizontal: PAD, flexDirection: 'row', gap: GAP }}>
-          <SoftPress onPress={goStore} style={{ flex: 1, height: 118, borderRadius: 14, overflow: 'hidden', backgroundColor: C.soft }}>
-            <Image source={require('../../assets/mart-clone/promo_bakery.png')} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-          </SoftPress>
-          <SoftPress onPress={goStore} style={{ flex: 1, height: 118, borderRadius: 14, overflow: 'hidden', backgroundColor: '#0A6CBA' }}>
-            <Image source={require('../../assets/mart-clone/promo_hs.png')} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-          </SoftPress>
-        </View>
+        {/* Ekmek / Head&Shoulders — tek kayan banner */}
+        <PromoBannerSlider onPress={goStore} />
 
-        {/* Markaya göre alışveriş — tek kart slider */}
+        {/* Markaya göre alışveriş — 2×4 logo grid (dokunulmaz) */}
         <View style={{ marginTop: 18 }}>
           <SectionTitle title={L.shopBrand} action={L.viewAll} onAction={goStore} />
-          <BrandBannerCarousel items={LOGO_BRANDS} onPress={goStore} />
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: PAD, gap: GAP }}>
+            {LOGO_BRANDS.map((b) => (
+              <SoftPress
+                key={b.id}
+                onPress={goStore}
+                style={{
+                  width: logoTile,
+                  height: logoTile * 0.85,
+                  borderRadius: 14,
+                  backgroundColor: '#fff',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: C.line,
+                  overflow: 'hidden',
+                  padding: 8,
+                }}
+              >
+                <Image source={b.image} style={{ width: '70%', height: '55%' }} resizeMode="contain" />
+                <Text style={{ marginTop: 4, fontSize: 11, fontWeight: '700', color: C.ink }} numberOfLines={1}>
+                  {b.name}
+                </Text>
+              </SoftPress>
+            ))}
+          </View>
         </View>
 
         <View style={{ marginTop: 22 }}>
