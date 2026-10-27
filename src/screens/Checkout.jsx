@@ -9,7 +9,7 @@ import { useI18n } from '../context/I18nContext'
 import { DELIVERY_SLOTS, formatIQD, generateDeliverySlots, linePrice, productName } from '../data/mock'
 import { colors, radius, shadow } from '../theme'
 
-const ACCENT = '#E31E24' // app bar kırmızısı
+const ACCENT = colors.red // Pantone 2347 C
 
 export default function CheckoutScreen({ navigation }) {
   const insets = useSafeAreaInsets()

@@ -1,6 +1,6 @@
 /**
  * Talabat Mart sepet klonu — beyaz header, usuals, satırlar, sticky Checkout
- * Accent: app bar kırmızısı (#E31E24)
+ * Accent: kurumsal kırmızı (Pantone 2347 C)
  */
 import { ScrollView, Text, View } from 'react-native'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'

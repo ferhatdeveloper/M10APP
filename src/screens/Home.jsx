@@ -3,7 +3,7 @@
  * Görseller: Migros Sanal Market ürün CDN (demo)
  * App bar: orijinal TopBar + beyaz M10 Logo
  */
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Dimensions,
   Image,
@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Snowflake } from 'lucide-react-native'
+import { Snowflake, Zap } from 'lucide-react-native'
 import SoftPress from '../components/SoftPress'
 import TopBar from '../components/TopBar'
 import SearchField from '../components/SearchField'
@@ -20,6 +20,7 @@ import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
 import { DEFAULT_STORE_ID, formatIQD, getNearestStore } from '../data/mock'
 import { nescafeBannerImg } from '../utils/images'
+import { colors } from '../theme'
 import {
   BEVERAGES,
   BEST_SELLERS,
@@ -42,17 +43,18 @@ const { width: W } = Dimensions.get('window')
 const PAD = 16
 const GAP = 10
 
+/** Şartname palette — Pantone 2347 C / 116 C / 1365 C / 2287 C */
 const C = {
-  bg: '#FFFFFF',
-  ink: '#212121',
-  muted: '#757575',
-  soft: '#F5F5F5',
-  line: '#EEEEEE',
+  bg: colors.card,
+  ink: colors.ink,
+  muted: colors.muted,
+  soft: colors.bg,
+  line: colors.line,
   cream: '#F5EFE6',
-  orange: '#FF5A00',
-  red: '#E31E24',
-  green: '#1B7A3D',
-  lime: '#C6F400',
+  orange: colors.orange,
+  red: colors.red,
+  green: colors.open,
+  lime: colors.yellow,
 }
 
 const label = (p, lang) => p.names?.[lang] || p.names?.en || p.name || ''
@@ -93,6 +95,71 @@ function SectionTitle({ title, action, onAction }) {
         </SoftPress>
       ) : null}
     </View>
+  )
+}
+
+/** Talabat tarzı Flash Sale — app bar / arama altı şerit + geri sayım */
+function FlashSaleHeader({ title, endsInLabel, secondsLeft, isRTL, onPress }) {
+  const h = Math.floor(secondsLeft / 3600)
+  const m = Math.floor((secondsLeft % 3600) / 60)
+  const s = secondsLeft % 60
+  const pad = (n) => String(n).padStart(2, '0')
+  const cells = [pad(h), pad(m), pad(s)]
+  return (
+    <SoftPress
+      onPress={onPress}
+      style={{
+        marginHorizontal: PAD,
+        marginTop: 8,
+        marginBottom: 4,
+        borderRadius: 12,
+        overflow: 'hidden',
+        backgroundColor: C.red,
+        flexDirection: isRTL ? 'row-reverse' : 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        gap: 10,
+      }}
+    >
+      <View
+        style={{
+          width: 32,
+          height: 32,
+          borderRadius: 16,
+          backgroundColor: C.yellow,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Zap size={16} color={C.ink} fill={C.ink} strokeWidth={2.4} />
+      </View>
+      <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
+        <Text style={{ color: '#fff', fontWeight: '900', fontSize: 15 }}>{title}</Text>
+        <Text style={{ color: 'rgba(255,255,255,0.85)', fontWeight: '600', fontSize: 11, marginTop: 1 }}>
+          {endsInLabel}
+        </Text>
+      </View>
+      <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 3 }}>
+        {cells.map((cell, i) => (
+          <View key={`${i}-${cell}`} style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 3 }}>
+            {i > 0 ? <Text style={{ color: '#fff', fontWeight: '900', fontSize: 12 }}>:</Text> : null}
+            <View
+              style={{
+                minWidth: 26,
+                paddingHorizontal: 4,
+                paddingVertical: 4,
+                borderRadius: 6,
+                backgroundColor: 'rgba(0,0,0,0.22)',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ color: '#fff', fontWeight: '900', fontSize: 13, fontVariant: ['tabular-nums'] }}>{cell}</Text>
+            </View>
+          </View>
+        ))}
+      </View>
+    </SoftPress>
   )
 }
 
@@ -303,11 +370,19 @@ export default function HomeScreen({ navigation }) {
   const minOrder = Number(cartStore?.minOrder) || 0
   const remain = minOrder > 0 ? Math.max(0, minOrder - (cartTotal || 0)) : 0
 
+  /** Flash sale geri sayım — her açılışta ~2 saat (demo) */
+  const [flashLeft, setFlashLeft] = useState(2 * 60 * 60 + 14 * 60 + 37)
+  useEffect(() => {
+    const id = setInterval(() => setFlashLeft((s) => (s > 0 ? s - 1 : 0)), 1000)
+    return () => clearInterval(id)
+  }, [])
+
   const brandW = 148
   const brandH = 200
   const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
   const exploreW = Math.floor((W - PAD * 2 - GAP) / 2)
   const categoryPages = useMemo(() => [CATEGORIES, CATEGORIES_PAGE2], [])
+  const flashProducts = useMemo(() => TOP_SAVERS.slice(0, 8), [])
 
   const go = (screen, params) => navigation.navigate(screen, params)
   const goStore = () => navigation.navigate('Store', { id: storeId })
@@ -348,6 +423,8 @@ export default function HomeScreen({ navigation }) {
     explore: lang === 'tr' ? "Market'i keşfet" : lang === 'ar' ? 'استكشف Market' : 'Explore Market',
     viewCart: lang === 'tr' ? 'Sepeti gör' : lang === 'ar' ? 'عرض السلة' : 'View cart',
     yourCart: lang === 'tr' ? 'Sepetin' : lang === 'ar' ? 'سلتك' : 'Your cart',
+    flashSale: lang === 'tr' ? 'Flash Sale' : lang === 'ar' ? 'عروض سريعة' : 'Flash sale',
+    endsIn: lang === 'tr' ? 'Bitiş' : lang === 'ar' ? 'ينتهي خلال' : 'Ends in',
   }
 
   return (
@@ -368,7 +445,26 @@ export default function HomeScreen({ navigation }) {
         />
       </View>
 
+      {/* Talabat: Flash Sale — app bar / arama hemen altında */}
+      <FlashSaleHeader
+        title={L.flashSale}
+        endsInLabel={L.endsIn}
+        secondsLeft={flashLeft}
+        isRTL={isRTL}
+        onPress={goStore}
+      />
+
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 110 + insets.bottom }}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 6, paddingBottom: 4 }}
+        >
+          {flashProducts.map((p) => (
+            <ProductChip key={`flash-${p.id}`} product={p} lang={lang} onAdd={() => onAdd(p)} showSave width={108} />
+          ))}
+        </ScrollView>
+
         {/* Marka kartları */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 8 }}>
           {BRANDS.map((b) => (

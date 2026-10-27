@@ -317,7 +317,7 @@ export function MockHome() {
       <View style={{ flex: 1, backgroundColor: colors.bg, padding: 10, gap: 8 }}>
         {/* Story halkası */}
         <View style={{ flexDirection: 'row', gap: 6 }}>
-          {['#E31E24', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6'].map((c, i) => (
+          {[colors.red, colors.orange, colors.open, colors.blue, '#8B5CF6'].map((c, i) => (
             <View key={i} style={{ alignItems: 'center', gap: 3 }}>
               <View
                 style={{

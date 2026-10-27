@@ -10,10 +10,10 @@ const SAMPLE_NOTIFICATIONS = [
 ]
 
 const KIND_COLOR = {
-  order: '#E31E24',
-  stock: '#B86A00',
-  campaign: '#6E36F3',
-  customer: '#12803C',
+  order: '#E02020',
+  stock: '#F0B040',
+  campaign: '#203080',
+  customer: '#60B040',
   system: '#7A7A7A',
 }
 

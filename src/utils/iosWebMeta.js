@@ -25,7 +25,7 @@ export function ensureIosWebMeta() {
   setMeta('mobile-web-app-capable', 'yes')
   setMeta('apple-mobile-web-app-status-bar-style', 'black-translucent')
   setMeta('apple-mobile-web-app-title', 'M10')
-  setMeta('theme-color', '#E31E24')
+  setMeta('theme-color', '#E02020')
   setMeta('format-detection', 'telephone=no')
 
   const ensureLink = (rel, href, sizes) => {

@@ -532,7 +532,7 @@ function CourierSearching({ stage, pulse, destination, storeCoords, isRTL, t }) 
               alignItems: 'center',
               justifyContent: 'center',
               borderWidth: 3,
-              borderColor: '#E31E24',
+              borderColor: colors.red,
             }}
           >
             <Text style={{ fontSize: 12 }}>🏪</Text>
@@ -553,7 +553,7 @@ function CourierSearching({ stage, pulse, destination, storeCoords, isRTL, t }) 
               alignItems: 'center',
               justifyContent: 'center',
               borderWidth: 3,
-              borderColor: '#E31E24',
+              borderColor: colors.red,
             }}
           >
             <Text style={{ fontSize: 12 }}>📍</Text>
@@ -581,7 +581,7 @@ function CourierSearching({ stage, pulse, destination, storeCoords, isRTL, t }) 
             width: 44,
             height: 44,
             borderRadius: 22,
-            backgroundColor: isSearching ? '#FFF200' : '#E31E24',
+            backgroundColor: isSearching ? colors.yellow : colors.red,
             alignItems: 'center',
             justifyContent: 'center',
           }}
@@ -617,7 +617,7 @@ function CourierSearching({ stage, pulse, destination, storeCoords, isRTL, t }) 
             ? `${distanceKm(storeCoords, destination).toFixed(1)} km`
             : '—'}
         </Text>
-        <Text style={{ color: '#FFF200', fontWeight: '900', fontSize: 11 }}>
+        <Text style={{ color: colors.yellow, fontWeight: '900', fontSize: 11 }}>
           {isSearching ? t('findingCourier') : t('onTheWay')}
         </Text>
       </View>

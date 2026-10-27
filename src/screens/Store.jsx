@@ -20,8 +20,6 @@ import TopBar from '../components/TopBar'
 const STORE_HERO = {
   uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80',
 }
-const MART_RED = '#E31E24'
-const MART_ORANGE = '#FF5A00'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
 import {
@@ -33,6 +31,9 @@ import {
 } from '../data/mock'
 import { aisleFallback, src } from '../utils/images'
 import { colors, shadow } from '../theme'
+
+const MART_RED = colors.red
+const MART_ORANGE = colors.orange
 
 export default function StoreScreen({ navigation, route }) {
   const { id, aisle: aisleParam } = route.params

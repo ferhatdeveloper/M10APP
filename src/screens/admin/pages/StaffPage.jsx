@@ -14,7 +14,7 @@ const STAFF_SEED = [
 const empty = () => ({ id: '', name: '', role: 'Kurye', shift: '08:00-16:00', phone: '' })
 
 const roleColor = (r) => {
-  if (r === 'Kurye') return '#E31E24'
+  if (r === 'Kurye') return '#E02020'
   if (r === 'Müdür') return '#6E36F3'
   if (r === 'Kasiyer') return '#0EA5E9'
   return '#B86A00'

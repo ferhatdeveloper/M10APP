@@ -1,21 +1,36 @@
-// M10 Premium theme tokens — supports light & dark modes
-// Designed for the admin shell but safe to use app-wide.
+// M10 theme tokens — Teknik Şartname (Pantone 2347 C / 116 C + yardımcılar)
+// Supports light & dark modes. Safe app-wide.
 
 export const palette = {
-  red: '#E31E24',
-  redDark: '#C4181E',
-  redDeep: '#9E1218',
-  redSoft: '#FDECEE',
-  yellow: '#FFF200',
-  yellowDark: '#E6D600',
+  // Kurumsal — Pantone 2347 C
+  red: '#E02020',
+  redDark: '#C01818',
+  redDeep: '#9A1212',
+  redSoft: '#FDECEC',
+  // Kurumsal — Pantone 116 C
+  yellow: '#FFD000',
+  yellowDark: '#E6BB00',
+  yellowSoft: '#FFF8D6',
+  // Yardımcı — Pantone 1365 C
+  orange: '#F0B040',
+  orangeDark: '#D99420',
+  orangeSoft: '#FFF4E0',
+  // Yardımcı — Pantone 432 C
+  slate: '#3D596A',
+  // Yardımcı — Pantone 2287 C
+  open: '#60B040',
+  openBg: '#EAF6E4',
+  // Yardımcı — Pantone 2146 C
+  blue: '#203080',
+  blueSoft: '#E8EAF4',
+  // Nötr
   ink: '#161616',
   muted: '#7A7A7A',
   line: '#ECECEC',
   bg: '#F6F6F7',
   card: '#FFFFFF',
-  open: '#12803C',
-  openBg: '#E8F8EE',
-  busy: '#B86A00',
+  // Uyarı (turuncu soft)
+  busy: '#D99420',
   busyBg: '#FFF4E0',
 }
 
@@ -27,7 +42,10 @@ export const darkPalette = {
   bg: '#0A0A0F',
   card: '#15151D',
   redSoft: '#2A1418',
+  yellowSoft: '#2A2410',
+  orangeSoft: '#2A1E0A',
   openBg: '#0F2A1A',
+  blueSoft: '#141828',
   busyBg: '#2A1E0A',
 }
 

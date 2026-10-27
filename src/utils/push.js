@@ -10,7 +10,7 @@ try {
 }
 
 const ANDROID_ICON = './assets/icon.png' // app launcher icon (monochrome small icon would be './assets/notification-icon.png' if available)
-const ANDROID_COLOR = '#E31E24' // M10 red
+const ANDROID_COLOR = '#E02020' // Pantone 2347 C
 const CHANNEL_ID = 'm10-default'
 const CHANNEL_NAME = 'M10 Bildirimleri'
 

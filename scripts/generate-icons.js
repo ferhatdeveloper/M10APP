@@ -6,7 +6,7 @@ const fs = require('fs')
 const path = require('path')
 
 const ROOT = path.join(__dirname, '..')
-const RED = '#E31E24'
+const RED = '#E02020'
 
 async function main() {
   let sharp

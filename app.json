@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#E31E24"
+      "backgroundColor": "#E02020"
     },
     "ios": {
       "supportsTablet": true,
@@ -19,7 +19,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#E31E24"
+        "backgroundColor": "#E02020"
       },
       "package": "com.m10.app",
       "versionCode": 4,
@@ -38,7 +38,7 @@
       [
         "expo-notifications",
         {
-          "color": "#E31E24"
+          "color": "#E02020"
         }
       ],
       [

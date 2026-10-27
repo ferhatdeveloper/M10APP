@@ -7,11 +7,11 @@ import { useI18n } from '../../../context/I18nContext'
 import SectionHeader from '../components/SectionHeader'
 
 const COLUMNS = [
-  { id: 'confirmed', label: 'Onaylandı', color: '#E6D600' },
-  { id: 'preparing', label: 'Hazırlanıyor', color: '#B86A00' },
-  { id: 'onway', label: 'Yolda', color: '#6E36F3' },
-  { id: 'delivered', label: 'Teslim Edildi', color: '#12803C' },
-  { id: 'cancelled', label: 'İptal', color: '#E31E24' },
+  { id: 'confirmed', label: 'Onaylandı', color: '#FFD000' },
+  { id: 'preparing', label: 'Hazırlanıyor', color: '#F0B040' },
+  { id: 'onway', label: 'Yolda', color: '#203080' },
+  { id: 'delivered', label: 'Teslim Edildi', color: '#60B040' },
+  { id: 'cancelled', label: 'İptal', color: '#E02020' },
 ]
 
 export default function OrdersKanbanPage({ theme, isRTL }) {

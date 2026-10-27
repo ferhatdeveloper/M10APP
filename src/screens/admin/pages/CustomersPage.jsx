@@ -14,7 +14,7 @@ const initials = (name) =>
     .join('')
     .toUpperCase()
 
-const colors = ['#E31E24', '#12803C', '#6E36F3', '#B86A00', '#0EA5E9']
+const colors = ['#E02020', '#60B040', '#203080', '#F0B040', '#3D596A']
 
 export default function CustomersPage({ theme, isRTL }) {
   const c = theme.colors
