@@ -17,9 +17,9 @@
   <code>exp://72.60.182.107:8081</code>
 </p>
 
-**iPhone Expo Go 57’de uygulama içi QR kamerası yok.** Safari, iPhone **Kamera** ve Notlar’daki `exp://` linki **aynı deep link** — hepsi imzasız Metro’da `npx expo login` der.
+**iPhone Expo Go 58’de uygulama içi QR kamerası yok.** Safari, iPhone **Kamera** ve Notlar’daki `exp://` linki **aynı deep link** — hepsi imzasız Metro’da `npx expo login` der.
 
-1. Telefonda **Expo Go**’yu aç (App Store, SDK 57).
+1. Telefonda **Expo Go**’yu aç (App Store, SDK 58).
 2. Alt menüde **Home**.
 3. Sağ üst **avatar** → Expo hesabına **giriş yap** (iOS 57 zorunlu).
 4. Home’da aşağı kaydır → **Enter URL manually** (bazen **+** veya URL kutusu).
@@ -29,13 +29,13 @@
 
 Eski kayıtlı **M10** (SDK 54) varsa sil. GitHub master / `u.expo.dev` kullanma.
 
-Safari / Kamera / Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Aynı Expo hesabının **EXPO_TOKEN** değeri Dokploy `m10-metro` env’sine eklenmeli — adımlar: [`DOKPLOY.md`](./DOKPLOY.md#expo-token-ios-57). Token’ı sohbete yapıştırma.
+Safari / Kamera / Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Aynı Expo hesabının **EXPO_TOKEN** değeri Dokploy `m10-metro` env’sine eklenmeli — adımlar: [`DOKPLOY.md`](./DOKPLOY.md#expo-token-ios-58). Token’ı sohbete yapıştırma.
 
 **EXFINPDKS örneği login sormuyordu** çünkü o Metro **SDK 54 / eski Expo Go** + `https://exp.exfinpdks.com` idi; `EXPO_TOKEN` yoktu, komut da `--offline`. Aynı bayraklar M10’da duruyor. iPhone App Store Go **57** artık imzasızda giriş ister — EXFIN kalıbı bunu kaldırmaz.
 
-**Android login sormaz, iPhone sorar:** Metro her iki platforma **aynı imzasız SDK 57** manifestini verir. [Expo](https://expo.dev/changelog/expo-go-57-login): giriş zorunluluğu **yalnızca iOS App Store Expo Go 57**; Android’e sonra gelecek. Play Store Expo Go hâlâ 54/eski istemci olduğu için imzasızı açar. iPhone’u Android gibi yapmak (tokensız) **mümkün değil**. 54’e geri alınmaz (iPhone Go 57 onu reddeder). Android şu an tokensız kalır.
+**Android login sormaz, iPhone sorar:** Metro her iki platforma **aynı imzasız SDK 58** manifestini verir. Giriş zorunluluğu **yalnızca iOS App Store Expo Go**; Android’e sonra gelebilir. iPhone’u Android gibi yapmak (tokensız) **mümkün değil**. Android şu an tokensız kalır.
 
-**Android:** Play Store hâlâ 54 ise proje 57 olduğu için uyumsuzluk çıkabilir → [SDK 57](https://expo.dev/go?sdkVersion=57&platform=android).
+**Android:** Play Store eski Expo Go ise proje 58 olduğu için uyumsuzluk çıkabilir → [SDK 58](https://expo.dev/go?sdkVersion=58&platform=android).
 
 <details>
 <summary>Web önizleme (Safari / Chrome)</summary>
@@ -58,7 +58,7 @@ Safari / Kamera / Enter URL hâlâ `npx expo login` derse Metro imzasızdır. Ay
 
 | Katman | Teknoloji |
 |---|---|
-| Çatı | Expo SDK 57, React Native 0.86.3, React 19.2, yeni mimari (newArchEnabled) |
+| Çatı | Expo SDK 58, React Native 0.88.0, React 19.3, yeni mimari (newArchEnabled) |
 | Web export | Metro bundler, single-page, statik nginx'e derleniyor (`web-dist`) |
 | Yönlendirme | `@react-navigation/native-stack` + `bottom-tabs` (native), `react-router` (web kalıntı) |
 | UI | React Native primitives + `lucide-react-native` ikonlar + özel tema |

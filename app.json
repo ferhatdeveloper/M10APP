@@ -3,11 +3,10 @@
     "name": "M10",
     "slug": "m10",
     "version": "1.0.2",
-    "sdkVersion": "57.0.0",
+    "sdkVersion": "58.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -50,7 +49,8 @@
           "recordAudioAndroid": false
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "expo-status-bar"
     ],
     "extra": {
       "eas": {
@@ -58,7 +58,7 @@
       }
     },
     "owner": "dev.ferhatnas",
-    "runtimeVersion": "57.0.0",
+    "runtimeVersion": "58.0.0",
     "updates": {
       "url": "https://u.expo.dev/f5df0de1-7a05-4d7d-a056-217d9da60e29"
     }

@@ -1,5 +1,5 @@
 # M10 — Expo Metro (Expo Go native bundle)
-# Expo SDK 57 — iPhone Expo Go 57-only.
+# Expo SDK 58 — iPhone Expo Go 58-only.
 # QR: exp://72.60.182.107:8081
 # Dokploy: domain 443 + published port 8081 (host)
 FROM node:22-alpine

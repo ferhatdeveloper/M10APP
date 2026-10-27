@@ -5,7 +5,7 @@ Bu servis **iki kanaldan** yayın yapar:
 | Kanal | Adres | İçerik | Çalıştıran |
 |-------|-------|--------|------------|
 | **Web** (Dokploy) | `https://apk.retailex.app` | Statik web SPA (`expo export --platform web` → nginx) | iOS Safari, Android tarayıcı |
-| **Native (Metro)** | `exp://72.60.182.107:8081` | Canlı Metro, **SDK 57** | iPhone Expo Go 57 |
+| **Native (Metro)** | `exp://72.60.182.107:8081` | Canlı Metro, **SDK 58** | iPhone Expo Go 58 |
 | **EAS Update (eski)** | `https://u.expo.dev/<projectId>?...&runtime-version=1.0.0` | Production update **SDK 54** — iPhone Expo Go **açmaz** | Kullanma |
 
 Kaynak: [ferhatdeveloper/M10APP](https://github.com/ferhatdeveloper/M10APP) · dal `master`.
@@ -20,7 +20,7 @@ Kaynak: [ferhatdeveloper/M10APP](https://github.com/ferhatdeveloper/M10APP) · d
 |-----|----------------|-------------|
 | **iOS Safari (web demo)** | `https://apk.retailex.app` | Dokploy’daki SPA. Touch + safe-area odaklı. |
 | Ana ekrana ekle | Safari → Paylaş → **Ana Ekrana Ekle** | PWA benzeri tam ekran; ikon `apple-touch-icon`. |
-| **Expo Go (native)** | `exp://72.60.182.107:8081` | Metro native bundle, **SDK 57** (HTTP/IP — TLS yok). iPhone Expo Go 57. |
+| **Expo Go (native)** | `exp://72.60.182.107:8081` | Metro native bundle, **SDK 58** (HTTP/IP — TLS yok). iPhone Expo Go 58. |
 | **EAS Update (alternatif)** | `exps://u.expo.dev/.../manifest?...` | EAS Update ile native bundle (asset HMAC bazen sorunlu) |
 
 ### DNS (sen ekleyeceksin)
@@ -71,7 +71,7 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 |-----|-------|----------|
 | `CI` | `1` | Non-interactive; imza prompt’unu keser |
 | `EXPO_OFFLINE` | `1` | Token yoksa `--offline` (imzasız). `EXPO_TOKEN` varsa script bunu kapatır |
-| `EXPO_TOKEN` | (opsiyonel) | iOS Expo Go 57 imzalı manifesto için aynı Expo hesabının access token’ı |
+| `EXPO_TOKEN` | (opsiyonel) | iOS Expo Go 58 imzalı manifesto için aynı Expo hesabının access token’ı |
 | `EXPO_NO_DOTENV` | `1` | `.env` okuma yok |
 | `EXPO_DEVTOOLS_LISTEN_ADDRESS` | `0.0.0.0` | Metro tüm arayüzlerde dinler |
 | `PUBLIC_HOST` | `72.60.182.107` | Manifest hostname (IP — TLS/HSTS yok) |
@@ -80,7 +80,7 @@ TLS proxy’de (Traefik/Caddy) biter; container içi nginx yalnızca **80** dinl
 | `EXPO_PACKAGER_PROXY_URL` | `http://72.60.182.107:8081` | Manifest/bundle URL’leri düz HTTP IP |
 | `EXPO_PORT` | `8081` | Container içi Metro portu |
 
-### EXPO_TOKEN (iOS 57)
+### EXPO_TOKEN (iOS 58)
 
 iPhone **Kamera** veya Expo Go **Enter URL** `npx expo login` diyorsa manifesto imzasızdır. Token’ı sohbete yazma.
 
@@ -90,7 +90,7 @@ iPhone **Kamera** veya Expo Go **Enter URL** `npx expo login` diyorsa manifesto 
 4. `EXPO_TOKEN` = o token. Kaydet.
 5. **Deploy** yetmezse **Stop** sonra **Start** (Reload çoğu zaman eski process’i bırakır).
 
-Token varken `scripts/start-metro.sh` `--offline` kapatır ve expo-root imzası üretir. Token yoksa imzasız 200 devam eder (Android hâlâ açar). iOS App Store Expo Go 57 imzasızı açmaz — [Expo changelog](https://expo.dev/changelog/expo-go-57-login).
+Token varken `scripts/start-metro.sh` `--offline` kapatır ve expo-root imzası üretir. Token yoksa imzasız 200 devam eder (Android hâlâ açar). iOS App Store Expo Go imzasızı açmayabilir.
 
 ### EXFINPDKS (`expo-checkin-metro`) neden login istemedi?
 
@@ -102,9 +102,9 @@ Aynı Dokploy projesindeki şablon compose **idle** bırakılmalı (`:8081` çak
 | `EXPO_OFFLINE` / `CI` | `1` | `1` |
 | `EXPO_TOKEN` / `expo login` | **yok** | **yok** |
 | Proxy | `https://exp.exfinpdks.com:443` (Traefik) | `http://72.60.182.107:8081` (TLS/HSTS yok) |
-| Proje SDK | Eski check-in uygulaması (**54 dönemi**) | **57** (iPhone Go 57) |
+| Proje SDK | Eski check-in uygulaması (**54 dönemi**) | **58** (iPhone Go 58) |
 
-EXFIN’de sihirli bir imza yoktu. O dönemde iPhone Expo Go **54** imzasız `--offline` Metro’yu açıyordu; web `https://exp.exfinpdks.com` + `exp://` QR. App Store Go artık **57** ve [giriş istiyor](https://expo.dev/changelog/expo-go-57-login). EXFIN bayraklarını kopyalamak iOS 57 login’ini kaldırmaz. `metro.retailex.app:443` PROXY yapmak eski TLS hatasını geri getirir — QR `exp://72.60.182.107:8081` kalır. Web önizleme: `https://apk.retailex.app`.
+EXFIN’de sihirli bir imza yoktu. O dönemde iPhone Expo Go **54** imzasız `--offline` Metro’yu açıyordu; web `https://exp.exfinpdks.com` + `exp://` QR. App Store Go artık **58** ve giriş isteyebilir. EXFIN bayraklarını kopyalamak iOS login’ini kaldırmaz. `metro.retailex.app:443` PROXY yapmak eski TLS hatasını geri getirir — QR `exp://72.60.182.107:8081` kalır. Web önizleme: `https://apk.retailex.app`.
 
 Komut: **`npx expo start --offline --port 8081`** (`--host lan` kullanma — Expo CLI v6’da `--offline` ile çakışır ve imza 500 üretir). Token varsa script `npx expo start --port 8081` çalıştırır.
 
@@ -245,7 +245,7 @@ Geliştirme akışı:
 | iOS `deploymentTarget` | **15.1** |
 | `bundleIdentifier` | `com.m10.app` |
 | `supportsTablet` | `true` |
-| `runtimeVersion` | **57.0.0** (Metro). EAS production hâlâ `1.0.0` / SDK 54 — iPhone’da kullanma |
+| `runtimeVersion` | **58.0.0** (Metro). EAS production hâlâ `1.0.0` / SDK 54 — iPhone’da kullanma |
 | `updates.url` | `https://u.expo.dev/f5df0de1-7a05-4d7d-a056-217d9da60e29` |
 | Web | Metro SPA + PWA manifest / `apple-touch-icon` / `viewport-fit=cover` |
 

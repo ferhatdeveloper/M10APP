@@ -501,7 +501,7 @@ export default function PresentationScreen({ navigation }) {
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#F4F4F6' }}>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#F4F4F6' }} edges={['top', 'left', 'right']}>
-        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <StatusBar barStyle="dark-content" />
 
         {/* Header */}
         <View

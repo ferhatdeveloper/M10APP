@@ -22,7 +22,7 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
         paddingTop: insets.top,
       }}
     >
-      <StatusBar barStyle="light-content" backgroundColor={colors.red} />
+      <StatusBar barStyle="light-content" />
       <View
         style={{
           paddingHorizontal: 12,

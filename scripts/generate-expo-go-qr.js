@@ -4,7 +4,7 @@ const path = require('path')
 
 const url = process.env.EXPO_GO_URL || 'exp://72.60.182.107:8081'
 const root = path.join(__dirname, '..')
-// EAS QR (u.expo.dev SDK 54) iPhone Expo Go 57'de açılmaz — Metro URL'sine çek.
+// EAS QR (u.expo.dev SDK 54) iPhone Expo Go 58'de açılmaz — Metro URL'sine çek.
 const files = [
   'apk-retailex-expo-go-qr.png',
   'expo-go-qr.png',
