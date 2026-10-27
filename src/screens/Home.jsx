@@ -526,8 +526,8 @@ function PromoBannerSlider({ onPress, lang = 'tr' }) {
   const scrollRef = useRef(null)
   const pageRef = useRef(0)
   const bannerW = W - PAD * 2
-  /** NESCAFÉ promo oranı (~800×206) */
-  const bannerH = Math.round(bannerW * (206 / 800))
+  /** Daha yüksek banner — görseller okunaklı olsun (cover ile kırpılır) */
+  const bannerH = Math.max(156, Math.round(bannerW * 0.44))
 
   useEffect(() => {
     const id = setInterval(() => {
