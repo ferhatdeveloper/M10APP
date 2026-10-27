@@ -422,9 +422,9 @@ function DealPromoStrip({ onPress, lang }) {
 }
 
 /**
- * Tek slayt promo — güzel tam genişlik kartlar
- * - bleed: genis banner (pink/american zaten + ikonlu)
- * - hero: ürün görseli contain + metin + canlı + butonu
+ * Tek slayt promo — güzel tam genişlik kartlar (+ işareti yok)
+ * - bleed: genis banner
+ * - hero: ürün görseli contain + metin
  */
 const PROMO_SLIDES = [
   {
@@ -448,22 +448,22 @@ const PROMO_SLIDES = [
     subColor: 'rgba(255,255,255,0.85)',
   },
   {
-    id: 'pink',
-    kind: 'bleed',
-    image: require('../../assets/mart-clone/promo_pink.png'),
-    bg: '#FCE4EC',
-  },
-  {
-    id: 'american',
-    kind: 'bleed',
-    image: require('../../assets/mart-clone/promo_american.png'),
-    bg: '#E8F0FE',
-  },
-  {
     id: 'nescafe',
     kind: 'bleed',
     image: require('../../assets/mart-clone/promo_nescafe.png'),
     bg: '#4FC3F7',
+  },
+  {
+    id: 'full',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/banner_full.png'),
+    bg: C.soft,
+  },
+  {
+    id: 'deals',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/best_deals_band.png'),
+    bg: '#FFF8E1',
   },
 ]
 
@@ -522,28 +522,6 @@ function PromoBannerSlider({ onPress }) {
                   </View>
                   <View style={{ width: bannerW * 0.48, height: '100%', paddingVertical: 8, paddingRight: 8 }}>
                     <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
-                  </View>
-                  <View
-                    style={{
-                      position: 'absolute',
-                      right: 12,
-                      bottom: 12,
-                      width: 34,
-                      height: 34,
-                      borderRadius: 17,
-                      backgroundColor: '#fff',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: 'rgba(0,0,0,0.06)',
-                      shadowColor: '#000',
-                      shadowOpacity: 0.14,
-                      shadowRadius: 5,
-                      shadowOffset: { width: 0, height: 2 },
-                      elevation: 4,
-                    }}
-                  >
-                    <Text style={{ color: C.orange, fontWeight: '900', fontSize: 20, marginTop: -1 }}>+</Text>
                   </View>
                 </View>
               )}
