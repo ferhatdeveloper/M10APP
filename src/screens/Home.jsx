@@ -114,7 +114,7 @@ function FlashSaleHeader({ title, endsInLabel, secondsLeft, isRTL, onPress }) {
         marginBottom: 4,
         borderRadius: 12,
         overflow: 'hidden',
-        backgroundColor: C.red,
+        backgroundColor: C.lime,
         flexDirection: isRTL ? 'row-reverse' : 'row',
         alignItems: 'center',
         paddingVertical: 10,
@@ -127,34 +127,34 @@ function FlashSaleHeader({ title, endsInLabel, secondsLeft, isRTL, onPress }) {
           width: 32,
           height: 32,
           borderRadius: 16,
-          backgroundColor: C.yellow,
+          backgroundColor: C.red,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Zap size={16} color={C.ink} fill={C.ink} strokeWidth={2.4} />
+        <Zap size={16} color="#fff" fill="#fff" strokeWidth={2.4} />
       </View>
       <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
-        <Text style={{ color: '#fff', fontWeight: '900', fontSize: 15 }}>{title}</Text>
-        <Text style={{ color: 'rgba(255,255,255,0.85)', fontWeight: '600', fontSize: 11, marginTop: 1 }}>
+        <Text style={{ color: C.ink, fontWeight: '900', fontSize: 15 }}>{title}</Text>
+        <Text style={{ color: 'rgba(22,22,22,0.7)', fontWeight: '600', fontSize: 11, marginTop: 1 }}>
           {endsInLabel}
         </Text>
       </View>
       <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 3 }}>
         {cells.map((cell, i) => (
           <View key={`${i}-${cell}`} style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 3 }}>
-            {i > 0 ? <Text style={{ color: '#fff', fontWeight: '900', fontSize: 12 }}>:</Text> : null}
+            {i > 0 ? <Text style={{ color: C.ink, fontWeight: '900', fontSize: 12 }}>:</Text> : null}
             <View
               style={{
                 minWidth: 26,
                 paddingHorizontal: 4,
                 paddingVertical: 4,
                 borderRadius: 6,
-                backgroundColor: 'rgba(0,0,0,0.22)',
+                backgroundColor: 'rgba(0,0,0,0.12)',
                 alignItems: 'center',
               }}
             >
-              <Text style={{ color: '#fff', fontWeight: '900', fontSize: 13, fontVariant: ['tabular-nums'] }}>{cell}</Text>
+              <Text style={{ color: C.ink, fontWeight: '900', fontSize: 13, fontVariant: ['tabular-nums'] }}>{cell}</Text>
             </View>
           </View>
         ))}
