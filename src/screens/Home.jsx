@@ -384,7 +384,7 @@ function DealPromoStrip({ onPress, lang }) {
         </View>
       </DealPromoCard>
 
-      <DealPromoCard title={titles.hot} onPress={onPress} bottomColor={C.red} wave>
+      <DealPromoCard title={titles.hot} onPress={onPress} bottomColor={C.lime} wave>
         <View
           style={{
             position: 'absolute',
@@ -428,7 +428,7 @@ function DealPromoStrip({ onPress, lang }) {
         />
       </DealPromoCard>
 
-      <DealPromoCard title={titles.brand} onPress={onPress} bottomColor={C.red} wave>
+      <DealPromoCard title={titles.brand} onPress={onPress} bottomColor={C.lime} wave>
         {kinderImg ? (
           <Image
             source={kinderImg}
@@ -450,7 +450,7 @@ function DealPromoStrip({ onPress, lang }) {
         />
       </DealPromoCard>
 
-      <DealPromoCard title={titles.maggi} onPress={onPress} bottomColor={C.orange} wave>
+      <DealPromoCard title={titles.maggi} onPress={onPress} bottomColor={C.lime} wave>
         {maggiImg ? (
           <Image
             source={maggiImg}
