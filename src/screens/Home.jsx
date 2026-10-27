@@ -1,5 +1,5 @@
 /**
- * M10 Mart — Talabat Mart yoğun Home
+ * M10 Market — Talabat Mart yoğun Home
  * Görseller: Migros Sanal Market ürün CDN (demo)
  * App bar: orijinal TopBar + beyaz M10 Logo
  */
@@ -298,9 +298,10 @@ function CategoryPager({ pages, lang, onPress }) {
 export default function HomeScreen({ navigation }) {
   const insets = useSafeAreaInsets()
   const { lang, t, isRTL } = useI18n()
-  const { addToCart, cartCount, cartTotal, user } = useApp()
+  const { addToCart, cartCount, cartTotal, cartStore, user } = useApp()
   const storeId = useMemo(() => getNearestStore(user?.address)?.id || DEFAULT_STORE_ID, [user?.address])
-  const remain = Math.max(0, 7000 - (cartTotal || 0))
+  const minOrder = Number(cartStore?.minOrder) || 0
+  const remain = minOrder > 0 ? Math.max(0, minOrder - (cartTotal || 0)) : 0
 
   const brandW = 148
   const brandH = 200
@@ -344,15 +345,7 @@ export default function HomeScreen({ navigation }) {
     drinks: lang === 'tr' ? 'İçecekler' : lang === 'ar' ? 'مشروبات' : 'Beverages',
     clean: lang === 'tr' ? 'Temizlik' : lang === 'ar' ? 'منظفات' : 'Care & clean',
     nescafe: 'NESCAFÉ',
-    explore: lang === 'tr' ? "Mart'ı keşfet" : lang === 'ar' ? 'استكشف Mart' : 'Explore Mart',
-    min:
-      remain > 0
-        ? lang === 'tr'
-          ? `${formatIQD(remain, lang)} daha ekle`
-          : lang === 'ar'
-            ? `أضف ${formatIQD(remain, lang)}`
-            : `Add ${formatIQD(remain, lang)} more`
-        : null,
+    explore: lang === 'tr' ? "Market'i keşfet" : lang === 'ar' ? 'استكشف Market' : 'Explore Market',
     viewCart: lang === 'tr' ? 'Sepeti gör' : lang === 'ar' ? 'عرض السلة' : 'View cart',
     yourCart: lang === 'tr' ? 'Sepetin' : lang === 'ar' ? 'سلتك' : 'Your cart',
   }
@@ -557,20 +550,6 @@ export default function HomeScreen({ navigation }) {
             bottom: Math.max(insets.bottom, 8) + 4,
           }}
         >
-          {remain > 0 && L.min ? (
-            <Text
-              numberOfLines={1}
-              style={{
-                textAlign: 'center',
-                fontSize: 11,
-                fontWeight: '600',
-                color: C.muted,
-                marginBottom: 6,
-              }}
-            >
-              {L.min}
-            </Text>
-          ) : null}
           <SoftPress
             onPress={() => go('Cart')}
             style={{
@@ -578,7 +557,7 @@ export default function HomeScreen({ navigation }) {
               borderRadius: 16,
               paddingHorizontal: 10,
               paddingVertical: 10,
-              flexDirection: 'row',
+              flexDirection: isRTL ? 'row-reverse' : 'row',
               alignItems: 'center',
               shadowColor: '#000',
               shadowOpacity: 0.22,
@@ -602,9 +581,16 @@ export default function HomeScreen({ navigation }) {
             <Text style={{ flex: 1, textAlign: 'center', color: '#fff', fontWeight: '800', fontSize: 16 }}>
               {L.viewCart}
             </Text>
-            <Text style={{ color: '#fff', fontWeight: '800', fontSize: 15, paddingRight: 8 }}>
-              {formatIQD(cartTotal, lang)}
-            </Text>
+            <View style={{ alignItems: isRTL ? 'flex-start' : 'flex-end', paddingHorizontal: 4, maxWidth: '38%' }}>
+              <Text numberOfLines={1} style={{ color: '#fff', fontWeight: '800', fontSize: 15 }}>
+                {formatIQD(cartTotal, lang)}
+              </Text>
+              {remain > 0 ? (
+                <Text numberOfLines={1} style={{ color: 'rgba(255,255,255,0.88)', fontWeight: '600', fontSize: 10, marginTop: 1 }}>
+                  {t('addMore', { n: formatIQD(remain, lang) })}
+                </Text>
+              ) : null}
+            </View>
           </SoftPress>
         </View>
       ) : null}

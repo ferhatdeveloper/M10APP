@@ -17,6 +17,7 @@ services:
   # =============================================================
   # Host:8081 public (Expo Go). QR: exp://72.60.182.107:8081
   # EXFINPDKS compose kalıbı: --offline, 8081/19000/19001
+  # Not: soğuk/paralel hermes bundle Expo Go beyaz ekran üretir — start-metro.sh ısıtır.
   m10-metro:
     build:
       context: .

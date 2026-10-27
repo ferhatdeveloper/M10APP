@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Kuç Oglu menü sitesinden ürünleri (görseller + varyantlar) çıkarır.
+ * Menü sitesinden ürünleri (görseller + varyantlar) çıkarır — display: M10 Market.
  * Kaynak: JSON-LD Menu schema (en + ar).
  *
  * Kullanım:
@@ -28,7 +28,7 @@ function parseArgs(argv) {
 async function fetchHtml(lang) {
   const url = `${BASE}/${lang}/`
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'KucogluMenuScraper/1.0', Accept: 'text/html' },
+    headers: { 'User-Agent': 'M10MarketMenuScraper/1.0', Accept: 'text/html' },
   })
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`)
   return res.text()
@@ -135,7 +135,7 @@ function mergeLangs(byLang) {
       price: item.price,
       currency: item.currency || 'IQD',
       stock: 99,
-      brand: 'Kuç Oglu',
+      brand: 'M10 Market',
       unit: 'pcs',
       unitAmount: 1,
       allergens: [],
@@ -160,14 +160,14 @@ function mergeLangs(byLang) {
     },
     tenant: {
       code: 'kucoglu',
-      displayName: 'Kuç Oglu',
+      displayName: 'M10 Market',
       module: 'restaurant',
     },
     store: {
       id: 'kucoglu-duhok',
-      name: 'كوج أوغلو دهوك',
-      nameEn: 'Kuç Oglu Duhok',
-      nameTr: 'Kuç Oglu Duhok',
+      name: 'M10 Market',
+      nameEn: 'M10 Market',
+      nameTr: 'M10 Market',
       city: 'دهوك',
       cityEn: 'Duhok',
       cityTr: 'Duhok',

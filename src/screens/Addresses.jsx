@@ -11,7 +11,7 @@ export default function AddressesScreen({ navigation }) {
   const { user, setUser, addresses, setAddresses } = useApp()
   const { t, isRTL } = useI18n()
   const [open, setOpen] = useState(false)
-  const [form, setForm] = useState({ label: '', area: '', details: '', note: '', pinLat: 36.2, pinLng: 44.0 })
+  const [form, setForm] = useState({ label: '', area: '', details: '', note: '', pinLat: 33.315, pinLng: 44.35 })
 
   const same = (a, b) => a && b && a.label === b.label && a.area === b.area && a.details === b.details
 
@@ -166,7 +166,7 @@ export default function AddressesScreen({ navigation }) {
                 }
                 setAddresses((prev) => [...prev, addr])
                 setUser((u) => ({ ...u, address: addr }))
-                setForm({ label: '', area: '', details: '', note: '', pinLat: 36.2, pinLng: 44.0 })
+                setForm({ label: '', area: '', details: '', note: '', pinLat: 33.315, pinLng: 44.35 })
                 setOpen(false)
               }}
               style={{ backgroundColor: colors.red, borderRadius: 12, padding: 12, alignItems: 'center' }}

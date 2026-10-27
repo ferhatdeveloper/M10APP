@@ -20,7 +20,6 @@ export default function LanguageScreen({ navigation }) {
         <View style={{ alignItems: 'center', marginBottom: 28 }}>
           <Logo size={88} onBrand />
           <Text style={{ color: '#fff', fontSize: 32, fontWeight: '900', marginTop: 14, fontStyle: 'italic' }}>M10</Text>
-          <Text style={{ color: colors.yellow, fontWeight: '800', marginTop: 6 }}>{t('tagline')}</Text>
           <Text style={{ color: 'rgba(255,255,255,0.9)', marginTop: 18, fontSize: 18, fontWeight: '800' }}>
             {t('chooseLanguage')}
           </Text>

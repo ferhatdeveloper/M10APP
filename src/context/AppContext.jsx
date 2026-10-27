@@ -425,7 +425,7 @@ export function AppProvider({ children }) {
     })()
   }, [])
 
-  // Gerçek RetailEX API (kucoglu). Varsayılan: https://api.retailex.app/kucoglu
+  // Gerçek RetailEX API. Varsayılan tenant base: EXPO_PUBLIC_RETAILEX_TENANT
   // EXPO_PUBLIC_ALLOW_CATALOG_FALLBACK=1 ise API fail'de lokal seed'e düşer; aksi halde hata durumu.
   useEffect(() => {
     if (!hydrated || isOffline) return undefined
@@ -1220,7 +1220,7 @@ export function AppProvider({ children }) {
         {
           tenant_code: tenantCode,
           demo_mode: false,
-          customer_name: user?.name || user?.phone || 'Kuçoglu Müşteri',
+          customer_name: user?.name || user?.phone || 'M10 Market Müşteri',
           customer_phone: user?.phone || null,
           customer_email: user?.email || null,
           shipping_address: encodeShippingAddress(address),
@@ -1231,7 +1231,7 @@ export function AppProvider({ children }) {
           total: payable,
           notes: [note, fulfillment ? `fulfillment=${fulfillment}` : null, schedule ? `schedule=${schedule}` : null]
             .filter(Boolean)
-            .join(' · ') || 'Kuçoglu mobil sipariş',
+            .join(' · ') || 'M10 Market mobil sipariş',
           items: apiItems,
         },
         { tenantCode, baseUrl: base },
@@ -1309,7 +1309,7 @@ export function AppProvider({ children }) {
       try {
         if (user?.pushEnabled) {
           scheduleLocalDemo({
-            title: 'Kuçoglu',
+            title: 'M10 Market',
             body: order.id,
             seconds: 0,
           }).catch(() => {})

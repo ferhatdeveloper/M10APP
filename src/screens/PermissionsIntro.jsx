@@ -111,9 +111,6 @@ export default function PermissionsIntroScreen({ navigation }) {
           >
             M10
           </Text>
-          <Text style={{ color: colors.yellow, fontWeight: '800', marginTop: 6 }}>
-            {t('tagline')}
-          </Text>
         </View>
 
         <Text

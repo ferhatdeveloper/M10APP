@@ -227,24 +227,9 @@ export default function CartScreen({ navigation }) {
           ))}
         </View>
 
-        {belowMin ? (
-          <Text
-            numberOfLines={1}
-            style={{
-              marginHorizontal: 16,
-              marginTop: 12,
-              color: colors.muted,
-              fontWeight: '600',
-              fontSize: 12,
-              textAlign: isRTL ? 'right' : 'left',
-            }}
-          >
-            {t('addMore', { n: formatIQD(remainMin, lang) })}
-          </Text>
-        ) : null}
       </ScrollView>
 
-      {/* Sticky footer — Talabat style */}
+      {/* Sticky footer — Talabat style: tutar + kısa "X daha" */}
       <View
         style={{
           position: 'absolute',
@@ -260,20 +245,6 @@ export default function CartScreen({ navigation }) {
           ...shadow.soft,
         }}
       >
-        {belowMin ? (
-          <Text
-            numberOfLines={1}
-            style={{
-              marginBottom: 8,
-              fontSize: 11,
-              fontWeight: '600',
-              color: colors.muted,
-              textAlign: 'center',
-            }}
-          >
-            {t('addMore', { n: formatIQD(remainMin, lang) })}
-          </Text>
-        ) : null}
         <SoftPress
           disabled={belowMin || !lines.length}
           onPress={() => navigation.navigate('Checkout')}
@@ -281,11 +252,23 @@ export default function CartScreen({ navigation }) {
             backgroundColor: RED,
             opacity: belowMin || !lines.length ? 0.45 : 1,
             borderRadius: 14,
-            paddingVertical: 16,
+            paddingVertical: 14,
+            paddingHorizontal: 16,
+            flexDirection: isRTL ? 'row-reverse' : 'row',
             alignItems: 'center',
           }}
         >
-          <Text style={{ color: '#fff', fontWeight: '800', fontSize: 16 }}>{L.checkout}</Text>
+          <Text style={{ flex: 1, color: '#fff', fontWeight: '800', fontSize: 16 }}>{L.checkout}</Text>
+          <View style={{ alignItems: isRTL ? 'flex-start' : 'flex-end', maxWidth: '42%' }}>
+            <Text numberOfLines={1} style={{ color: '#fff', fontWeight: '800', fontSize: 15 }}>
+              {formatIQD(cartTotal, lang)}
+            </Text>
+            {belowMin ? (
+              <Text numberOfLines={1} style={{ color: 'rgba(255,255,255,0.88)', fontWeight: '600', fontSize: 10, marginTop: 1 }}>
+                {t('addMore', { n: formatIQD(remainMin, lang) })}
+              </Text>
+            ) : null}
+          </View>
         </SoftPress>
       </View>
     </SafeAreaView>

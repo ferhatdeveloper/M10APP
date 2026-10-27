@@ -12,6 +12,17 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
   const { user, unreadCount, getLiveStore } = useApp()
   const defaultStore = getLiveStore(DEFAULT_STORE_ID)
   const activeStoreName = defaultStore ? storeName(defaultStore, lang) : t('appName')
+  const addr = user?.address
+  const addrArea =
+    lang === 'en' ? addr?.areaEn || addr?.area : lang === 'tr' ? addr?.areaTr || addr?.area : addr?.area
+  const addrCity =
+    lang === 'en' ? addr?.cityEn || addr?.city : lang === 'tr' ? addr?.cityTr || addr?.city : addr?.city
+  const addrLine =
+    addrArea && addrCity
+      ? lang === 'ar'
+        ? `${addrArea}، ${addrCity}`
+        : `${addrArea}, ${addrCity}`
+      : addrArea || addrCity || ''
   const insets = useSafeAreaInsets()
   const Chevron = isRTL ? ChevronRight : ChevronLeft
 
@@ -86,7 +97,7 @@ export default function TopBar({ title, onBack, showLocation, onLocation, onBell
                     marginTop: 1,
                   }}
                 >
-                  {user.address.area}، {user.address.city}
+                  {addrLine}
                 </Text>
               </View>
               <MapPin size={14} color={colors.yellow} />

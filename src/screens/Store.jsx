@@ -108,6 +108,8 @@ export default function StoreScreen({ navigation, route }) {
 
   const closed = store.status === 'closed' || store.comingSoon
   const thisStore = cartStore?.id === store.id && cartCount > 0
+  const minOrder = Number(cartStore?.minOrder) || 0
+  const remainMin = thisStore && minOrder > 0 ? Math.max(0, minOrder - cartTotal) : 0
   const isFav = favorites.includes(store.id)
   const name = storeName(store, lang)
   const showSectioned = tab === 'shop' && !aisle && !q.trim() && !store.comingSoon
@@ -541,9 +543,16 @@ export default function StoreScreen({ navigation, route }) {
           <Text style={{ flex: 1, textAlign: 'center', color: '#fff', fontWeight: '800', fontSize: 16 }}>
             {t('viewCart')}
           </Text>
-          <Text style={{ color: '#fff', fontWeight: '800', fontSize: 15, paddingHorizontal: 8 }}>
-            {formatIQD(cartTotal, lang)}
-          </Text>
+          <View style={{ alignItems: isRTL ? 'flex-start' : 'flex-end', paddingHorizontal: 4, maxWidth: '38%' }}>
+            <Text numberOfLines={1} style={{ color: '#fff', fontWeight: '800', fontSize: 15 }}>
+              {formatIQD(cartTotal, lang)}
+            </Text>
+            {remainMin > 0 ? (
+              <Text numberOfLines={1} style={{ color: 'rgba(255,255,255,0.88)', fontWeight: '600', fontSize: 10, marginTop: 1 }}>
+                {t('addMore', { n: formatIQD(remainMin, lang) })}
+              </Text>
+            ) : null}
+          </View>
         </SoftPress>
       ) : null}
     </SafeAreaView>

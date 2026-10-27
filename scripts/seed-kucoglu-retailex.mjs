@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Kuç Oglu menü JSON → RetailEX kiracı DB (rex_001_products + kategoriler + rest.floors).
+ * Menü JSON → RetailEX kiracı DB (rex_001_products + kategoriler + rest.floors).
  *
  * Varsayılan: uzak PG (config) + database=kucoglu
  *
@@ -108,7 +108,7 @@ async function seedProducts(client, catByKey) {
        ) VALUES (
          '001', $1, $2, $3, $4, $5,
          $6, $7, $8, $9,
-         $10, $11, 'Kuç Oglu', 'Porsiyon', 0,
+         $10, $11, 'M10 Market', 'Porsiyon', 0,
          $12, 0, 999, 1, 'IQD', true, $13
        )
        ON CONFLICT (code) DO UPDATE SET
@@ -177,11 +177,11 @@ async function seedProducts(client, catByKey) {
 async function seedRestaurant(client) {
   await client.query(
     `UPDATE public.firms SET name = $1, is_active = true, "default" = true WHERE firm_nr = '001'`,
-    [menu.tenant?.displayName || 'Kuç Oglu'],
+    [menu.tenant?.displayName || 'M10 Market'],
   )
   await client.query(
     `UPDATE public.stores SET name = $1 WHERE firm_nr = '001'`,
-    [menu.store?.nameTr || 'Kuç Oglu Duhok'],
+    [menu.store?.nameTr || 'M10 Market'],
   )
 
   await client.query(

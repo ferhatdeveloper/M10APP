@@ -1,4 +1,4 @@
-/** Kuç Oglu menü kataloğu — Metro `require` JSON (RN/web uyumlu). */
+/** M10 Market menü kataloğu — Metro `require` JSON (RN/web uyumlu). */
 // eslint-disable-next-line import/no-commonjs, global-require
 const menu = require('./kucoglu-menu.json')
 
@@ -32,16 +32,16 @@ export const KUCOGLU_STORE_ID = 'kucoglu-duhok'
 
 export const kucogluStore = {
   id: KUCOGLU_STORE_ID,
-  name: menu.store?.name || 'كوج أوغلو دهوك',
-  nameEn: menu.store?.nameEn || 'Kuç Oglu Duhok',
-  nameTr: menu.store?.nameTr || 'Kuç Oglu Duhok',
+  name: menu.store?.name || 'M10 Market',
+  nameEn: menu.store?.nameEn || 'M10 Market',
+  nameTr: menu.store?.nameTr || 'M10 Market',
   city: menu.store?.city || 'دهوك',
   cityEn: menu.store?.cityEn || 'Duhok',
   cityTr: menu.store?.cityTr || 'Duhok',
   area: menu.store?.area || 'Ashty Road',
   areaEn: menu.store?.areaEn || 'Ashty Road',
   areaTr: menu.store?.areaTr || 'Ashty Road',
-  aliases: ['kucoglu', 'kuç', 'kuc', 'oglu', 'كوج', 'دهوك', 'duhok'],
+  aliases: ['m10', 'm10 market', 'market', 'دهوك', 'duhok'],
   cityAliases: ['duhok', 'dohuk', 'دهوك', 'دهۆک'],
   express: true,
   isNew: true,
@@ -75,7 +75,7 @@ export function buildKucogluCatalog() {
       descs: p.descs || { ar: p.categoryAr || p.category, en: p.category, tr: p.category },
       barcode: p.barcode || `8699${String(100000000 + i).slice(-9)}`,
       sku: p.sku || p.id,
-      brand: p.brand || 'Kuç Oglu',
+      brand: p.brand || 'M10 Market',
       popular: i < 8,
     }
   })

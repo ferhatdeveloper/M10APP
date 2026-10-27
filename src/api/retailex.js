@@ -94,7 +94,11 @@ export function mapRexProduct(row) {
     },
     price: Number(row.price) || 0,
     stock: 99,
-    brand: row.brand || 'Kuç Oglu',
+    brand: (() => {
+      const b = String(row.brand || '').trim()
+      if (!b || /ku[cç]\s*oglu|küçükoğlu|كوج/i.test(b)) return 'M10 Market'
+      return b
+    })(),
     unit: row.unit || 'pcs',
     unitAmount: 1,
     allergens: [],
@@ -277,7 +281,7 @@ export async function submitWebOrder(payload, { tenantCode = DEFAULT_TENANT, bas
     currency: payload.currency || 'IQD',
     subtotal: Number(payload.subtotal) || 0,
     total: Number(payload.total) || 0,
-    notes: payload.notes || 'Kuçoglu mobil sipariş',
+    notes: payload.notes || 'M10 Market mobil sipariş',
     items: Array.isArray(payload.items) ? payload.items : [],
     firm_nr: payload.firm_nr || undefined,
   }

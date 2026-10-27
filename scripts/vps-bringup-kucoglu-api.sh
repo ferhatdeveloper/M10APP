@@ -7,7 +7,7 @@
 # veya bu dosyanın içeriğini yapıştırın.
 set -euo pipefail
 
-echo "== Kuçoglu PostgREST bring-up =="
+echo "== M10 Market PostgREST bring-up =="
 
 # Mevcut bir postgrest örneğinden network + DB parolasını al
 REF_CONTAINER="${REF_CONTAINER:-saas_postgrest_ozbek}"

@@ -102,7 +102,7 @@ export const aisles = [
 
 export const categories = aisles
 
-/** Kuç Oglu menü reyonları (et / tavuk / içecek) */
+/** M10 Market menü reyonları (et / tavuk / içecek) */
 export const shopAisles = aisles.filter((a) => ['meat', 'ready', 'drinks'].includes(a.id))
 
 export const filters = [
@@ -1848,7 +1848,7 @@ const legacyM10Catalog = [
   sku: p.sku || p.id,
 }))
 
-/** Aktif katalog: Kuç Oglu menü (görsellerle). Eski M10 kataloğu legacyM10Catalog’ta. */
+/** Aktif katalog: M10 Market menü (görsellerle). Eski M10 kataloğu legacyM10Catalog’ta. */
 export const catalog = buildKucogluCatalog()
 export { legacyM10Catalog }
 
@@ -1872,9 +1872,12 @@ export const AREA_COORDS = {
   dohuk: { lat: 36.8554609, lng: 42.9784602 },
   دهوك: { lat: 36.8554609, lng: 42.9784602 },
   kucoglu: { lat: 36.8554609, lng: 42.9784602 },
+  mansour: { lat: 33.315, lng: 44.35 },
+  monsor: { lat: 33.315, lng: 44.35 },
+  المنصور: { lat: 33.315, lng: 44.35 },
 }
 
-export const DEFAULT_DEST = { lat: 36.8554609, lng: 42.9784602 }
+export const DEFAULT_DEST = { lat: 33.315, lng: 44.35 }
 export const DEFAULT_STORE_COORDS = { lat: 36.8554609, lng: 42.9784602 }
 
 export const coordsForAddress = (address) => {
@@ -1918,12 +1921,16 @@ export const user = {
   role: 'customer',
   address: {
     label: 'المنزل',
-    city: 'أربيل',
-    area: 'عنكاوا',
-    details: 'شارع 100، بناية 12، طابق 3',
+    city: 'بغداد',
+    cityEn: 'Baghdad',
+    cityTr: 'Bağdat',
+    area: 'المنصور',
+    areaEn: 'Mansour',
+    areaTr: 'Monsor',
+    details: 'شارع 14 رمضان، بناية 8، طابق 2',
     note: 'اترك الطلب عند الباب',
-    lat: 36.2305,
-    lng: 44.0092,
+    lat: 33.315,
+    lng: 44.35,
   },
 }
 
