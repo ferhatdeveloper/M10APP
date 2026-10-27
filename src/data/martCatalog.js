@@ -64,136 +64,112 @@ export const CATEGORIES_PAGE2 = [
   { id: 'oil', images: [M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'), M('https://images.migrosone.com/sanalmarket/product/14209387/14209387_1-77ff0a.jpg'), M('https://images.migrosone.com/sanalmarket/product/05010401/05010401_1-c4c14f.jpg')], image: M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'), names: { en: 'Oils & Sauces', tr: 'Yağ & Sos', ar: 'زيوت وصلصات' } },
 ]
 
-/** Shop by brand — Talabat squircle grid (logo + marka rengi zemin) */
+/** Shop by brand — Talabat squircle grid (yalnızca logo, ürün yok) */
 export const LOGO_BRANDS = [
   {
     id: 'lb_banetti',
     name: 'Banetti',
-    color: '#000000',
-    image: require('../../assets/mart-clone/brand_banetti.png'),
+    color: '#FFFFFF',
+    image: require('../../assets/mart-clone/brand_banetti_sq.png'),
     fill: true,
   },
   {
     id: 'lb_maggi',
     name: 'Maggi',
     color: '#FFD000',
-    image: require('../../assets/mart-clone/cutouts/maggi.png'),
+    image: require('../../assets/mart-clone/brand-logos/maggi.png'),
   },
   {
     id: 'lb_kinder',
     name: 'Kinder',
     color: '#F2F2F2',
-    image: require('../../assets/mart-clone/cutouts/kinder.png'),
+    image: require('../../assets/mart-clone/brand-logos/kinder.png'),
   },
   {
     id: 'lb_nescafe',
     name: 'Nescafe',
     color: '#FFFFFF',
-    image: require('../../assets/mart-clone/cutouts/nescafe.png'),
+    image: require('../../assets/mart-clone/brand-logos/nescafe.png'),
   },
   {
     id: 'lb_coca',
     name: 'Coca-Cola',
     color: '#E02020',
-    image: require('../../assets/mart-clone/cutouts/coca.png'),
+    image: require('../../assets/mart-clone/brand-logos/coca.png'),
   },
   {
     id: 'lb_lipton',
     name: 'Lipton',
     color: '#F57F17',
-    image: require('../../assets/mart-clone/cutouts/lipton.png'),
+    image: require('../../assets/mart-clone/brand-logos/lipton.png'),
   },
   {
     id: 'lb_pinar',
     name: 'Pınar',
     color: '#1565C0',
-    image: require('../../assets/mart-clone/cutouts/pinar.png'),
+    image: require('../../assets/mart-clone/brand-logos/pinar.png'),
   },
   {
     id: 'lb_ulker',
     name: 'Ülker',
     color: '#6A1B9A',
-    image: require('../../assets/mart-clone/cutouts/ulker.png'),
+    image: require('../../assets/mart-clone/brand-logos/ulker.png'),
   },
 ]
 
-/** Banetti — demo makarna ürünleri */
+/** Banetti — resmi banetti.com.tr paketleri (NESCAFÉ row bire bir) */
 export const BANETTI_PRODUCTS = [
   {
     id: 'banetti_spaghetti',
     brand: 'Banetti',
-    image: M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'),
+    image: require('../../assets/mart-clone/cutouts/banetti_spaghetti.png'),
     price: 2200,
     pro: 1950,
-    names: {
-      en: 'Banetti Spaghetti 500g',
-      tr: 'Banetti Spaghetti 500g',
-      ar: 'بانتي سباغيتي 500غ',
-    },
+    names: { en: 'Banetti Spaghetti 500g', tr: 'Banetti Spaghetti 500g', ar: 'بانتي سباغيتي 500غ' },
   },
   {
     id: 'banetti_penne',
     brand: 'Banetti',
-    image: M('https://images.migrosone.com/sanalmarket/product/05010401/05010401_1-c4c14f.jpg'),
+    image: require('../../assets/mart-clone/cutouts/banetti_penne.png'),
     price: 2200,
     pro: 1950,
-    names: {
-      en: 'Banetti Penne 500g',
-      tr: 'Banetti Penne 500g',
-      ar: 'بانتي بيني 500غ',
-    },
+    names: { en: 'Banetti Penne Rigate 500g', tr: 'Banetti Kalem Kesme 500g', ar: 'بانتي قلم 500غ' },
   },
   {
     id: 'banetti_fusilli',
     brand: 'Banetti',
-    image: { uri: 'https://images.migrosone.com/sanalmarket/product/05010405/05010405_1-bcae71.png' },
-    price: 2300,
-    pro: 2050,
-    names: {
-      en: 'Banetti Fusilli 500g',
-      tr: 'Banetti Fusilli 500g',
-      ar: 'بانتي فوسيلي 500غ',
-    },
+    image: require('../../assets/mart-clone/cutouts/banetti_fusilli.png'),
+    price: 2200,
+    pro: 1950,
+    names: { en: 'Banetti Fusilli 500g', tr: 'Banetti Burgu 500g', ar: 'بانتي برغو 500غ' },
   },
   {
-    id: 'banetti_farfalle',
+    id: 'banetti_elbows',
     brand: 'Banetti',
-    image: M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'),
-    price: 2400,
-    old: 2800,
-    save: 14,
-    pro: 2150,
-    names: {
-      en: 'Banetti Farfalle 500g',
-      tr: 'Banetti Farfalle 500g',
-      ar: 'بانتي فارفالي 500غ',
-    },
+    image: require('../../assets/mart-clone/cutouts/banetti_elbows.png'),
+    price: 2200,
+    pro: 1950,
+    names: { en: 'Banetti Big Elbows 500g', tr: 'Banetti Dirsek 500g', ar: 'بانتي ديرسيك 500غ' },
   },
   {
     id: 'banetti_rigatoni',
     brand: 'Banetti',
-    image: M('https://images.migrosone.com/sanalmarket/product/05010401/05010401_1-c4c14f.jpg'),
-    price: 2500,
-    pro: 2250,
-    names: {
-      en: 'Banetti Rigatoni 500g',
-      tr: 'Banetti Rigatoni 500g',
-      ar: 'بانتي ريغاتوني 500غ',
-    },
+    image: require('../../assets/mart-clone/cutouts/banetti_rigatoni.png'),
+    price: 2400,
+    pro: 2150,
+    names: { en: 'Banetti Rigatoni 500g', tr: 'Banetti Rigatoni 500g', ar: 'بانتي ريجاتوني 500غ' },
   },
   {
-    id: 'banetti_linguine',
+    id: 'banetti_fettuccine',
     brand: 'Banetti',
-    image: { uri: 'https://images.migrosone.com/sanalmarket/product/05010405/05010405_1-bcae71.png' },
+    image: require('../../assets/mart-clone/cutouts/banetti_fettuccine.png'),
     price: 2300,
     pro: 2050,
-    names: {
-      en: 'Banetti Linguine 500g',
-      tr: 'Banetti Linguine 500g',
-      ar: 'بانتي لينغويني 500غ',
-    },
+    names: { en: 'Banetti Fettuccine 500g', tr: 'Banetti Fettuccine 500g', ar: 'بانتي فيتوتشيني 500غ' },
   },
 ]
+
+export const banettiBannerImg = require('../../assets/mart-clone/brand-banners/banetti-series.jpg')
 
 /** Taze sebze & meyve — M10 her zaman taze stok vurgusu */
 export const BEST_SELLERS = [
@@ -285,10 +261,11 @@ export const PROMOS = [
   { id: 'p3', title: 'Hot Deals', sub: 'UP TO 30% OFF', image: M('https://images.migrosone.com/sanalmarket/product/05080438/05080438_1-3ea5fb.jpg') },
 ]
 
+/** Dünya mutfağı — Shutterstock squircle bayraklar */
 export const WORLD = [
-  { id: 'w1', names: { tr: 'Yerel', en: 'Local', ar: 'محلي' }, flag: '🇮🇶', bg: '#E8F5E9' },
-  { id: 'w2', names: { tr: 'Avrupa', en: 'Europe', ar: 'أوروبا' }, flag: '🇪🇺', bg: '#E3F2FD' },
-  { id: 'w3', names: { tr: 'ABD', en: 'USA', ar: 'أمريكا' }, flag: '🇺🇸', bg: '#FFEBEE' },
-  { id: 'w4', names: { tr: 'Kore', en: 'Korea', ar: 'كوريا' }, flag: '🇰🇷', bg: '#FCE4EC' },
-  { id: 'w5', names: { tr: 'Türkiye', en: 'Turkey', ar: 'تركيا' }, flag: '🇹🇷', bg: '#FFF3E0' },
+  { id: 'w1', names: { tr: 'Yerel', en: 'Local', ar: 'محلي' }, flagImg: require('../../assets/mart-clone/flags/iq.png'), bg: '#E8F5E9' },
+  { id: 'w2', names: { tr: 'Avrupa', en: 'Europe', ar: 'أوروبا' }, flagImg: require('../../assets/mart-clone/flags/eu.png'), bg: '#E3F2FD' },
+  { id: 'w3', names: { tr: 'ABD', en: 'USA', ar: 'أمريكا' }, flagImg: require('../../assets/mart-clone/flags/us.png'), bg: '#FFEBEE' },
+  { id: 'w4', names: { tr: 'Kore', en: 'Korea', ar: 'كوريا' }, flagImg: require('../../assets/mart-clone/flags/kr.png'), bg: '#FCE4EC' },
+  { id: 'w5', names: { tr: 'Türkiye', en: 'Turkey', ar: 'تركيا' }, flagImg: require('../../assets/mart-clone/flags/tr.png'), bg: '#FFF3E0' },
 ]

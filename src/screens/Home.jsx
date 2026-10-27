@@ -40,6 +40,7 @@ import {
   SNACKS,
   TOP_SAVERS,
   WORLD,
+  banettiBannerImg,
 } from '../data/martCatalog'
 
 const { width: W } = Dimensions.get('window')
@@ -492,6 +493,7 @@ const PROMO_SLIDES = [
   {
     id: 'nescafe',
     kind: 'bleed',
+    /** Kullanıcı 4 kutu splash — 1600×606 (800×303 oranı) */
     image: require('../../assets/mart-clone/brand-banners/nescafe-series.jpg'),
     bg: '#4FC3F7',
   },
@@ -526,8 +528,8 @@ function PromoBannerSlider({ onPress, lang = 'tr' }) {
   const scrollRef = useRef(null)
   const pageRef = useRef(0)
   const bannerW = W - PAD * 2
-  /** Banner asset oranı 1600×704 — cover ile bire bir sığar */
-  const bannerH = Math.round(bannerW * (704 / 1600))
+  /** Tüm slaytlar 1600×606 — çerçeveye bire bir oturur */
+  const bannerH = Math.round(bannerW * (606 / 1600))
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -571,7 +573,11 @@ function PromoBannerSlider({ onPress, lang = 'tr' }) {
                 }}
               >
                 {item.kind === 'bleed' ? (
-                  <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                  <Image
+                    source={item.image}
+                    style={{ width: bannerW, height: bannerH }}
+                    resizeMode="stretch"
+                  />
                 ) : (
                   <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={{ flex: 1, paddingLeft: 16, paddingRight: 6, justifyContent: 'center' }}>
@@ -967,7 +973,7 @@ export default function HomeScreen({ navigation }) {
                   width: logoTile,
                   height: logoTile,
                   borderRadius: 22,
-                  backgroundColor: b.color || '#F2F2F2',
+                  backgroundColor: b.id === 'lb_banetti' ? '#FFFFFF' : b.color || '#F2F2F2',
                   alignItems: 'center',
                   justifyContent: 'center',
                   overflow: 'hidden',
@@ -977,7 +983,7 @@ export default function HomeScreen({ navigation }) {
                   source={b.image}
                   style={
                     b.fill
-                      ? { width: '100%', height: '100%' }
+                      ? { width: '100%', height: '100%', backgroundColor: '#FFFFFF' }
                       : { width: '72%', height: '72%' }
                   }
                   resizeMode={b.fill ? 'cover' : 'contain'}
@@ -986,16 +992,6 @@ export default function HomeScreen({ navigation }) {
             ))}
           </View>
         </View>
-
-        <ProductRow
-          title={lang === 'tr' ? 'Banetti' : 'Banetti'}
-          action={L.viewAll}
-          onAction={goStore}
-          products={BANETTI_PRODUCTS}
-          lang={lang}
-          onAdd={onAdd}
-          showSave
-        />
 
         <View style={{ marginTop: 22 }}>
           <SectionTitle title={L.world} />
@@ -1006,27 +1002,16 @@ export default function HomeScreen({ navigation }) {
                   style={{
                     width: 72,
                     height: 72,
-                    borderRadius: 36,
-                    backgroundColor: w.bg,
+                    borderRadius: 22,
+                    backgroundColor: '#fff',
                     alignItems: 'center',
                     justifyContent: 'center',
                     overflow: 'hidden',
-                    borderWidth: 1.5,
+                    borderWidth: 1,
                     borderColor: C.line,
                   }}
                 >
-                  {/* Flag emoji iOS'ta dikdörtgen; büyütüp daireye kırp */}
-                  <Text
-                    style={{
-                      fontSize: 58,
-                      lineHeight: 72,
-                      width: 72,
-                      textAlign: 'center',
-                      includeFontPadding: false,
-                    }}
-                  >
-                    {w.flag}
-                  </Text>
+                  <Image source={w.flagImg} style={{ width: 72, height: 72 }} resizeMode="cover" />
                 </View>
                 <Text style={{ marginTop: 6, fontSize: 12, fontWeight: '700', color: C.ink }}>{label(w, lang)}</Text>
               </SoftPress>
@@ -1036,7 +1021,7 @@ export default function HomeScreen({ navigation }) {
 
         <ProductRow title={L.best} action={L.viewAll} onAction={goStore} products={BEST_SELLERS} lang={lang} onAdd={onAdd} />
 
-        {/* NESCAFÉ — banner + ürün şeridi (kırmızı şerit yok) */}
+        {/* NESCAFÉ — banner + ürün şeridi */}
         <View style={{ marginTop: 22 }}>
           <SoftPress
             onPress={goStore}
@@ -1051,9 +1036,9 @@ export default function HomeScreen({ navigation }) {
               source={nescafeBannerImg}
               style={{
                 width: W - PAD * 2,
-                height: Math.round((W - PAD * 2) * (303 / 800)),
+                height: Math.round((W - PAD * 2) * (606 / 1600)),
               }}
-              resizeMode="cover"
+              resizeMode="stretch"
             />
           </SoftPress>
           <ScrollView
@@ -1063,6 +1048,44 @@ export default function HomeScreen({ navigation }) {
           >
             {NESCAFE_ROW.map((p, i) => (
               <ProductChip key={`nescafe-${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} width={118} />
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* Banetti — NESCAFÉ bire bir: banner + ürün şeridi */}
+        <View style={{ marginTop: 22 }}>
+          <SoftPress
+            onPress={goStore}
+            style={{
+              marginHorizontal: PAD,
+              borderRadius: 16,
+              overflow: 'hidden',
+              backgroundColor: '#2E8BC9',
+            }}
+          >
+            <Image
+              source={banettiBannerImg}
+              style={{
+                width: W - PAD * 2,
+                height: Math.round((W - PAD * 2) * (606 / 1600)),
+              }}
+              resizeMode="stretch"
+            />
+          </SoftPress>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 12 }}
+          >
+            {BANETTI_PRODUCTS.map((p, i) => (
+              <ProductChip
+                key={`banetti-${p.id}-${i}`}
+                product={p}
+                lang={lang}
+                onAdd={() => onAdd(p)}
+                width={118}
+                tileBg="#FFFFFF"
+              />
             ))}
           </ScrollView>
         </View>

@@ -1,9 +1,7 @@
-import { nescafeBannerDataUri } from './nescafeBannerData'
-
 export const logoImg = require('../../assets/m10-logo.png')
 export const promoImg = require('../../assets/promo-banner.png')
-/** Data-URI — Android release bazen drawable require’ı boyamıyor; data URI her zaman yüklenir */
-export const nescafeBannerImg = { uri: nescafeBannerDataUri }
+/** Kullanıcı 4 kutu splash — slider / marka banner ile aynı dosya */
+export const nescafeBannerImg = require('../../assets/mart-clone/brand-banners/nescafe-series.jpg')
 
 /** Stable grocery photo used when a product image is missing or fails to load */
 const FALLBACK_GROCERY =
