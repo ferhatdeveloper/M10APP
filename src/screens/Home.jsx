@@ -591,11 +591,23 @@ export default function HomeScreen({ navigation }) {
                     backgroundColor: w.bg,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderWidth: 1,
+                    overflow: 'hidden',
+                    borderWidth: 1.5,
                     borderColor: C.line,
                   }}
                 >
-                  <Text style={{ fontSize: 32 }}>{w.flag}</Text>
+                  {/* Flag emoji iOS'ta dikdörtgen; büyütüp daireye kırp */}
+                  <Text
+                    style={{
+                      fontSize: 58,
+                      lineHeight: 72,
+                      width: 72,
+                      textAlign: 'center',
+                      includeFontPadding: false,
+                    }}
+                  >
+                    {w.flag}
+                  </Text>
                 </View>
                 <Text style={{ marginTop: 6, fontSize: 12, fontWeight: '700', color: C.ink }}>{label(w, lang)}</Text>
               </SoftPress>
