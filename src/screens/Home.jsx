@@ -422,57 +422,76 @@ function DealPromoStrip({ onPress, lang }) {
 }
 
 /**
- * Tek slayt promo — güzel tam genişlik kartlar (+ işareti yok)
- * - bleed: genis banner
- * - hero: ürün görseli contain + metin
+ * Tek slayt promo — ek banner asset’e bağımlı değil.
+ * Migros ürün CDN + yerel net görseller + tasarlanmış hero kart.
  */
 const PROMO_SLIDES = [
   {
     id: 'bakery',
     kind: 'hero',
-    image: require('../../assets/mart-clone/promo_bakery.png'),
+    images: [
+      { uri: 'https://images.migrosone.com/sanalmarket/product/05120000/05120000-a957e2.jpg' },
+      { uri: 'https://images.migrosone.com/sanalmarket/product/05052000/05052000-2d95e7.jpg' },
+    ],
     bg: '#F3EDE4',
-    title: 'Fresh Bakery',
-    sub: 'Fırından taze',
-    titleColor: C.ink,
-    subColor: C.muted,
+    accent: C.red,
+    title: { tr: 'Fırın taze', en: 'Fresh bakery', ar: 'مخبوزات طازجة' },
+    sub: { tr: 'Her gün taze', en: 'Baked daily', ar: 'طازج يومياً' },
+    light: false,
   },
   {
-    id: 'hs',
+    id: 'care',
     kind: 'hero',
-    image: require('../../assets/mart-clone/promo_hs.png'),
+    images: [
+      { uri: 'https://images.migrosone.com/sanalmarket/product/07070145/07070145-ef65f0.jpg' },
+      { uri: 'https://images.migrosone.com/sanalmarket/product/07070960/07070960-eeb67b.jpg' },
+    ],
     bg: '#0A6CBA',
-    title: 'feel fresh',
-    sub: 'all day',
-    titleColor: '#fff',
-    subColor: 'rgba(255,255,255,0.85)',
+    accent: '#fff',
+    title: { tr: 'Kişisel bakım', en: 'Feel fresh', ar: 'العناية الشخصية' },
+    sub: { tr: 'Tüm gün ferahlık', en: 'All day fresh', ar: 'انتعاش طوال اليوم' },
+    light: true,
+  },
+  {
+    id: 'produce',
+    kind: 'hero',
+    images: [
+      { uri: 'https://images.migrosone.com/sanalmarket/product/27271000/27271000_1-25552e.jpg' },
+      { uri: 'https://images.migrosone.com/sanalmarket/product/28080000/28080000_1-c12d3b.jpg' },
+    ],
+    bg: '#E8F5E9',
+    accent: C.green,
+    title: { tr: 'Taze sebze & meyve', en: 'Fresh fruit & veg', ar: 'خضار وفواكه طازجة' },
+    sub: { tr: 'Her gün taze stok', en: 'Always fresh stock', ar: 'مخزون طازج دائماً' },
+    light: false,
   },
   {
     id: 'nescafe',
     kind: 'bleed',
-    image: require('../../assets/mart-clone/promo_nescafe.png'),
+    image: nescafeBannerImg,
     bg: '#4FC3F7',
   },
   {
-    id: 'full',
-    kind: 'bleed',
-    image: require('../../assets/mart-clone/banner_full.png'),
-    bg: C.soft,
-  },
-  {
-    id: 'deals',
-    kind: 'bleed',
-    image: require('../../assets/mart-clone/best_deals_band.png'),
-    bg: '#FFF8E1',
+    id: 'drinks',
+    kind: 'hero',
+    images: [
+      { uri: 'https://images.migrosone.com/sanalmarket/product/08010903/8010903_yan-2e2bcb.jpg' },
+      { uri: 'https://images.migrosone.com/sanalmarket/product/08059546/08059546_1-8fa892.jpg' },
+    ],
+    bg: '#FFEBEE',
+    accent: C.red,
+    title: { tr: 'İçecekler', en: 'Cold drinks', ar: 'مشروبات' },
+    sub: { tr: 'Serinleten fırsatlar', en: 'Chilled deals', ar: 'عروض منعشة' },
+    light: false,
   },
 ]
 
-function PromoBannerSlider({ onPress }) {
+function PromoBannerSlider({ onPress, lang = 'tr' }) {
   const [page, setPage] = useState(0)
   const scrollRef = useRef(null)
   const pageRef = useRef(0)
   const bannerW = W - PAD * 2
-  const bannerH = Math.round(bannerW * (232 / 800))
+  const bannerH = Math.max(132, Math.round(bannerW * 0.36))
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -498,36 +517,81 @@ function PromoBannerSlider({ onPress }) {
           setPage(next)
         }}
       >
-        {PROMO_SLIDES.map((item) => (
-          <View key={item.id} style={{ width: W, paddingHorizontal: PAD }}>
-            <SoftPress
-              onPress={onPress}
-              style={{
-                width: bannerW,
-                height: bannerH,
-                borderRadius: 16,
-                overflow: 'hidden',
-                backgroundColor: item.bg,
-              }}
-            >
-              {item.kind === 'bleed' ? (
-                <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-              ) : (
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                  <View style={{ flex: 1, paddingLeft: 18, paddingRight: 8, justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 20, fontWeight: '900', color: item.titleColor, letterSpacing: -0.3 }}>
-                      {item.title}
-                    </Text>
-                    <Text style={{ marginTop: 4, fontSize: 13, fontWeight: '700', color: item.subColor }}>{item.sub}</Text>
+        {PROMO_SLIDES.map((item) => {
+          const title = item.title?.[lang] || item.title?.en || item.title
+          const sub = item.sub?.[lang] || item.sub?.en || item.sub
+          const ink = item.light ? '#fff' : C.ink
+          const muted = item.light ? 'rgba(255,255,255,0.85)' : C.muted
+          return (
+            <View key={item.id} style={{ width: W, paddingHorizontal: PAD }}>
+              <SoftPress
+                onPress={onPress}
+                style={{
+                  width: bannerW,
+                  height: bannerH,
+                  borderRadius: 16,
+                  overflow: 'hidden',
+                  backgroundColor: item.bg,
+                }}
+              >
+                {item.kind === 'bleed' ? (
+                  <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                ) : (
+                  <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 1, paddingLeft: 16, paddingRight: 6, justifyContent: 'center' }}>
+                      <View
+                        style={{
+                          alignSelf: 'flex-start',
+                          width: 28,
+                          height: 4,
+                          borderRadius: 2,
+                          backgroundColor: item.accent,
+                          marginBottom: 8,
+                        }}
+                      />
+                      <Text style={{ fontSize: 18, fontWeight: '900', color: ink, letterSpacing: -0.3 }} numberOfLines={2}>
+                        {title}
+                      </Text>
+                      <Text style={{ marginTop: 4, fontSize: 12, fontWeight: '700', color: muted }} numberOfLines={1}>
+                        {sub}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: bannerW * 0.5,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        paddingRight: 10,
+                        gap: 4,
+                      }}
+                    >
+                      {(item.images || []).slice(0, 2).map((img, i) => (
+                        <Image
+                          key={`${item.id}-img-${i}`}
+                          source={img}
+                          style={{ width: '46%', height: '78%' }}
+                          resizeMode="contain"
+                        />
+                      ))}
+                    </View>
+                    <View
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        height: 8,
+                        backgroundColor: item.accent,
+                        opacity: item.light ? 0.35 : 1,
+                      }}
+                    />
                   </View>
-                  <View style={{ width: bannerW * 0.48, height: '100%', paddingVertical: 8, paddingRight: 8 }}>
-                    <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
-                  </View>
-                </View>
-              )}
-            </SoftPress>
-          </View>
-        ))}
+                )}
+              </SoftPress>
+            </View>
+          )
+        })}
       </ScrollView>
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, gap: 6 }}>
         {PROMO_SLIDES.map((item, i) => (
@@ -830,7 +894,7 @@ export default function HomeScreen({ navigation }) {
         <DealPromoStrip onPress={goStore} lang={lang} />
 
         {/* Ekmek / Head&Shoulders — tek kayan banner */}
-        <PromoBannerSlider onPress={goStore} />
+        <PromoBannerSlider onPress={goStore} lang={lang} />
 
         {/* Markaya göre alışveriş — 2×4 logo grid (dokunulmaz) */}
         <View style={{ marginTop: 18 }}>
