@@ -763,12 +763,13 @@ function CategoryTile({ item, size, lang, onPress }) {
   )
 }
 
-/** 3×4 paging grid + bottom pill indicator (Talabat Shop by category) */
+/** 3×3 paging grid + bottom dots (daha büyük kategori görselleri) */
 function CategoryPager({ pages, lang, onPress }) {
   const [page, setPage] = useState(0)
   const pageW = W
-  const tile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
-  const rowH = tile + 36
+  const cols = 3
+  const tile = Math.floor((W - PAD * 2 - GAP * (cols - 1)) / cols)
+  const rowH = tile + 38
   const gridH = rowH * 3 + 4
 
   return (
@@ -793,27 +794,18 @@ function CategoryPager({ pages, lang, onPress }) {
           </View>
         ))}
       </ScrollView>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, gap: 0 }}>
-        <View
-          style={{
-            width: 36,
-            height: 4,
-            borderRadius: 2,
-            backgroundColor: '#E0E0E0',
-            overflow: 'hidden',
-            flexDirection: 'row',
-          }}
-        >
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, gap: 6 }}>
+        {pages.map((_, i) => (
           <View
+            key={`catdot-${i}`}
             style={{
-              width: 18,
-              height: 4,
-              borderRadius: 2,
-              backgroundColor: C.ink,
-              marginLeft: page === 0 ? 0 : 18,
+              width: i === page ? 16 : 6,
+              height: 6,
+              borderRadius: 3,
+              backgroundColor: i === page ? C.lime : C.line,
             }}
           />
-        </View>
+        ))}
       </View>
     </View>
   )
@@ -838,7 +830,13 @@ export default function HomeScreen({ navigation }) {
   const brandH = 200
   const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
   const exploreW = Math.floor((W - PAD * 2 - GAP) / 2)
-  const categoryPages = useMemo(() => [CATEGORIES, CATEGORIES_PAGE2], [])
+  const categoryPages = useMemo(() => {
+    const all = [...CATEGORIES, ...CATEGORIES_PAGE2]
+    const size = 9
+    const pages = []
+    for (let i = 0; i < all.length; i += size) pages.push(all.slice(i, i + size))
+    return pages
+  }, [])
   const flashProducts = useMemo(() => TOP_SAVERS.slice(0, 8), [])
 
   const go = (screen, params) => navigation.navigate(screen, params)
