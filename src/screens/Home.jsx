@@ -206,6 +206,8 @@ function BrandCard({ item, w, h, onPress }) {
     )
   }
 
+  const imgW = Math.round(w * 0.78)
+  const imgH = Math.round(h * 0.58)
   return (
     <SoftPress
       onPress={onPress}
@@ -227,18 +229,21 @@ function BrandCard({ item, w, h, onPress }) {
       <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 3, fontSize: 17, fontWeight: '800', color: C.ink }}>
         {item.name}
       </Text>
-      <Image
-        source={item.image}
+      {/* Explicit w/h + contain — absolute left/right kırpmayı bozuyordu */}
+      <View
         style={{
           position: 'absolute',
-          left: 16,
-          right: 16,
-          top: 48,
-          bottom: 10,
+          left: 0,
+          right: 0,
+          top: 42,
+          bottom: 8,
           zIndex: 2,
+          alignItems: 'center',
+          justifyContent: 'flex-end',
         }}
-        resizeMode="contain"
-      />
+      >
+        <Image source={item.image} style={{ width: imgW, height: imgH }} resizeMode="contain" />
+      </View>
       <View
         style={{
           position: 'absolute',
@@ -428,11 +433,20 @@ function DealPromoStrip({ onPress, lang }) {
 
       <DealPromoCard title={titles.brand} onPress={onPress} bottomColor={C.lime} wave>
         {kinderImg ? (
-          <Image
-            source={kinderImg}
-            style={{ position: 'absolute', left: 18, right: 18, top: 52, bottom: 40, zIndex: 2 }}
-            resizeMode="contain"
-          />
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 48,
+              bottom: 28,
+              zIndex: 2,
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Image source={kinderImg} style={{ width: 112, height: 112 }} resizeMode="contain" />
+          </View>
         ) : null}
         <View
           style={{
@@ -450,11 +464,20 @@ function DealPromoStrip({ onPress, lang }) {
 
       <DealPromoCard title={titles.maggi} onPress={onPress} bottomColor={C.lime} wave>
         {maggiImg ? (
-          <Image
-            source={maggiImg}
-            style={{ position: 'absolute', left: 18, right: 18, top: 52, bottom: 40, zIndex: 2 }}
-            resizeMode="contain"
-          />
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 48,
+              bottom: 28,
+              zIndex: 2,
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Image source={maggiImg} style={{ width: 112, height: 112 }} resizeMode="contain" />
+          </View>
         ) : null}
       </DealPromoCard>
     </ScrollView>
