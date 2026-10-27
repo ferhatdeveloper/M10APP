@@ -173,6 +173,48 @@ function FlashSaleHeader({ title, endsInLabel, secondsLeft, isRTL, onPress }) {
   )
 }
 
+/** Flash Sale altı marka kartları — yan yana kaydırma */
+function BrandCard({ item, w, h, onPress }) {
+  return (
+    <SoftPress
+      onPress={onPress}
+      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: C.cream }}
+    >
+      <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 2, fontSize: 17, fontWeight: '800', color: C.ink }}>
+        {item.name}
+      </Text>
+      <Image
+        source={item.image}
+        style={{ position: 'absolute', left: 20, right: 20, top: 44, bottom: 36 }}
+        resizeMode="contain"
+      />
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 34,
+          backgroundColor: C.red,
+          borderTopLeftRadius: 36,
+          borderTopRightRadius: 36,
+        }}
+      />
+      <View
+        style={{
+          position: 'absolute',
+          right: 14,
+          top: h * 0.42,
+          width: 9,
+          height: 9,
+          backgroundColor: C.lime,
+          transform: [{ rotate: '45deg' }],
+        }}
+      />
+    </SoftPress>
+  )
+}
+
 /** Talabat “deal cards” — dikey promo şeridi (pro / hot deals / marka) */
 function DealPromoCard({ title, onPress, children, bottomColor, wave }) {
   const w = 148
@@ -648,7 +690,8 @@ export default function HomeScreen({ navigation }) {
     return () => clearInterval(id)
   }, [])
 
-  const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
+  const brandW = 148
+  const brandH = 200
   const exploreW = Math.floor((W - PAD * 2 - GAP) / 2)
   const categoryPages = useMemo(() => [CATEGORIES, CATEGORIES_PAGE2], [])
   const flashProducts = useMemo(() => TOP_SAVERS.slice(0, 8), [])
@@ -739,7 +782,11 @@ export default function HomeScreen({ navigation }) {
           </ScrollView>
         </View>
 
-        <BrandBannerCarousel items={BRANDS} onPress={goStore} />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 8 }}>
+          {BRANDS.map((b) => (
+            <BrandCard key={b.id} item={b} w={brandW} h={brandH} onPress={goStore} />
+          ))}
+        </ScrollView>
 
         <ProductRow title={L.buyAgain} action={L.viewAll} onAction={goStore} products={BUY_AGAIN} lang={lang} onAdd={onAdd} />
 
@@ -762,34 +809,10 @@ export default function HomeScreen({ navigation }) {
           </SoftPress>
         </View>
 
-        {/* Marka logoları — 2×4 */}
+        {/* Markaya göre alışveriş — tek kart slider */}
         <View style={{ marginTop: 18 }}>
           <SectionTitle title={L.shopBrand} action={L.viewAll} onAction={goStore} />
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: PAD, gap: GAP }}>
-            {LOGO_BRANDS.map((b) => (
-              <SoftPress
-                key={b.id}
-                onPress={goStore}
-                style={{
-                  width: logoTile,
-                  height: logoTile * 0.85,
-                  borderRadius: 14,
-                  backgroundColor: '#fff',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderWidth: 1,
-                  borderColor: C.line,
-                  overflow: 'hidden',
-                  padding: 8,
-                }}
-              >
-                <Image source={b.image} style={{ width: '70%', height: '55%' }} resizeMode="contain" />
-                <Text style={{ marginTop: 4, fontSize: 11, fontWeight: '700', color: C.ink }} numberOfLines={1}>
-                  {b.name}
-                </Text>
-              </SoftPress>
-            ))}
-          </View>
+          <BrandBannerCarousel items={LOGO_BRANDS} onPress={goStore} />
         </View>
 
         <View style={{ marginTop: 22 }}>
