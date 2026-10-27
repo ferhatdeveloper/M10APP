@@ -571,13 +571,20 @@ function PromoBannerSlider({ onPress, lang = 'tr' }) {
                   borderRadius: 16,
                   overflow: 'hidden',
                   backgroundColor: item.bg,
+                  position: 'relative',
                 }}
               >
                 {item.kind === 'bleed' ? (
                   <Image
                     source={item.image}
-                    style={{ width: bannerW, height: bannerH }}
-                    resizeMode="stretch"
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      top: 0,
+                      width: bannerW,
+                      height: bannerH,
+                    }}
+                    resizeMode="cover"
                   />
                 ) : (
                   <View style={{ flex: 1, flexDirection: 'row' }}>

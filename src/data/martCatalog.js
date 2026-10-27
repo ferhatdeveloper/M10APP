@@ -64,62 +64,62 @@ export const CATEGORIES_PAGE2 = [
   { id: 'oil', images: [M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'), M('https://images.migrosone.com/sanalmarket/product/14209387/14209387_1-77ff0a.jpg'), M('https://images.migrosone.com/sanalmarket/product/05010401/05010401_1-c4c14f.jpg')], image: M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'), names: { en: 'Oils & Sauces', tr: 'Yağ & Sos', ar: 'زيوت وصلصات' } },
 ]
 
-/** Shop by brand — Talabat squircle grid (referans ekrandaki logolar) */
+/** Shop by brand — net vektör kare logolar (1024px) */
 export const LOGO_BRANDS = [
+  {
+    id: 'lb_banetti',
+    name: 'Banetti',
+    color: '#FFFFFF',
+    image: require('../../assets/mart-clone/brand-logos/hd_banetti.png'),
+    fill: true,
+  },
   {
     id: 'lb_maggi',
     name: 'Maggi',
     color: '#FFD000',
-    image: require('../../assets/mart-clone/brand-logos/tile_maggi.png'),
-    fill: true,
-  },
-  {
-    id: 'lb_johnwest',
-    name: 'John West',
-    color: '#1B4D3E',
-    image: require('../../assets/mart-clone/brand-logos/tile_johnwest.png'),
-    fill: true,
-  },
-  {
-    id: 'lb_vaseline',
-    name: 'Vaseline',
-    color: '#F2F2F2',
-    image: require('../../assets/mart-clone/brand-logos/tile_vaseline.png'),
-    fill: true,
-  },
-  {
-    id: 'lb_sanita',
-    name: 'Sanita',
-    color: '#FFFFFF',
-    image: require('../../assets/mart-clone/brand-logos/tile_sanita.png'),
-    fill: true,
-  },
-  {
-    id: 'lb_indomie',
-    name: 'Indomie',
-    color: '#E02020',
-    image: require('../../assets/mart-clone/brand-logos/tile_indomie.png'),
-    fill: true,
-  },
-  {
-    id: 'lb_parex',
-    name: 'Parex',
-    color: '#FFFFFF',
-    image: require('../../assets/mart-clone/brand-logos/tile_parex.png'),
+    image: require('../../assets/mart-clone/brand-logos/hd_maggi.png'),
     fill: true,
   },
   {
     id: 'lb_kinder',
     name: 'Kinder',
     color: '#F2F2F2',
-    image: require('../../assets/mart-clone/brand-logos/tile_kinder.png'),
+    image: require('../../assets/mart-clone/brand-logos/hd_kinder.png'),
     fill: true,
   },
   {
-    id: 'lb_nescafe_dg',
-    name: 'Nescafé Dolce Gusto',
+    id: 'lb_nescafe',
+    name: 'Nescafé',
     color: '#FFFFFF',
-    image: require('../../assets/mart-clone/brand-logos/tile_nescafe_dg.png'),
+    image: require('../../assets/mart-clone/brand-logos/hd_nescafe.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_coca',
+    name: 'Coca-Cola',
+    color: '#E02020',
+    image: require('../../assets/mart-clone/brand-logos/hd_coca.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_lipton',
+    name: 'Lipton',
+    color: '#F57F17',
+    image: require('../../assets/mart-clone/brand-logos/hd_lipton.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_vaseline',
+    name: 'Vaseline',
+    color: '#F2F2F2',
+    image: require('../../assets/mart-clone/brand-logos/hd_vaseline.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_indomie',
+    name: 'Indomie',
+    color: '#E02020',
+    image: require('../../assets/mart-clone/brand-logos/hd_indomie.png'),
     fill: true,
   },
 ]
@@ -186,9 +186,9 @@ export const BEST_SELLERS = [
   { id: 'm28080000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/28080000/28080000_1-c12d3b.jpg' }, price: 1450, pro: 1300, names: { en: 'Tomato Kg', tr: 'Domates Kg', ar: 'طماطم كغ' } },
   { id: 'm28130000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/28130000/28130000_1-97c4cf.jpg' }, price: 850, pro: 750, names: { en: 'Cucumber Kg', tr: 'Hıyar Kg', ar: 'خيار كغ' } },
   { id: 'm28160000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/28160000/28160000_1-9a2b7c.jpg' }, price: 1700, pro: 1550, names: { en: 'Zucchini Kg', tr: 'Kabak Kg', ar: 'كوسا كغ' } },
-  { id: 'fv_pepper', image: require('../../assets/mart-clone/prod_pepper.png'), price: 1900, pro: 1700, names: { en: 'Bell Pepper Kg', tr: 'Biber Kg', ar: 'فلفل كغ' } },
+  { id: 'fv_pepper', image: require('../../assets/mart-clone/prod_pepper.png'), price: 1900, pro: 1700, names: { en: 'Red Bell Pepper Kg', tr: 'Kırmızı Biber Kg', ar: 'فلفل أحمر كغ' } },
   { id: 'fv_beet', image: require('../../assets/mart-clone/buy_beet.png'), price: 1200, pro: 1050, names: { en: 'Beetroot Kg', tr: 'Pancar Kg', ar: 'شمندر كغ' } },
-  { id: 'fv_dates', image: require('../../assets/mart-clone/prod_dates.png'), price: 4500, pro: 4000, names: { en: 'Dates Pack', tr: 'Hurma Paket', ar: 'تمر' } },
+  { id: 'fv_dates', image: require('../../assets/mart-clone/prod_dates.png'), price: 4500, pro: 4000, names: { en: 'Medjool Dates Pack', tr: 'Hurma Medjool Paket', ar: 'تمر مجدول' } },
 ]
 
 export const TOP_SAVERS = [
