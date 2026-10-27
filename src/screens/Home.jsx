@@ -108,68 +108,107 @@ function SectionTitle({ title, action, onAction }) {
   )
 }
 
-/** Talabat tarzı Flash Sale — app bar / arama altı şerit + geri sayım */
-function FlashSaleHeader({ title, endsInLabel, secondsLeft, isRTL, onPress }) {
+/** Flash Sale — tek bütün sarı blok, daha keskin / marjinal */
+function FlashSaleBlock({ title, endsInLabel, secondsLeft, isRTL, onPress, products, lang, onAdd }) {
   const h = Math.floor(secondsLeft / 3600)
   const m = Math.floor((secondsLeft % 3600) / 60)
   const s = secondsLeft % 60
   const pad = (n) => String(n).padStart(2, '0')
   const cells = [pad(h), pad(m), pad(s)]
   return (
-    <SoftPress
-      onPress={onPress}
+    <View
       style={{
         marginHorizontal: PAD,
-        marginTop: 8,
+        marginTop: 10,
         marginBottom: 4,
-        borderRadius: 12,
+        borderRadius: 4,
         overflow: 'hidden',
         backgroundColor: C.lime,
-        flexDirection: isRTL ? 'row-reverse' : 'row',
-        alignItems: 'center',
-        paddingVertical: 10,
-        paddingHorizontal: 12,
-        gap: 10,
+        borderWidth: 2,
+        borderColor: C.ink,
       }}
     >
-      <View
+      <SoftPress
+        onPress={onPress}
         style={{
-          width: 32,
-          height: 32,
-          borderRadius: 16,
-          backgroundColor: C.red,
+          flexDirection: isRTL ? 'row-reverse' : 'row',
           alignItems: 'center',
-          justifyContent: 'center',
+          paddingVertical: 12,
+          paddingHorizontal: 12,
+          gap: 10,
+          borderBottomWidth: 2,
+          borderBottomColor: C.ink,
+          backgroundColor: C.lime,
         }}
       >
-        <Zap size={16} color="#fff" fill="#fff" strokeWidth={2.4} />
-      </View>
-      <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
-        <Text style={{ color: C.ink, fontWeight: '900', fontSize: 15 }}>{title}</Text>
-        <Text style={{ color: 'rgba(22,22,22,0.7)', fontWeight: '600', fontSize: 11, marginTop: 1 }}>
-          {endsInLabel}
-        </Text>
-      </View>
-      <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 3 }}>
-        {cells.map((cell, i) => (
-          <View key={`${i}-${cell}`} style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 3 }}>
-            {i > 0 ? <Text style={{ color: C.ink, fontWeight: '900', fontSize: 12 }}>:</Text> : null}
-            <View
-              style={{
-                minWidth: 26,
-                paddingHorizontal: 4,
-                paddingVertical: 4,
-                borderRadius: 6,
-                backgroundColor: 'rgba(0,0,0,0.12)',
-                alignItems: 'center',
-              }}
-            >
-              <Text style={{ color: C.ink, fontWeight: '900', fontSize: 13, fontVariant: ['tabular-nums'] }}>{cell}</Text>
+        <View
+          style={{
+            width: 36,
+            height: 36,
+            backgroundColor: C.red,
+            alignItems: 'center',
+            justifyContent: 'center',
+            transform: [{ rotate: '-6deg' }],
+            borderWidth: 2,
+            borderColor: C.ink,
+          }}
+        >
+          <Zap size={18} color="#fff" fill="#fff" strokeWidth={2.6} />
+        </View>
+        <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
+          <Text
+            style={{
+              color: C.ink,
+              fontWeight: '900',
+              fontSize: 17,
+              letterSpacing: 0.6,
+              textTransform: 'uppercase',
+            }}
+          >
+            {title}
+          </Text>
+          <Text style={{ color: C.ink, fontWeight: '700', fontSize: 11, marginTop: 2, opacity: 0.75 }}>
+            {endsInLabel}
+          </Text>
+        </View>
+        <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 2 }}>
+          {cells.map((cell, i) => (
+            <View key={`${i}-${cell}`} style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 2 }}>
+              {i > 0 ? <Text style={{ color: C.ink, fontWeight: '900', fontSize: 14 }}>:</Text> : null}
+              <View
+                style={{
+                  minWidth: 28,
+                  paddingHorizontal: 4,
+                  paddingVertical: 5,
+                  backgroundColor: C.ink,
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: C.lime, fontWeight: '900', fontSize: 13, fontVariant: ['tabular-nums'] }}>{cell}</Text>
+              </View>
             </View>
-          </View>
+          ))}
+        </View>
+      </SoftPress>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 10, paddingTop: 12, paddingBottom: 14 }}
+      >
+        {products.map((p, i) => (
+          <ProductChip
+            key={`flash-${p.id}-${i}`}
+            product={p}
+            lang={lang}
+            onAdd={() => onAdd(p)}
+            showSave
+            width={104}
+            tileBg="transparent"
+            inkOnLight
+          />
         ))}
-      </View>
-    </SoftPress>
+      </ScrollView>
+    </View>
   )
 }
 
@@ -610,10 +649,20 @@ function PromoBannerSlider({ onPress, lang = 'tr' }) {
   )
 }
 
-function ProductChip({ product, lang, onAdd, width = 118, showSave }) {
+function ProductChip({ product, lang, onAdd, width = 118, showSave, tileBg, inkOnLight, labelColor, priceColor }) {
+  const nameColor = labelColor || (inkOnLight ? C.ink : C.ink)
+  const moneyColor = priceColor || nameColor
   return (
     <View style={{ width, marginRight: 12 }}>
-      <View style={{ width, height: width, borderRadius: 16, backgroundColor: C.soft, overflow: 'hidden' }}>
+      <View
+        style={{
+          width,
+          height: width,
+          borderRadius: 16,
+          backgroundColor: tileBg === undefined ? C.soft : tileBg,
+          overflow: 'hidden',
+        }}
+      >
         <Image source={product.image} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
         {showSave && product.save ? (
           <View
@@ -625,6 +674,8 @@ function ProductChip({ product, lang, onAdd, width = 118, showSave }) {
               borderRadius: 6,
               paddingHorizontal: 6,
               paddingVertical: 3,
+              borderWidth: inkOnLight ? 1.5 : 0,
+              borderColor: C.ink,
             }}
           >
             <Text style={{ fontSize: 10, fontWeight: '800', color: C.ink }}>Save {product.save}%</Text>
@@ -634,10 +685,10 @@ function ProductChip({ product, lang, onAdd, width = 118, showSave }) {
           <AddBtn onPress={onAdd} size={30} />
         </View>
       </View>
-      <Text numberOfLines={2} style={{ marginTop: 8, fontSize: 13, fontWeight: '700', color: C.ink, lineHeight: 17, minHeight: 34 }}>
+      <Text numberOfLines={2} style={{ marginTop: 8, fontSize: 13, fontWeight: '700', color: nameColor, lineHeight: 17, minHeight: 34 }}>
         {label(product, lang)}
       </Text>
-      <Text style={{ marginTop: 2, fontSize: 14, fontWeight: '800', color: C.ink }}>{formatIQD(product.price, lang)}</Text>
+      <Text style={{ marginTop: 2, fontSize: 14, fontWeight: '800', color: moneyColor }}>{formatIQD(product.price, lang)}</Text>
       {product.old ? (
         <Text style={{ fontSize: 11, color: C.muted, textDecorationLine: 'line-through' }}>{formatIQD(product.old, lang)}</Text>
       ) : null}
@@ -857,24 +908,16 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 110 + insets.bottom }}>
-        <View style={{ backgroundColor: C.bg, borderBottomWidth: 1, borderBottomColor: C.line }}>
-          <FlashSaleHeader
-            title={L.flashSale}
-            endsInLabel={L.endsIn}
-            secondsLeft={flashLeft}
-            isRTL={isRTL}
-            onPress={goStore}
-          />
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 6, paddingBottom: 10 }}
-          >
-            {flashProducts.map((p, i) => (
-              <ProductChip key={`flash-${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} showSave width={108} />
-            ))}
-          </ScrollView>
-        </View>
+        <FlashSaleBlock
+          title={L.flashSale}
+          endsInLabel={L.endsIn}
+          secondsLeft={flashLeft}
+          isRTL={isRTL}
+          onPress={goStore}
+          products={flashProducts}
+          lang={lang}
+          onAdd={onAdd}
+        />
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 8 }}>
           {BRANDS.map((b) => (
@@ -965,15 +1008,16 @@ export default function HomeScreen({ navigation }) {
 
         <ProductRow title={L.best} action={L.viewAll} onAction={goStore} products={BEST_SELLERS} lang={lang} onAdd={onAdd} />
 
-        {/* NESCAFÉ — Talabat yapısı: full banner + ürün şeridi */}
-        <View style={{ marginTop: 22 }}>
+        {/* NESCAFÉ — banner + ürünler kırmızı şeridin üstünde (süt bg yok) */}
+        <View style={{ marginTop: 22, marginHorizontal: PAD }}>
           <SoftPress
             onPress={goStore}
             style={{
-              marginHorizontal: PAD,
-              borderRadius: 16,
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16,
               overflow: 'hidden',
-              backgroundColor: '#87CEEB',
+              backgroundColor: '#4FC3F7',
+              zIndex: 2,
             }}
           >
             <Image
@@ -985,15 +1029,36 @@ export default function HomeScreen({ navigation }) {
               resizeMode="cover"
             />
           </SoftPress>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 12 }}
+          <View
+            style={{
+              marginTop: -18,
+              paddingTop: 28,
+              paddingBottom: 14,
+              borderBottomLeftRadius: 16,
+              borderBottomRightRadius: 16,
+              backgroundColor: C.red,
+              overflow: 'hidden',
+            }}
           >
-            {NESCAFE_ROW.map((p, i) => (
-              <ProductChip key={`nescafe-${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} width={118} />
-            ))}
-          </ScrollView>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 12 }}
+            >
+              {NESCAFE_ROW.map((p, i) => (
+                <ProductChip
+                  key={`nescafe-${p.id}-${i}`}
+                  product={p}
+                  lang={lang}
+                  onAdd={() => onAdd(p)}
+                  width={112}
+                  tileBg="transparent"
+                  labelColor="#fff"
+                  priceColor="#fff"
+                />
+              ))}
+            </ScrollView>
+          </View>
         </View>
 
         <ProductRow title={L.savers} action={L.viewAll} onAction={goStore} products={TOP_SAVERS} lang={lang} onAdd={onAdd} showSave />
