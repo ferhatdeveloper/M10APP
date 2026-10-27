@@ -173,6 +173,212 @@ function FlashSaleHeader({ title, endsInLabel, secondsLeft, isRTL, onPress }) {
   )
 }
 
+/** Talabat “deal cards” — dikey promo şeridi (pro / hot deals / marka) */
+function DealPromoCard({ title, onPress, children, bottomColor, wave }) {
+  const w = 148
+  const h = 200
+  return (
+    <SoftPress
+      onPress={onPress}
+      style={{
+        width: w,
+        height: h,
+        marginRight: 12,
+        borderRadius: 18,
+        overflow: 'hidden',
+        backgroundColor: C.cream,
+      }}
+    >
+      <Text
+        numberOfLines={2}
+        style={{
+          position: 'absolute',
+          top: 14,
+          left: 12,
+          right: 12,
+          zIndex: 3,
+          fontSize: 17,
+          fontWeight: '900',
+          color: C.ink,
+          lineHeight: 20,
+        }}
+      >
+        {title}
+      </Text>
+      {children}
+      {wave ? (
+        <View
+          style={{
+            position: 'absolute',
+            left: -20,
+            right: -20,
+            bottom: -8,
+            height: 78,
+            backgroundColor: bottomColor,
+            borderTopLeftRadius: 90,
+            borderTopRightRadius: 90,
+          }}
+        />
+      ) : (
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 72,
+            backgroundColor: bottomColor,
+          }}
+        />
+      )}
+    </SoftPress>
+  )
+}
+
+function DealPromoStrip({ onPress, lang }) {
+  const kinderImg = BRANDS.find((b) => b.id === 'kinder')?.image
+  const maggiImg = BRANDS.find((b) => b.id === 'maggi')?.image
+  const titles = {
+    pro: lang === 'tr' ? 'Sadece M10’da' : lang === 'ar' ? 'فقط في M10' : 'Only for M10',
+    hot: lang === 'tr' ? 'İndirim %30’a var' : lang === 'ar' ? 'خصم حتى 30٪' : 'Up to 30% off',
+    brand: 'Kinder',
+    maggi: 'Maggi',
+  }
+
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 14, paddingBottom: 2 }}
+    >
+      <DealPromoCard title={titles.pro} onPress={onPress} bottomColor="#6B2D9B" wave={false}>
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 72,
+            backgroundColor: '#EDE4F5',
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            alignSelf: 'center',
+            top: 58,
+            width: 96,
+            height: 96,
+            borderRadius: 48,
+            backgroundColor: C.lime,
+            borderWidth: 3,
+            borderColor: C.ink,
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2,
+            transform: [{ rotate: '-6deg' }],
+          }}
+        >
+          <Text style={{ fontSize: 12, fontWeight: '800', color: C.ink, textAlign: 'center' }}>Up to</Text>
+          <Text style={{ fontSize: 18, fontWeight: '900', color: C.ink, textAlign: 'center', marginTop: 1 }}>50% off</Text>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 18,
+            alignSelf: 'center',
+            zIndex: 3,
+            backgroundColor: 'rgba(255,255,255,0.95)',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 6,
+          }}
+        >
+          <Text style={{ fontSize: 11, fontWeight: '800', color: '#6B2D9B' }}>
+            {lang === 'tr' ? 'özel fırsatlar' : lang === 'ar' ? 'عروض خاصة' : 'pro offers'}
+          </Text>
+        </View>
+      </DealPromoCard>
+
+      <DealPromoCard title={titles.hot} onPress={onPress} bottomColor={C.red} wave>
+        <View
+          style={{
+            position: 'absolute',
+            alignSelf: 'center',
+            top: 70,
+            zIndex: 2,
+            backgroundColor: '#fff',
+            borderWidth: 2.5,
+            borderColor: C.ink,
+            borderRadius: 18,
+            paddingHorizontal: 14,
+            paddingVertical: 12,
+            transform: [{ rotate: '4deg' }],
+          }}
+        >
+          <Text style={{ fontSize: 16, fontWeight: '900', color: C.ink }}>Hot Deals</Text>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            top: 62,
+            right: 22,
+            width: 8,
+            height: 8,
+            backgroundColor: C.orange,
+            transform: [{ rotate: '45deg' }],
+            zIndex: 2,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            top: 118,
+            left: 18,
+            width: 6,
+            height: 6,
+            backgroundColor: C.lime,
+            transform: [{ rotate: '45deg' }],
+            zIndex: 2,
+          }}
+        />
+      </DealPromoCard>
+
+      <DealPromoCard title={titles.brand} onPress={onPress} bottomColor={C.red} wave>
+        {kinderImg ? (
+          <Image
+            source={kinderImg}
+            style={{ position: 'absolute', left: 18, right: 18, top: 52, bottom: 40, zIndex: 2 }}
+            resizeMode="contain"
+          />
+        ) : null}
+        <View
+          style={{
+            position: 'absolute',
+            top: 56,
+            right: 16,
+            width: 7,
+            height: 7,
+            backgroundColor: C.orange,
+            transform: [{ rotate: '45deg' }],
+            zIndex: 3,
+          }}
+        />
+      </DealPromoCard>
+
+      <DealPromoCard title={titles.maggi} onPress={onPress} bottomColor={C.orange} wave>
+        {maggiImg ? (
+          <Image
+            source={maggiImg}
+            style={{ position: 'absolute', left: 18, right: 18, top: 52, bottom: 40, zIndex: 2 }}
+            resizeMode="contain"
+          />
+        ) : null}
+      </DealPromoCard>
+    </ScrollView>
+  )
+}
+
 /** Tek banner — yatay kaydırma / otomatik geçiş (Talabat hero) */
 function BrandBannerCarousel({ items, onPress }) {
   const [page, setPage] = useState(0)
@@ -537,6 +743,9 @@ export default function HomeScreen({ navigation }) {
           <SectionTitle title={L.shopCat} />
           <CategoryPager pages={categoryPages} lang={lang} onPress={goStore} />
         </View>
+
+        {/* Talabat deal cards — kategori altına kaydırılabilir dikey promo */}
+        <DealPromoStrip onPress={goStore} lang={lang} />
 
         {/* Marka ↔ kategori arası çift promo */}
         <View style={{ marginTop: 16, paddingHorizontal: PAD, flexDirection: 'row', gap: GAP }}>
