@@ -209,7 +209,7 @@ function BrandCard({ item, w, h, onPress }) {
   return (
     <SoftPress
       onPress={onPress}
-      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: '#fff' }}
+      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: '#F3EEE6' }}
     >
       <View
         style={{
@@ -217,27 +217,25 @@ function BrandCard({ item, w, h, onPress }) {
           left: 0,
           right: 0,
           bottom: 0,
-          height: 40,
+          height: 44,
           backgroundColor: C.red,
-          borderTopLeftRadius: 40,
-          borderTopRightRadius: 40,
+          borderTopLeftRadius: 42,
+          borderTopRightRadius: 42,
           zIndex: 1,
         }}
       />
       <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 3, fontSize: 17, fontWeight: '800', color: C.ink }}>
         {item.name}
       </Text>
-      {/* Beyaz kart + ürün kırmızı üstünde → JPEG beyaz bg erir (transparent hissi) */}
       <Image
         source={item.image}
         style={{
           position: 'absolute',
-          left: 12,
-          right: 12,
-          top: 46,
-          bottom: 8,
+          left: 16,
+          right: 16,
+          top: 48,
+          bottom: 10,
           zIndex: 2,
-          backgroundColor: 'transparent',
         }}
         resizeMode="contain"
       />

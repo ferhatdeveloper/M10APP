@@ -2,6 +2,9 @@
 export const M = (url) => ({ uri: url })
 
 export const BRANDS = [
+  { id: 'nescafe', name: 'Nescafe', accent: '#C62828', image: require('../../assets/mart-clone/cutouts/nescafe.png') },
+  { id: 'pinar', name: 'Pınar', accent: '#1565C0', image: require('../../assets/mart-clone/cutouts/pinar.png') },
+  { id: 'ulker', name: 'Ülker', accent: '#6A1B9A', image: require('../../assets/mart-clone/cutouts/ulker.png') },
   /** `card`: sadece Nada / Puck — hazır Talabat kartı */
   {
     id: 'nada',
@@ -17,19 +20,11 @@ export const BRANDS = [
     card: require('../../assets/mart-clone/brand_puck.png'),
     image: M('https://images.migrosone.com/sanalmarket/product/10300063/10300063-a0216f.jpg'),
   },
-  {
-    id: 'nescafe',
-    name: 'Nescafe',
-    accent: '#C62828',
-    image: require('../../assets/mart-clone/cutouts/nescafe.png'),
-  },
-  { id: 'pinar', name: 'Pınar', accent: '#1565C0', image: M('https://images.migrosone.com/sanalmarket/product/11010198/11010198_1-c52501.jpg') },
-  { id: 'ulker', name: 'Ülker', accent: '#6A1B9A', image: M('https://images.migrosone.com/sanalmarket/product/07010209/07010209-1747ff.jpg') },
-  { id: 'eti', name: 'Eti', accent: '#E65100', image: M('https://images.migrosone.com/sanalmarket/product/07163987/07163987-235c4a.jpg') },
-  { id: 'maggi', name: 'Maggi', accent: '#F9A825', image: M('https://images.migrosone.com/sanalmarket/product/06010092/06010092-f13db9.jpg') },
-  { id: 'kinder', name: 'Kinder', accent: '#E65100', image: M('https://images.migrosone.com/sanalmarket/product/07049983/07049983-3604cc.jpg') },
-  { id: 'coca', name: 'Coca-Cola', accent: '#B71C1C', image: M('https://images.migrosone.com/sanalmarket/product/08010903/8010903_yan-2e2bcb.jpg') },
-  { id: 'lipton', name: 'Lipton', accent: '#F57F17', image: M('https://images.migrosone.com/sanalmarket/product/08059546/08059546_1-8fa892.jpg') },
+  { id: 'eti', name: 'Eti', accent: '#E65100', image: require('../../assets/mart-clone/cutouts/eti.png') },
+  { id: 'maggi', name: 'Maggi', accent: '#F9A825', image: require('../../assets/mart-clone/cutouts/maggi.png') },
+  { id: 'kinder', name: 'Kinder', accent: '#E65100', image: require('../../assets/mart-clone/cutouts/kinder.png') },
+  { id: 'coca', name: 'Coca-Cola', accent: '#B71C1C', image: require('../../assets/mart-clone/cutouts/coca.png') },
+  { id: 'lipton', name: 'Lipton', accent: '#F57F17', image: require('../../assets/mart-clone/cutouts/lipton.png') },
 ]
 
 export const BUY_AGAIN = [
