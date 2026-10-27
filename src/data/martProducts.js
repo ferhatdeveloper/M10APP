@@ -2,6 +2,7 @@
  * Migros-sourced demo products → catalog shape for cart / checkout.
  */
 import {
+  BANETTI_PRODUCTS,
   BEVERAGES,
   BEST_SELLERS,
   BUY_AGAIN,
@@ -46,6 +47,7 @@ const RAW = [
   ...CLEANING,
   ...NESCAFE_ROW,
   ...EXPLORE,
+  ...BANETTI_PRODUCTS,
 ]
 
 const MAP = {}

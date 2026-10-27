@@ -64,15 +64,135 @@ export const CATEGORIES_PAGE2 = [
   { id: 'oil', images: [M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'), M('https://images.migrosone.com/sanalmarket/product/14209387/14209387_1-77ff0a.jpg'), M('https://images.migrosone.com/sanalmarket/product/05010401/05010401_1-c4c14f.jpg')], image: M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'), names: { en: 'Oils & Sauces', tr: 'Yağ & Sos', ar: 'زيوت وصلصات' } },
 ]
 
+/** Shop by brand — Talabat squircle grid (logo + marka rengi zemin) */
 export const LOGO_BRANDS = [
-  { id: 'lb_nescafe', name: 'Nescafe', color: '#C62828', image: M('https://images.migrosone.com/sanalmarket/product/03221309/3221309-409c19.jpg') },
-  { id: 'lb_pinar', name: 'Pınar', color: '#1565C0', image: M('https://images.migrosone.com/sanalmarket/product/11010198/11010198_1-c52501.jpg') },
-  { id: 'lb_ulker', name: 'Ülker', color: '#6A1B9A', image: M('https://images.migrosone.com/sanalmarket/product/07010209/07010209-1747ff.jpg') },
-  { id: 'lb_eti', name: 'Eti', color: '#E65100', image: M('https://images.migrosone.com/sanalmarket/product/07163987/07163987-235c4a.jpg') },
-  { id: 'lb_maggi', name: 'Maggi', color: '#F9A825', image: M('https://images.migrosone.com/sanalmarket/product/06010092/06010092-f13db9.jpg') },
-  { id: 'lb_kinder', name: 'Kinder', color: '#E65100', image: M('https://images.migrosone.com/sanalmarket/product/07049983/07049983-3604cc.jpg') },
-  { id: 'lb_coca', name: 'Coca-Cola', color: '#B71C1C', image: M('https://images.migrosone.com/sanalmarket/product/08010903/8010903_yan-2e2bcb.jpg') },
-  { id: 'lb_lipton', name: 'Lipton', color: '#F57F17', image: M('https://images.migrosone.com/sanalmarket/product/08059546/08059546_1-8fa892.jpg') },
+  {
+    id: 'lb_banetti',
+    name: 'Banetti',
+    color: '#000000',
+    image: require('../../assets/mart-clone/brand_banetti.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_maggi',
+    name: 'Maggi',
+    color: '#FFD000',
+    image: require('../../assets/mart-clone/cutouts/maggi.png'),
+  },
+  {
+    id: 'lb_kinder',
+    name: 'Kinder',
+    color: '#F2F2F2',
+    image: require('../../assets/mart-clone/cutouts/kinder.png'),
+  },
+  {
+    id: 'lb_nescafe',
+    name: 'Nescafe',
+    color: '#FFFFFF',
+    image: require('../../assets/mart-clone/cutouts/nescafe.png'),
+  },
+  {
+    id: 'lb_coca',
+    name: 'Coca-Cola',
+    color: '#E02020',
+    image: require('../../assets/mart-clone/cutouts/coca.png'),
+  },
+  {
+    id: 'lb_lipton',
+    name: 'Lipton',
+    color: '#F57F17',
+    image: require('../../assets/mart-clone/cutouts/lipton.png'),
+  },
+  {
+    id: 'lb_pinar',
+    name: 'Pınar',
+    color: '#1565C0',
+    image: require('../../assets/mart-clone/cutouts/pinar.png'),
+  },
+  {
+    id: 'lb_ulker',
+    name: 'Ülker',
+    color: '#6A1B9A',
+    image: require('../../assets/mart-clone/cutouts/ulker.png'),
+  },
+]
+
+/** Banetti — demo makarna ürünleri */
+export const BANETTI_PRODUCTS = [
+  {
+    id: 'banetti_spaghetti',
+    brand: 'Banetti',
+    image: M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'),
+    price: 2200,
+    pro: 1950,
+    names: {
+      en: 'Banetti Spaghetti 500g',
+      tr: 'Banetti Spaghetti 500g',
+      ar: 'بانتي سباغيتي 500غ',
+    },
+  },
+  {
+    id: 'banetti_penne',
+    brand: 'Banetti',
+    image: M('https://images.migrosone.com/sanalmarket/product/05010401/05010401_1-c4c14f.jpg'),
+    price: 2200,
+    pro: 1950,
+    names: {
+      en: 'Banetti Penne 500g',
+      tr: 'Banetti Penne 500g',
+      ar: 'بانتي بيني 500غ',
+    },
+  },
+  {
+    id: 'banetti_fusilli',
+    brand: 'Banetti',
+    image: { uri: 'https://images.migrosone.com/sanalmarket/product/05010405/05010405_1-bcae71.png' },
+    price: 2300,
+    pro: 2050,
+    names: {
+      en: 'Banetti Fusilli 500g',
+      tr: 'Banetti Fusilli 500g',
+      ar: 'بانتي فوسيلي 500غ',
+    },
+  },
+  {
+    id: 'banetti_farfalle',
+    brand: 'Banetti',
+    image: M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'),
+    price: 2400,
+    old: 2800,
+    save: 14,
+    pro: 2150,
+    names: {
+      en: 'Banetti Farfalle 500g',
+      tr: 'Banetti Farfalle 500g',
+      ar: 'بانتي فارفالي 500غ',
+    },
+  },
+  {
+    id: 'banetti_rigatoni',
+    brand: 'Banetti',
+    image: M('https://images.migrosone.com/sanalmarket/product/05010401/05010401_1-c4c14f.jpg'),
+    price: 2500,
+    pro: 2250,
+    names: {
+      en: 'Banetti Rigatoni 500g',
+      tr: 'Banetti Rigatoni 500g',
+      ar: 'بانتي ريغاتوني 500غ',
+    },
+  },
+  {
+    id: 'banetti_linguine',
+    brand: 'Banetti',
+    image: { uri: 'https://images.migrosone.com/sanalmarket/product/05010405/05010405_1-bcae71.png' },
+    price: 2300,
+    pro: 2050,
+    names: {
+      en: 'Banetti Linguine 500g',
+      tr: 'Banetti Linguine 500g',
+      ar: 'بانتي لينغويني 500غ',
+    },
+  },
 ]
 
 /** Taze sebze & meyve — M10 her zaman taze stok vurgusu */

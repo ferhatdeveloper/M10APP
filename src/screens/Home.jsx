@@ -24,6 +24,7 @@ import { DEFAULT_STORE_ID, formatIQD, getNearestStore } from '../data/mock'
 import { nescafeBannerImg } from '../utils/images'
 import { colors } from '../theme'
 import {
+  BANETTI_PRODUCTS,
   BEVERAGES,
   BEST_SELLERS,
   BRANDS,
@@ -845,7 +846,7 @@ export default function HomeScreen({ navigation }) {
 
   const brandW = 148
   const brandH = 200
-  const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
+  const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4) // 4 sütun squircle
   const exploreW = Math.floor((W - PAD * 2 - GAP) / 2)
   const categoryPages = useMemo(() => {
     const all = [...CATEGORIES, ...CATEGORIES_PAGE2]
@@ -954,9 +955,9 @@ export default function HomeScreen({ navigation }) {
         {/* Ekmek / Head&Shoulders — tek kayan banner */}
         <PromoBannerSlider onPress={goStore} lang={lang} />
 
-        {/* Markaya göre alışveriş — 2×4 logo grid (dokunulmaz) */}
+        {/* Shop by brand — Talabat bire bir: 2×4 squircle logo grid */}
         <View style={{ marginTop: 18 }}>
-          <SectionTitle title={L.shopBrand} action={L.viewAll} onAction={goStore} />
+          <SectionTitle title={L.shopBrand} />
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: PAD, gap: GAP }}>
             {LOGO_BRANDS.map((b) => (
               <SoftPress
@@ -964,25 +965,37 @@ export default function HomeScreen({ navigation }) {
                 onPress={goStore}
                 style={{
                   width: logoTile,
-                  height: logoTile * 0.85,
-                  borderRadius: 14,
-                  backgroundColor: '#fff',
+                  height: logoTile,
+                  borderRadius: 22,
+                  backgroundColor: b.color || '#F2F2F2',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  borderWidth: 1,
-                  borderColor: C.line,
                   overflow: 'hidden',
-                  padding: 8,
                 }}
               >
-                <Image source={b.image} style={{ width: '70%', height: '55%' }} resizeMode="contain" />
-                <Text style={{ marginTop: 4, fontSize: 11, fontWeight: '700', color: C.ink }} numberOfLines={1}>
-                  {b.name}
-                </Text>
+                <Image
+                  source={b.image}
+                  style={
+                    b.fill
+                      ? { width: '100%', height: '100%' }
+                      : { width: '72%', height: '72%' }
+                  }
+                  resizeMode={b.fill ? 'cover' : 'contain'}
+                />
               </SoftPress>
             ))}
           </View>
         </View>
+
+        <ProductRow
+          title={lang === 'tr' ? 'Banetti' : 'Banetti'}
+          action={L.viewAll}
+          onAction={goStore}
+          products={BANETTI_PRODUCTS}
+          lang={lang}
+          onAdd={onAdd}
+          showSave
+        />
 
         <View style={{ marginTop: 22 }}>
           <SectionTitle title={L.world} />
