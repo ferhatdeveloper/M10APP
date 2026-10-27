@@ -94,11 +94,7 @@ export function mapRexProduct(row) {
     },
     price: Number(row.price) || 0,
     stock: 99,
-    brand: (() => {
-      const b = String(row.brand || '').trim()
-      if (!b || /ku[cç]\s*oglu|küçükoğlu|كوج/i.test(b)) return 'M10 Market'
-      return b
-    })(),
+    brand: 'M10 Market',
     unit: row.unit || 'pcs',
     unitAmount: 1,
     allergens: [],
