@@ -207,8 +207,8 @@ function BrandCard({ item, w, h, onPress }) {
     )
   }
 
-  const imgW = Math.round(w * 0.78)
-  const imgH = Math.round(h * 0.58)
+  const imgW = Math.round(w * 0.9)
+  const imgH = Math.round(h * 0.7)
   return (
     <SoftPress
       onPress={onPress}
