@@ -6,7 +6,7 @@ module.exports = ({ config }) => {
   const hasToken = Boolean(process.env.EXPO_TOKEN)
   const next = {
     ...config,
-    name: 'M10 SDK58',
+    name: 'M10 Market',
     slug: 'm10-metro58',
     sdkVersion: '58.0.0',
     runtimeVersion: '58.0.0',
