@@ -57,6 +57,7 @@ const C = {
   red: colors.red,
   green: colors.open,
   lime: colors.yellow,
+  yellowSoft: colors.yellowSoft,
 }
 
 const label = (p, lang) => p.names?.[lang] || p.names?.en || p.name || ''
@@ -650,15 +651,15 @@ function ProductChip({ product, lang, onAdd, width = 118, showSave, tileBg, inkO
               position: 'absolute',
               top: 8,
               left: 8,
-              backgroundColor: C.lime,
+              backgroundColor: C.yellowSoft,
               borderRadius: 6,
               paddingHorizontal: 6,
               paddingVertical: 3,
-              borderWidth: inkOnLight ? 1.5 : 0,
-              borderColor: C.ink,
+              borderWidth: 1.5,
+              borderColor: C.red,
             }}
           >
-            <Text style={{ fontSize: 10, fontWeight: '800', color: C.ink }}>Save {product.save}%</Text>
+            <Text style={{ fontSize: 10, fontWeight: '900', color: C.red }}>Save {product.save}%</Text>
           </View>
         ) : null}
         <View style={{ position: 'absolute', right: 8, bottom: 8 }}>
