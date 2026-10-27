@@ -455,27 +455,26 @@ export default function HomeScreen({ navigation }) {
         />
       </View>
 
-      {/* Flash Sale sabit — sayfa kayınca inmez (TopBar + arama altında) */}
-      <View style={{ backgroundColor: C.bg, zIndex: 2, borderBottomWidth: 1, borderBottomColor: C.line }}>
-        <FlashSaleHeader
-          title={L.flashSale}
-          endsInLabel={L.endsIn}
-          secondsLeft={flashLeft}
-          isRTL={isRTL}
-          onPress={goStore}
-        />
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 6, paddingBottom: 10 }}
-        >
-          {flashProducts.map((p, i) => (
-            <ProductChip key={`flash-${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} showSave width={108} />
-          ))}
-        </ScrollView>
-      </View>
-
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 110 + insets.bottom }}>
+        <View style={{ backgroundColor: C.bg, borderBottomWidth: 1, borderBottomColor: C.line }}>
+          <FlashSaleHeader
+            title={L.flashSale}
+            endsInLabel={L.endsIn}
+            secondsLeft={flashLeft}
+            isRTL={isRTL}
+            onPress={goStore}
+          />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 6, paddingBottom: 10 }}
+          >
+            {flashProducts.map((p, i) => (
+              <ProductChip key={`flash-${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} showSave width={108} />
+            ))}
+          </ScrollView>
+        </View>
+
         {/* Marka kartları */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 8 }}>
           {BRANDS.map((b) => (
