@@ -1028,16 +1028,15 @@ export default function HomeScreen({ navigation }) {
 
         <ProductRow title={L.best} action={L.viewAll} onAction={goStore} products={BEST_SELLERS} lang={lang} onAdd={onAdd} />
 
-        {/* NESCAFÉ — banner + ürünler kırmızı şeridin üstünde (süt bg yok) */}
-        <View style={{ marginTop: 22, marginHorizontal: PAD }}>
+        {/* NESCAFÉ — banner + ürün şeridi (kırmızı şerit yok) */}
+        <View style={{ marginTop: 22 }}>
           <SoftPress
             onPress={goStore}
             style={{
-              borderTopLeftRadius: 16,
-              borderTopRightRadius: 16,
+              marginHorizontal: PAD,
+              borderRadius: 16,
               overflow: 'hidden',
               backgroundColor: '#4FC3F7',
-              zIndex: 2,
             }}
           >
             <Image
@@ -1049,36 +1048,15 @@ export default function HomeScreen({ navigation }) {
               resizeMode="cover"
             />
           </SoftPress>
-          <View
-            style={{
-              marginTop: -18,
-              paddingTop: 28,
-              paddingBottom: 14,
-              borderBottomLeftRadius: 16,
-              borderBottomRightRadius: 16,
-              backgroundColor: C.red,
-              overflow: 'hidden',
-            }}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 12 }}
           >
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: 12 }}
-            >
-              {NESCAFE_ROW.map((p, i) => (
-                <ProductChip
-                  key={`nescafe-${p.id}-${i}`}
-                  product={p}
-                  lang={lang}
-                  onAdd={() => onAdd(p)}
-                  width={112}
-                  tileBg="transparent"
-                  labelColor="#fff"
-                  priceColor="#fff"
-                />
-              ))}
-            </ScrollView>
-          </View>
+            {NESCAFE_ROW.map((p, i) => (
+              <ProductChip key={`nescafe-${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} width={118} />
+            ))}
+          </ScrollView>
         </View>
 
         <ProductRow title={L.savers} action={L.viewAll} onAction={goStore} products={TOP_SAVERS} lang={lang} onAdd={onAdd} showSave />
