@@ -1,4 +1,4 @@
-import { buildKucogluCatalog, kucogluStore, KUCOGLU_STORE_ID } from './kucogluCatalog.js'
+import { buildM10Catalog, m10Store, KUCOGLU_STORE_ID } from './kucogluCatalog.js'
 
 export { KUCOGLU_STORE_ID }
 
@@ -180,7 +180,7 @@ const normPlace = (s) =>
     .trim()
 
 export const stores = [
-  kucogluStore,
+  m10Store,
   {
     id: 'm10-dora-mechanic',
     name: 'M10 دورا ميكانيك',
@@ -1849,7 +1849,7 @@ const legacyM10Catalog = [
 }))
 
 /** Aktif katalog: M10 Market menü (görsellerle). Eski M10 kataloğu legacyM10Catalog’ta. */
-export const catalog = buildKucogluCatalog()
+export const catalog = buildM10Catalog()
 export { legacyM10Catalog }
 
 /** Approximate lat/lng for demo map pins (Erbil / Baghdad areas) */

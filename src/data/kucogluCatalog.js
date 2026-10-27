@@ -30,7 +30,7 @@ const TR_NAMES = {
 
 export const KUCOGLU_STORE_ID = 'kucoglu-duhok'
 
-export const kucogluStore = {
+export const m10Store = {
   id: KUCOGLU_STORE_ID,
   name: menu.store?.name || 'M10 Market',
   nameEn: menu.store?.nameEn || 'M10 Market',
@@ -60,7 +60,7 @@ export const kucogluStore = {
   tenantCode: 'kucoglu',
 }
 
-export function buildKucogluCatalog() {
+export function buildM10Catalog() {
   return (menu.products || []).map((p, i) => {
     const en = p.names?.en || p.name
     const tr = TR_NAMES[en] || p.names?.tr || en
