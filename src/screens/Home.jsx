@@ -91,7 +91,17 @@ function SectionTitle({ title, action, onAction }) {
       <Text style={{ fontSize: 18, fontWeight: '800', color: C.ink, letterSpacing: -0.2 }}>{title}</Text>
       {action ? (
         <SoftPress onPress={onAction}>
-          <Text style={{ fontSize: 13, fontWeight: '600', color: C.ink, textDecorationLine: 'underline' }}>{action}</Text>
+          <Text
+            style={{
+              fontSize: 13,
+              fontWeight: '600',
+              color: C.ink,
+              textDecorationLine: 'underline',
+              textDecorationColor: C.lime,
+            }}
+          >
+            {action}
+          </Text>
         </SoftPress>
       ) : null}
     </View>
@@ -184,7 +194,7 @@ function BrandCard({ item, w, h, onPress }) {
           right: 0,
           bottom: 0,
           height: 34,
-          backgroundColor: item.accent || C.orange,
+          backgroundColor: C.red,
           borderTopLeftRadius: 36,
           borderTopRightRadius: 36,
         }}
@@ -196,7 +206,7 @@ function BrandCard({ item, w, h, onPress }) {
           top: h * 0.42,
           width: 9,
           height: 9,
-          backgroundColor: C.orange,
+          backgroundColor: C.lime,
           transform: [{ rotate: '45deg' }],
         }}
       />
@@ -244,8 +254,8 @@ function ProductRow({ title, action, onAction, products, lang, onAdd, showSave }
     <View style={{ marginTop: 22 }}>
       <SectionTitle title={title} action={action} onAction={onAction} />
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD }}>
-        {products.map((p) => (
-          <ProductChip key={p.id} product={p} lang={lang} onAdd={() => onAdd(p)} showSave={showSave} />
+        {products.map((p, i) => (
+          <ProductChip key={`${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} showSave={showSave} />
         ))}
       </ScrollView>
     </View>
@@ -459,8 +469,8 @@ export default function HomeScreen({ navigation }) {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 6, paddingBottom: 10 }}
         >
-          {flashProducts.map((p) => (
-            <ProductChip key={`flash-${p.id}`} product={p} lang={lang} onAdd={() => onAdd(p)} showSave width={108} />
+          {flashProducts.map((p, i) => (
+            <ProductChip key={`flash-${p.id}-${i}`} product={p} lang={lang} onAdd={() => onAdd(p)} showSave width={108} />
           ))}
         </ScrollView>
       </View>
