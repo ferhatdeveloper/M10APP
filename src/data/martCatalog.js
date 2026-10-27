@@ -60,15 +60,16 @@ export const LOGO_BRANDS = [
   { id: 'lb_lipton', name: 'Lipton', color: '#F57F17', image: M('https://images.migrosone.com/sanalmarket/product/08059546/08059546_1-8fa892.jpg') },
 ]
 
+/** Taze sebze & meyve — M10 her zaman taze stok vurgusu */
 export const BEST_SELLERS = [
-  { id: 'm27271000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/27271000/27271000_1-25552e.jpg' }, price: 3150, pro: 2850, names: { en: 'Muz İthal Kg', tr: 'Muz İthal Kg', ar: 'Muz İthal Kg' } },
-  { id: 'm27133000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/27133000/27133000_1-fe30f9.jpg' }, price: 2000, pro: 1800, names: { en: 'Elma Granny Smith Kg', tr: 'Elma Granny Smith Kg', ar: 'Elma Granny Smith Kg' } },
-  { id: 'm46054277', image: { uri: 'https://images.migrosone.com/sanalmarket/product/46054277/46054277_1-3bb01f.jpg' }, price: 3600, pro: 3250, names: { en: 'Naturaköy Gezen 15\'li Yumurta M Orta B…', tr: 'Naturaköy Gezen 15\'li Yumurta M Orta B…', ar: 'Naturaköy Gezen 15\'li Yumurta M Orta B…' } },
-  { id: 'm28080000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/28080000/28080000_1-c12d3b.jpg' }, price: 1450, pro: 1300, names: { en: 'Domates Kg', tr: 'Domates Kg', ar: 'Domates Kg' } },
-  { id: 'm11010208', image: { uri: 'https://images.migrosone.com/sanalmarket/product/11010208/11010208_1-2ec412.jpg' }, price: 3800, pro: 3400, names: { en: 'Sütaş Latte 1 L', tr: 'Sütaş Latte 1 L', ar: 'Sütaş Latte 1 L' } },
-  { id: 'm05080438', image: { uri: 'https://images.migrosone.com/sanalmarket/product/05080438/05080438_1-3ea5fb.jpg' }, price: 2500, pro: 2250, names: { en: 'Master Potato Cheddar Peynir Soslu Cip…', tr: 'Master Potato Cheddar Peynir Soslu Cip…', ar: 'Master Potato Cheddar Peynir Soslu Cip…' } },
-  { id: 'm05120000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/05120000/05120000-a957e2.jpg' }, price: 500, pro: 450, names: { en: 'Sofra Ekmek Adet', tr: 'Sofra Ekmek Adet', ar: 'Sofra Ekmek Adet' } },
-  { id: 'm10300063', image: { uri: 'https://images.migrosone.com/sanalmarket/product/10300063/10300063-a0216f.jpg' }, price: 1600, pro: 1450, names: { en: 'İçim Labne 180 G', tr: 'İçim Labne 180 G', ar: 'İçim Labne 180 G' } },
+  { id: 'm27271000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/27271000/27271000_1-25552e.jpg' }, price: 3150, pro: 2850, names: { en: 'Banana Kg', tr: 'Muz İthal Kg', ar: 'موز كغ' } },
+  { id: 'm27133000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/27133000/27133000_1-fe30f9.jpg' }, price: 2000, pro: 1800, names: { en: 'Granny Smith Apple Kg', tr: 'Elma Granny Smith Kg', ar: 'تفاح كغ' } },
+  { id: 'm28080000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/28080000/28080000_1-c12d3b.jpg' }, price: 1450, pro: 1300, names: { en: 'Tomato Kg', tr: 'Domates Kg', ar: 'طماطم كغ' } },
+  { id: 'm28130000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/28130000/28130000_1-97c4cf.jpg' }, price: 850, pro: 750, names: { en: 'Cucumber Kg', tr: 'Hıyar Kg', ar: 'خيار كغ' } },
+  { id: 'm28160000', image: { uri: 'https://images.migrosone.com/sanalmarket/product/28160000/28160000_1-9a2b7c.jpg' }, price: 1700, pro: 1550, names: { en: 'Zucchini Kg', tr: 'Kabak Kg', ar: 'كوسا كغ' } },
+  { id: 'fv_pepper', image: require('../../assets/mart-clone/prod_pepper.png'), price: 1900, pro: 1700, names: { en: 'Bell Pepper Kg', tr: 'Biber Kg', ar: 'فلفل كغ' } },
+  { id: 'fv_beet', image: require('../../assets/mart-clone/buy_beet.png'), price: 1200, pro: 1050, names: { en: 'Beetroot Kg', tr: 'Pancar Kg', ar: 'شمندر كغ' } },
+  { id: 'fv_dates', image: require('../../assets/mart-clone/prod_dates.png'), price: 4500, pro: 4000, names: { en: 'Dates Pack', tr: 'Hurma Paket', ar: 'تمر' } },
 ]
 
 export const TOP_SAVERS = [

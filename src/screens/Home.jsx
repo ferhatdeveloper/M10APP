@@ -679,7 +679,12 @@ export default function HomeScreen({ navigation }) {
   const L = {
     viewAll: lang === 'tr' ? 'Tümü' : lang === 'ar' ? 'عرض الكل' : 'View all',
     buyAgain: lang === 'tr' ? 'Tekrar al' : lang === 'ar' ? 'اشترِ مجدداً' : 'Buy again',
-    best: lang === 'tr' ? 'Yakınındaki en çok satanlar 🔥' : lang === 'ar' ? 'الأكثر مبيعاً قربك 🔥' : 'Best sellers near you 🔥',
+    best:
+      lang === 'tr'
+        ? 'Taze sebze & meyve'
+        : lang === 'ar'
+          ? 'خضار وفواكه طازجة'
+          : 'Fresh fruit & veg',
     shopCat: lang === 'tr' ? 'Kategoriye göre alışveriş' : lang === 'ar' ? 'تسوّق حسب القسم' : 'Shop by category',
     shopBrand: lang === 'tr' ? 'Markaya göre alışveriş' : lang === 'ar' ? 'تسوّق حسب العلامة' : 'Shop by brand',
     world: lang === 'tr' ? 'Dünyadan lezzetler' : lang === 'ar' ? 'من حول العالم' : 'Around the world',
