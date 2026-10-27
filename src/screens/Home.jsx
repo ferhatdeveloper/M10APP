@@ -421,12 +421,50 @@ function DealPromoStrip({ onPress, lang }) {
   )
 }
 
-/** Tek slayt promo — ekmek / Head&Shoulders vb. tam genişlik banner */
+/**
+ * Tek slayt promo — güzel tam genişlik kartlar
+ * - bleed: genis banner (pink/american zaten + ikonlu)
+ * - hero: ürün görseli contain + metin + canlı + butonu
+ */
 const PROMO_SLIDES = [
-  { id: 'bakery', image: require('../../assets/mart-clone/promo_bakery.png'), bg: C.soft },
-  { id: 'hs', image: require('../../assets/mart-clone/promo_hs.png'), bg: '#0A6CBA' },
-  { id: 'pink', image: require('../../assets/mart-clone/promo_pink.png'), bg: '#F8BBD0' },
-  { id: 'american', image: require('../../assets/mart-clone/promo_american.png'), bg: '#E3F2FD' },
+  {
+    id: 'bakery',
+    kind: 'hero',
+    image: require('../../assets/mart-clone/promo_bakery.png'),
+    bg: '#F3EDE4',
+    title: 'Fresh Bakery',
+    sub: 'Fırından taze',
+    titleColor: C.ink,
+    subColor: C.muted,
+  },
+  {
+    id: 'hs',
+    kind: 'hero',
+    image: require('../../assets/mart-clone/promo_hs.png'),
+    bg: '#0A6CBA',
+    title: 'feel fresh',
+    sub: 'all day',
+    titleColor: '#fff',
+    subColor: 'rgba(255,255,255,0.85)',
+  },
+  {
+    id: 'pink',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/promo_pink.png'),
+    bg: '#FCE4EC',
+  },
+  {
+    id: 'american',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/promo_american.png'),
+    bg: '#E8F0FE',
+  },
+  {
+    id: 'nescafe',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/promo_nescafe.png'),
+    bg: '#4FC3F7',
+  },
 ]
 
 function PromoBannerSlider({ onPress }) {
@@ -434,7 +472,7 @@ function PromoBannerSlider({ onPress }) {
   const scrollRef = useRef(null)
   const pageRef = useRef(0)
   const bannerW = W - PAD * 2
-  const bannerH = 118
+  const bannerH = Math.round(bannerW * (232 / 800))
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -467,12 +505,48 @@ function PromoBannerSlider({ onPress }) {
               style={{
                 width: bannerW,
                 height: bannerH,
-                borderRadius: 14,
+                borderRadius: 16,
                 overflow: 'hidden',
                 backgroundColor: item.bg,
               }}
             >
-              <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+              {item.kind === 'bleed' ? (
+                <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+              ) : (
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flex: 1, paddingLeft: 18, paddingRight: 8, justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 20, fontWeight: '900', color: item.titleColor, letterSpacing: -0.3 }}>
+                      {item.title}
+                    </Text>
+                    <Text style={{ marginTop: 4, fontSize: 13, fontWeight: '700', color: item.subColor }}>{item.sub}</Text>
+                  </View>
+                  <View style={{ width: bannerW * 0.48, height: '100%', paddingVertical: 8, paddingRight: 8 }}>
+                    <Image source={item.image} style={{ width: '100%', height: '100%' }} resizeMode="contain" />
+                  </View>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      right: 12,
+                      bottom: 12,
+                      width: 34,
+                      height: 34,
+                      borderRadius: 17,
+                      backgroundColor: '#fff',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      borderColor: 'rgba(0,0,0,0.06)',
+                      shadowColor: '#000',
+                      shadowOpacity: 0.14,
+                      shadowRadius: 5,
+                      shadowOffset: { width: 0, height: 2 },
+                      elevation: 4,
+                    }}
+                  >
+                    <Text style={{ color: C.orange, fontWeight: '900', fontSize: 20, marginTop: -1 }}>+</Text>
+                  </View>
+                </View>
+              )}
             </SoftPress>
           </View>
         ))}
