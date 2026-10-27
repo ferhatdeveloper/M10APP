@@ -5,6 +5,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
+  Animated,
   Dimensions,
   Image,
   ScrollView,
@@ -14,6 +15,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Snowflake, Zap } from 'lucide-react-native'
 import SoftPress from '../components/SoftPress'
+import AddToCartButton from '../components/AddToCartButton'
 import TopBar from '../components/TopBar'
 import SearchField from '../components/SearchField'
 import { useApp } from '../context/AppContext'
@@ -60,29 +62,7 @@ const C = {
 const label = (p, lang) => p.names?.[lang] || p.names?.en || p.name || ''
 
 function AddBtn({ onPress, size = 32 }) {
-  return (
-    <SoftPress
-      onPress={onPress}
-      hitSlop={8}
-      style={{
-        width: size,
-        height: size,
-        borderRadius: size / 2,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderColor: 'rgba(0,0,0,0.06)',
-        shadowColor: '#000',
-        shadowOpacity: 0.14,
-        shadowRadius: 5,
-        shadowOffset: { width: 0, height: 2 },
-        elevation: 4,
-      }}
-    >
-      <Text style={{ color: C.orange, fontWeight: '900', fontSize: size * 0.55, marginTop: -1 }}>+</Text>
-    </SoftPress>
-  )
+  return <AddToCartButton onPress={onPress} size={size} color={C.orange} />
 }
 
 function SectionTitle({ title, action, onAction }) {
@@ -826,6 +806,27 @@ export default function HomeScreen({ navigation }) {
     return () => clearInterval(id)
   }, [])
 
+  const cartPulse = useRef(new Animated.Value(1)).current
+  const cartBadgePulse = useRef(new Animated.Value(1)).current
+  const prevCartCount = useRef(cartCount)
+  useEffect(() => {
+    if (cartCount > prevCartCount.current) {
+      cartPulse.setValue(1)
+      cartBadgePulse.setValue(1)
+      Animated.parallel([
+        Animated.sequence([
+          Animated.spring(cartPulse, { toValue: 1.06, friction: 3, tension: 220, useNativeDriver: true }),
+          Animated.spring(cartPulse, { toValue: 1, friction: 4, tension: 160, useNativeDriver: true }),
+        ]),
+        Animated.sequence([
+          Animated.spring(cartBadgePulse, { toValue: 1.45, friction: 3, tension: 240, useNativeDriver: true }),
+          Animated.spring(cartBadgePulse, { toValue: 1, friction: 4, tension: 160, useNativeDriver: true }),
+        ]),
+      ]).start()
+    }
+    prevCartCount.current = cartCount
+  }, [cartCount, cartPulse, cartBadgePulse])
+
   const brandW = 148
   const brandH = 200
   const logoTile = Math.floor((W - PAD * 2 - GAP * 3) / 4)
@@ -1119,12 +1120,13 @@ export default function HomeScreen({ navigation }) {
       </ScrollView>
 
       {cartCount > 0 ? (
-        <View
+        <Animated.View
           style={{
             position: 'absolute',
             left: 12,
             right: 12,
             bottom: Math.max(insets.bottom, 8) + 4,
+            transform: [{ scale: cartPulse }],
           }}
         >
           <SoftPress
@@ -1143,7 +1145,7 @@ export default function HomeScreen({ navigation }) {
               elevation: 10,
             }}
           >
-            <View
+            <Animated.View
               style={{
                 width: 36,
                 height: 36,
@@ -1151,10 +1153,11 @@ export default function HomeScreen({ navigation }) {
                 backgroundColor: 'rgba(0,0,0,0.22)',
                 alignItems: 'center',
                 justifyContent: 'center',
+                transform: [{ scale: cartBadgePulse }],
               }}
             >
               <Text style={{ color: '#fff', fontWeight: '900', fontSize: 15 }}>{cartCount}</Text>
-            </View>
+            </Animated.View>
             <Text style={{ flex: 1, textAlign: 'center', color: '#fff', fontWeight: '800', fontSize: 16 }}>
               {L.viewCart}
             </Text>
@@ -1169,7 +1172,7 @@ export default function HomeScreen({ navigation }) {
               ) : null}
             </View>
           </SoftPress>
-        </View>
+        </Animated.View>
       ) : null}
     </View>
   )

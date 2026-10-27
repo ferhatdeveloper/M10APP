@@ -1,11 +1,12 @@
 import { Alert, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { Camera, Plus, RefreshCw } from 'lucide-react-native'
+import { Camera, RefreshCw } from 'lucide-react-native'
 import { useApp } from '../context/AppContext'
 import { useI18n } from '../context/I18nContext'
 import { canTryInRoom, formatIQD, formatUnitPrice, getSubstitute, isInStock, productDesc, productName } from '../data/mock'
 import ProductImage from './ProductImage'
 import SoftPress from './SoftPress'
+import AddToCartButton from './AddToCartButton'
 import { colors, shadow } from '../theme'
 
 export default function ProductCard({ product, storeId, disabled, compact }) {
@@ -176,21 +177,25 @@ export default function ProductCard({ product, storeId, disabled, compact }) {
             ) : null}
           </View>
           {disabled ? null : qty === 0 ? (
-            <SoftPress
-              onPress={onAdd}
-              accessibilityLabel={t('add')}
-              style={{
-                width: addBtn,
-                height: addBtn,
-                borderRadius: addBtn / 2,
-                backgroundColor: inStock ? colors.red : colors.ink,
-                alignItems: 'center',
-                justifyContent: 'center',
-                ...shadow.soft,
-              }}
-            >
-              <Plus size={compact ? 14 : 16} color="#fff" strokeWidth={3} />
-            </SoftPress>
+            inStock ? (
+              <AddToCartButton onPress={onAdd} size={addBtn} color={colors.red} />
+            ) : (
+              <SoftPress
+                onPress={onAdd}
+                accessibilityLabel={t('add')}
+                style={{
+                  width: addBtn,
+                  height: addBtn,
+                  borderRadius: addBtn / 2,
+                  backgroundColor: colors.ink,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  ...shadow.soft,
+                }}
+              >
+                <Text style={{ color: '#fff', fontWeight: '900', fontSize: compact ? 14 : 16 }}>+</Text>
+              </SoftPress>
+            )
           ) : (
             <View
               style={{
