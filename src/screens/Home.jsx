@@ -193,39 +193,52 @@ function FlashSaleBlock({ title, endsInLabel, secondsLeft, isRTL, onPress, produ
   )
 }
 
-/** Flash Sale altı marka kartları — ürün kırmızı alanın üstünde (beyaz kutu yok) */
+/** Flash Sale altı marka kartları — Talabat: ürün turuncu/kırmızı tepe üstünde */
 function BrandCard({ item, w, h, onPress }) {
+  // Hazır kart asset’i varsa (Nescafe/Nada/Puck) birebir kullan
+  if (item.card) {
+    return (
+      <SoftPress
+        onPress={onPress}
+        style={{ width: w, height: h, marginRight: GAP, borderRadius: 18, overflow: 'hidden', backgroundColor: '#F3EEE6' }}
+      >
+        <Image source={item.card} style={{ width: w, height: h }} resizeMode="cover" />
+      </SoftPress>
+    )
+  }
+
+  const blobW = Math.round(w * 0.92)
+  const blobH = Math.round(h * 0.38)
   return (
     <SoftPress
       onPress={onPress}
-      style={{ width: w, height: h, marginRight: GAP, borderRadius: 20, overflow: 'hidden', backgroundColor: '#fff' }}
+      style={{ width: w, height: h, marginRight: GAP, borderRadius: 18, overflow: 'hidden', backgroundColor: '#F3EEE6' }}
     >
-      {/* Kırmızı “tepe” — ürünün arkasında / altında */}
-      <View
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: 48,
-          backgroundColor: C.red,
-          borderTopLeftRadius: 44,
-          borderTopRightRadius: 44,
-          zIndex: 1,
-        }}
-      />
       <Text style={{ position: 'absolute', top: 14, left: 14, zIndex: 3, fontSize: 17, fontWeight: '800', color: C.ink }}>
         {item.name}
       </Text>
-      {/* Ürün kırmızının üstüne biner; kart bg beyaz = JPEG beyazı kaybolur */}
+      {/* İçte turuncu tepe / pill — tam genişlik şerit değil */}
+      <View
+        style={{
+          position: 'absolute',
+          alignSelf: 'center',
+          left: (w - blobW) / 2,
+          bottom: -blobH * 0.22,
+          width: blobW,
+          height: blobH,
+          borderRadius: blobW / 2,
+          backgroundColor: item.accent || C.red,
+          zIndex: 1,
+        }}
+      />
       <Image
         source={item.image}
         style={{
           position: 'absolute',
-          left: 10,
-          right: 10,
-          top: 46,
-          bottom: 4,
+          left: 8,
+          right: 8,
+          top: 44,
+          bottom: blobH * 0.18,
           zIndex: 2,
         }}
         resizeMode="contain"
@@ -233,11 +246,11 @@ function BrandCard({ item, w, h, onPress }) {
       <View
         style={{
           position: 'absolute',
-          right: 14,
-          top: h * 0.42,
-          width: 9,
-          height: 9,
-          backgroundColor: C.lime,
+          right: 16,
+          top: h * 0.4,
+          width: 8,
+          height: 8,
+          backgroundColor: C.orange,
           transform: [{ rotate: '45deg' }],
           zIndex: 3,
         }}
