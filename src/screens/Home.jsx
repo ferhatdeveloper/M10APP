@@ -462,67 +462,38 @@ function DealPromoStrip({ onPress, lang }) {
 }
 
 /**
- * Tek slayt promo — ek banner asset’e bağımlı değil.
- * Migros ürün CDN + yerel net görseller + tasarlanmış hero kart.
+ * Tek slayt promo — marka banner’ları (Coca-Cola, Pınar, Pampers, Önlem…)
  */
 const PROMO_SLIDES = [
   {
-    id: 'bakery',
-    kind: 'hero',
-    images: [
-      { uri: 'https://images.migrosone.com/sanalmarket/product/05120000/05120000-a957e2.jpg' },
-      { uri: 'https://images.migrosone.com/sanalmarket/product/05052000/05052000-2d95e7.jpg' },
-    ],
-    bg: '#F3EDE4',
-    accent: C.red,
-    title: { tr: 'Fırın taze', en: 'Fresh bakery', ar: 'مخبوزات طازجة' },
-    sub: { tr: 'Her gün taze', en: 'Baked daily', ar: 'طازج يومياً' },
-    light: false,
+    id: 'coca-cola',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/brand-banners/coca-cola.jpg'),
+    bg: '#C8102E',
   },
   {
-    id: 'care',
-    kind: 'hero',
-    images: [
-      { uri: 'https://images.migrosone.com/sanalmarket/product/07070145/07070145-ef65f0.jpg' },
-      { uri: 'https://images.migrosone.com/sanalmarket/product/07070960/07070960-eeb67b.jpg' },
-    ],
-    bg: '#0A6CBA',
-    accent: '#fff',
-    title: { tr: 'Kişisel bakım', en: 'Feel fresh', ar: 'العناية الشخصية' },
-    sub: { tr: 'Tüm gün ferahlık', en: 'All day fresh', ar: 'انتعاش طوال اليوم' },
-    light: true,
+    id: 'pinar',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/brand-banners/pinar.jpg'),
+    bg: '#1565C0',
   },
   {
-    id: 'produce',
-    kind: 'hero',
-    images: [
-      { uri: 'https://images.migrosone.com/sanalmarket/product/27271000/27271000_1-25552e.jpg' },
-      { uri: 'https://images.migrosone.com/sanalmarket/product/28080000/28080000_1-c12d3b.jpg' },
-    ],
-    bg: '#E8F5E9',
-    accent: C.green,
-    title: { tr: 'Taze sebze & meyve', en: 'Fresh fruit & veg', ar: 'خضار وفواكه طازجة' },
-    sub: { tr: 'Her gün taze stok', en: 'Always fresh stock', ar: 'مخزون طازج دائماً' },
-    light: false,
+    id: 'pampers',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/brand-banners/pampers.jpg'),
+    bg: '#00A3E0',
+  },
+  {
+    id: 'onlem',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/brand-banners/onlem.jpg'),
+    bg: '#7B1FA2',
   },
   {
     id: 'nescafe',
     kind: 'bleed',
     image: nescafeBannerImg,
     bg: '#4FC3F7',
-  },
-  {
-    id: 'drinks',
-    kind: 'hero',
-    images: [
-      { uri: 'https://images.migrosone.com/sanalmarket/product/08010903/8010903_yan-2e2bcb.jpg' },
-      { uri: 'https://images.migrosone.com/sanalmarket/product/08059546/08059546_1-8fa892.jpg' },
-    ],
-    bg: '#FFEBEE',
-    accent: C.red,
-    title: { tr: 'İçecekler', en: 'Cold drinks', ar: 'مشروبات' },
-    sub: { tr: 'Serinleten fırsatlar', en: 'Chilled deals', ar: 'عروض منعشة' },
-    light: false,
   },
 ]
 
