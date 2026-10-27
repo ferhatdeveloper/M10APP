@@ -64,56 +64,63 @@ export const CATEGORIES_PAGE2 = [
   { id: 'oil', images: [M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'), M('https://images.migrosone.com/sanalmarket/product/14209387/14209387_1-77ff0a.jpg'), M('https://images.migrosone.com/sanalmarket/product/05010401/05010401_1-c4c14f.jpg')], image: M('https://images.migrosone.com/sanalmarket/product/05010402/5010402-c0b1a4.jpg'), names: { en: 'Oils & Sauces', tr: 'Yağ & Sos', ar: 'زيوت وصلصات' } },
 ]
 
-/** Shop by brand — Talabat squircle grid (yalnızca logo, ürün yok) */
+/** Shop by brand — Talabat squircle grid (referans ekrandaki logolar) */
 export const LOGO_BRANDS = [
-  {
-    id: 'lb_banetti',
-    name: 'Banetti',
-    color: '#FFFFFF',
-    image: require('../../assets/mart-clone/brand_banetti_sq.png'),
-    fill: true,
-  },
   {
     id: 'lb_maggi',
     name: 'Maggi',
     color: '#FFD000',
-    image: require('../../assets/mart-clone/brand-logos/maggi.png'),
+    image: require('../../assets/mart-clone/brand-logos/tile_maggi.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_johnwest',
+    name: 'John West',
+    color: '#1B4D3E',
+    image: require('../../assets/mart-clone/brand-logos/tile_johnwest.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_vaseline',
+    name: 'Vaseline',
+    color: '#F2F2F2',
+    image: require('../../assets/mart-clone/brand-logos/tile_vaseline.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_sanita',
+    name: 'Sanita',
+    color: '#FFFFFF',
+    image: require('../../assets/mart-clone/brand-logos/tile_sanita.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_indomie',
+    name: 'Indomie',
+    color: '#E02020',
+    image: require('../../assets/mart-clone/brand-logos/tile_indomie.png'),
+    fill: true,
+  },
+  {
+    id: 'lb_parex',
+    name: 'Parex',
+    color: '#FFFFFF',
+    image: require('../../assets/mart-clone/brand-logos/tile_parex.png'),
+    fill: true,
   },
   {
     id: 'lb_kinder',
     name: 'Kinder',
     color: '#F2F2F2',
-    image: require('../../assets/mart-clone/brand-logos/kinder.png'),
+    image: require('../../assets/mart-clone/brand-logos/tile_kinder.png'),
+    fill: true,
   },
   {
-    id: 'lb_nescafe',
-    name: 'Nescafe',
+    id: 'lb_nescafe_dg',
+    name: 'Nescafé Dolce Gusto',
     color: '#FFFFFF',
-    image: require('../../assets/mart-clone/brand-logos/nescafe.png'),
-  },
-  {
-    id: 'lb_coca',
-    name: 'Coca-Cola',
-    color: '#E02020',
-    image: require('../../assets/mart-clone/brand-logos/coca.png'),
-  },
-  {
-    id: 'lb_lipton',
-    name: 'Lipton',
-    color: '#F57F17',
-    image: require('../../assets/mart-clone/brand-logos/lipton.png'),
-  },
-  {
-    id: 'lb_pinar',
-    name: 'Pınar',
-    color: '#1565C0',
-    image: require('../../assets/mart-clone/brand-logos/pinar.png'),
-  },
-  {
-    id: 'lb_ulker',
-    name: 'Ülker',
-    color: '#6A1B9A',
-    image: require('../../assets/mart-clone/brand-logos/ulker.png'),
+    image: require('../../assets/mart-clone/brand-logos/tile_nescafe_dg.png'),
+    fill: true,
   },
 ]
 
@@ -170,6 +177,7 @@ export const BANETTI_PRODUCTS = [
 ]
 
 export const banettiBannerImg = require('../../assets/mart-clone/brand-banners/banetti-series.jpg')
+export const freshProduceBannerImg = require('../../assets/mart-clone/brand-banners/fresh-produce.jpg')
 
 /** Taze sebze & meyve — M10 her zaman taze stok vurgusu */
 export const BEST_SELLERS = [

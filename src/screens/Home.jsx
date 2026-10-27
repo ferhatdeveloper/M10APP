@@ -41,6 +41,7 @@ import {
   TOP_SAVERS,
   WORLD,
   banettiBannerImg,
+  freshProduceBannerImg,
 } from '../data/martCatalog'
 
 const { width: W } = Dimensions.get('window')
@@ -973,7 +974,7 @@ export default function HomeScreen({ navigation }) {
                   width: logoTile,
                   height: logoTile,
                   borderRadius: 22,
-                  backgroundColor: b.id === 'lb_banetti' ? '#FFFFFF' : b.color || '#F2F2F2',
+                  backgroundColor: b.color || '#FFFFFF',
                   alignItems: 'center',
                   justifyContent: 'center',
                   overflow: 'hidden',
@@ -983,7 +984,7 @@ export default function HomeScreen({ navigation }) {
                   source={b.image}
                   style={
                     b.fill
-                      ? { width: '100%', height: '100%', backgroundColor: '#FFFFFF' }
+                      ? { width: '100%', height: '100%' }
                       : { width: '72%', height: '72%' }
                   }
                   resizeMode={b.fill ? 'cover' : 'contain'}
@@ -997,21 +998,17 @@ export default function HomeScreen({ navigation }) {
           <SectionTitle title={L.world} />
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: PAD }}>
             {WORLD.map((w) => (
-              <SoftPress key={w.id} onPress={goStore} style={{ alignItems: 'center', marginRight: 16, width: 80 }}>
+              <SoftPress key={w.id} onPress={goStore} style={{ alignItems: 'center', marginRight: 16, width: 84 }}>
                 <View
                   style={{
-                    width: 72,
-                    height: 72,
+                    width: 76,
+                    height: 76,
                     borderRadius: 22,
-                    backgroundColor: '#fff',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    backgroundColor: w.bg || '#fff',
                     overflow: 'hidden',
-                    borderWidth: 1,
-                    borderColor: C.line,
                   }}
                 >
-                  <Image source={w.flagImg} style={{ width: 72, height: 72 }} resizeMode="cover" />
+                  <Image source={w.flagImg} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
                 </View>
                 <Text style={{ marginTop: 6, fontSize: 12, fontWeight: '700', color: C.ink }}>{label(w, lang)}</Text>
               </SoftPress>
@@ -1019,7 +1016,43 @@ export default function HomeScreen({ navigation }) {
           </ScrollView>
         </View>
 
-        <ProductRow title={L.best} action={L.viewAll} onAction={goStore} products={BEST_SELLERS} lang={lang} onAdd={onAdd} />
+        {/* Taze sebze & meyve — banner + ürün şeridi */}
+        <View style={{ marginTop: 22 }}>
+          <SoftPress
+            onPress={goStore}
+            style={{
+              marginHorizontal: PAD,
+              borderRadius: 16,
+              overflow: 'hidden',
+              backgroundColor: '#6FCF4A',
+            }}
+          >
+            <Image
+              source={freshProduceBannerImg}
+              style={{
+                width: W - PAD * 2,
+                height: Math.round((W - PAD * 2) * (606 / 1600)),
+              }}
+              resizeMode="stretch"
+            />
+          </SoftPress>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: PAD, paddingTop: 12 }}
+          >
+            {BEST_SELLERS.map((p, i) => (
+              <ProductChip
+                key={`fresh-${p.id}-${i}`}
+                product={p}
+                lang={lang}
+                onAdd={() => onAdd(p)}
+                width={118}
+                tileBg="#FFFFFF"
+              />
+            ))}
+          </ScrollView>
+        </View>
 
         {/* NESCAFÉ — banner + ürün şeridi */}
         <View style={{ marginTop: 22 }}>
