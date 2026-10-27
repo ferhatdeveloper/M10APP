@@ -485,38 +485,38 @@ function DealPromoStrip({ onPress, lang }) {
 }
 
 /**
- * Tek slayt promo — marka banner’ları (Coca-Cola, Pınar, Pampers, Önlem…)
+ * Tek slayt promo — NESCAFÉ serisi kalitesinde marka banner’ları
  */
 const PROMO_SLIDES = [
+  {
+    id: 'nescafe',
+    kind: 'bleed',
+    image: require('../../assets/mart-clone/brand-banners/nescafe-series.png'),
+    bg: '#4FC3F7',
+  },
   {
     id: 'coca-cola',
     kind: 'bleed',
     image: require('../../assets/mart-clone/brand-banners/coca-cola.jpg'),
-    bg: '#C8102E',
+    bg: '#B71C1C',
   },
   {
     id: 'pinar',
     kind: 'bleed',
     image: require('../../assets/mart-clone/brand-banners/pinar.jpg'),
-    bg: '#1565C0',
+    bg: '#0D47A1',
   },
   {
     id: 'pampers',
     kind: 'bleed',
     image: require('../../assets/mart-clone/brand-banners/pampers.jpg'),
-    bg: '#00A3E0',
+    bg: '#0277BD',
   },
   {
     id: 'onlem',
     kind: 'bleed',
     image: require('../../assets/mart-clone/brand-banners/onlem.jpg'),
-    bg: '#7B1FA2',
-  },
-  {
-    id: 'nescafe',
-    kind: 'bleed',
-    image: nescafeBannerImg,
-    bg: '#4FC3F7',
+    bg: '#6A1B9A',
   },
 ]
 
@@ -525,7 +525,8 @@ function PromoBannerSlider({ onPress, lang = 'tr' }) {
   const scrollRef = useRef(null)
   const pageRef = useRef(0)
   const bannerW = W - PAD * 2
-  const bannerH = Math.max(132, Math.round(bannerW * 0.36))
+  /** NESCAFÉ promo oranı (~800×206) */
+  const bannerH = Math.round(bannerW * (206 / 800))
 
   useEffect(() => {
     const id = setInterval(() => {
