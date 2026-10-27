@@ -68,8 +68,8 @@ WARM_PID=$!
 trap 'kill $WARM_PID 2>/dev/null || true' EXIT INT TERM
 
 if [ -n "${EXPO_TOKEN:-}" ]; then
+  # Expo getenv rejects empty EXPO_OFFLINE=""; must unset entirely.
   unset EXPO_OFFLINE || true
-  export EXPO_OFFLINE=
   echo "EXPO_OFFLINE unset (EXPO_TOKEN set — sign for iOS Expo Go 58)"
   # Mint/cache expo-root development cert before Metro (avoids unsigned iOS manifests)
   if [ -f scripts/prefetch-expo-codesigning.js ]; then

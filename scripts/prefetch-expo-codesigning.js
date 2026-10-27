@@ -12,8 +12,8 @@ async function main() {
     console.log('prefetch-expo-codesigning: no EXPO_TOKEN — skip')
     return
   }
+  // Empty string is not a valid boolean for Expo's getenv — must delete.
   delete process.env.EXPO_OFFLINE
-  process.env.EXPO_OFFLINE = ''
   process.env.CI = process.env.CI || '1'
   process.env.EXPO_NO_INTERACTIVE = '1'
 
