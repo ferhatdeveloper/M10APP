@@ -492,7 +492,7 @@ const PROMO_SLIDES = [
   {
     id: 'nescafe',
     kind: 'bleed',
-    image: require('../../assets/mart-clone/brand-banners/nescafe-series.png'),
+    image: require('../../assets/mart-clone/brand-banners/nescafe-series.jpg'),
     bg: '#4FC3F7',
   },
   {
@@ -526,8 +526,8 @@ function PromoBannerSlider({ onPress, lang = 'tr' }) {
   const scrollRef = useRef(null)
   const pageRef = useRef(0)
   const bannerW = W - PAD * 2
-  /** Daha yüksek banner — görseller okunaklı olsun (cover ile kırpılır) */
-  const bannerH = Math.max(156, Math.round(bannerW * 0.44))
+  /** Banner asset oranı 1600×704 — cover ile bire bir sığar */
+  const bannerH = Math.round(bannerW * (704 / 1600))
 
   useEffect(() => {
     const id = setInterval(() => {
