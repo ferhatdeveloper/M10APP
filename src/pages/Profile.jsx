@@ -13,6 +13,7 @@ import {
 import TopBar from '../components/TopBar.jsx'
 import Logo from '../components/Logo.jsx'
 import { useApp } from '../context/AppContext.jsx'
+import { useIsDesktop } from '../hooks/useIsDesktop.js'
 import { formatIQD } from '../data/mock.js'
 
 const LINKS = [
@@ -25,6 +26,77 @@ const LINKS = [
 
 export default function Profile() {
   const { user } = useApp()
+  const isDesktop = useIsDesktop()
+
+  if (isDesktop) {
+    return (
+      <div className="desktop-profile">
+        <div className="desktop-profile-layout">
+          <div className="desktop-profile-sidebar">
+            <div className="card" style={{ padding: 24 }}>
+              <div style={{ textAlign: 'center' }}>
+                <Logo size={80} />
+                <h1 className="h1" style={{ marginTop: 16, fontSize: 22 }}>{user.name}</h1>
+                <p className="muted">{user.phone}</p>
+                <div className="row" style={{ justifyContent: 'center', marginTop: 12, gap: 8 }}>
+                  <span className="gold-chip">{user.tier} tier</span>
+                  <span className="chip">{user.points.toLocaleString('ar-IQ')} نقطة</span>
+                </div>
+              </div>
+              <Link to="/rewards" className="btn btn-yellow full" style={{ marginTop: 20 }}>
+                استبدل نقاطك
+              </Link>
+            </div>
+          </div>
+
+          <div className="desktop-profile-main">
+            <h2 className="h2" style={{ marginBottom: 16 }}>الإعدادات</h2>
+            <div className="card" style={{ overflow: 'hidden' }}>
+              {LINKS.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link key={item.to} to={item.to} className="menu-link">
+                    <span className="menu-ico"><Icon size={18} /></span>
+                    <span style={{ flex: 1 }}>
+                      <span style={{ fontWeight: 800, display: 'block' }}>{item.label}</span>
+                      <span className="muted">{item.hint}</span>
+                    </span>
+                    <ChevronLeft size={18} color="#bbb" />
+                  </Link>
+                )
+              })}
+              <a href="mailto:support@m10.iq" className="menu-link">
+                <span className="menu-ico"><Headphones size={18} /></span>
+                <span style={{ flex: 1 }}>
+                  <span style={{ fontWeight: 800, display: 'block' }}>الدعم</span>
+                  <span className="muted">support@m10.iq</span>
+                </span>
+                <ChevronLeft size={18} color="#bbb" />
+              </a>
+            </div>
+
+            <div className="card menu-link" style={{ borderRadius: 16, marginTop: 16 }}>
+              <span className="menu-ico"><Languages size={18} /></span>
+              <span style={{ flex: 1 }}>
+                <span style={{ fontWeight: 800, display: 'block' }}>اللغة</span>
+                <span className="muted">العربية</span>
+              </span>
+            </div>
+
+            <button
+              type="button"
+              className="btn btn-ghost logout-btn"
+              style={{ marginTop: 24 }}
+              onClick={() => alert('تسجيل الخروج غير متاح في النسخة التجريبية.')}
+            >
+              <LogOut size={18} />
+              تسجيل الخروج
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>

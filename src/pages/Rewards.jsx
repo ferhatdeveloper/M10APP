@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { Check, Gift, Sparkles } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import { useApp } from '../context/AppContext.jsx'
+import { useIsDesktop } from '../hooks/useIsDesktop.js'
 import { rewards, formatIQD } from '../data/mock.js'
 
 export default function Rewards() {
   const { user, redeemReward } = useApp()
+  const isDesktop = useIsDesktop()
   const [pending, setPending] = useState(null)
   const [done, setDone] = useState(null)
 
@@ -15,6 +17,77 @@ export default function Rewards() {
     redeemReward(pending)
     setDone(pending)
     setPending(null)
+  }
+
+  const renderRewardCard = (r) => {
+    const enough = user.points >= r.cost
+    const selected = pending?.id === r.id
+    return (
+      <article key={r.id} className={`card card-body reward-card${selected ? ' on' : ''}`}>
+        <div className="between" style={{ alignItems: 'flex-start' }}>
+          <div className="row" style={{ gap: 10, alignItems: 'flex-start' }}>
+            <span className="menu-ico"><Gift size={18} /></span>
+            <div>
+              <div className="h2">{r.title}</div>
+              <p className="muted">{r.desc}</p>
+              <div className="chip" style={{ marginTop: 8 }}>
+                <Sparkles size={12} />
+                {r.cost.toLocaleString('ar-IQ')} نقطة
+              </div>
+            </div>
+          </div>
+        </div>
+        {selected ? (
+          <div className="row" style={{ marginTop: 12 }}>
+            <button type="button" className="btn" style={{ flex: 1 }} onClick={confirm}>تأكيد الاستبدال</button>
+            <button type="button" className="btn-ghost" onClick={() => setPending(null)}>إلغاء</button>
+          </div>
+        ) : (
+          <button type="button" className="btn" style={{ width: '100%', marginTop: 12 }} disabled={!enough} onClick={() => setPending(r)}>
+            {enough ? 'استبدل' : 'نقاط غير كافية'}
+          </button>
+        )}
+      </article>
+    )
+  }
+
+  if (isDesktop) {
+    return (
+      <div className="desktop-rewards">
+        <div className="desktop-rewards-layout">
+          <div className="desktop-rewards-sidebar">
+            <div className="card rewards-hero" style={{ padding: 24 }}>
+              <div className="muted">رصيدك</div>
+              <div className="h1" style={{ fontSize: 36, margin: '8px 0' }}>
+                {user.points.toLocaleString('ar-IQ')}
+                <span style={{ fontSize: 18, marginRight: 8 }}>نقطة</span>
+              </div>
+              <div className="row" style={{ marginTop: 8 }}>
+                <span className="gold-chip">{user.tier}</span>
+              </div>
+              <p className="muted" style={{ marginTop: 12 }}>كل {formatIQD(1000)} ≈ نقطة واحدة</p>
+            </div>
+          </div>
+
+          <div className="desktop-rewards-main">
+            {done && (
+              <div className="card card-body row" style={{ gap: 10, background: '#e8f8ee', marginBottom: 16 }}>
+                <Check size={20} color="#12803c" />
+                <div>
+                  <div style={{ fontWeight: 800, color: '#12803c' }}>تم الاستبدال</div>
+                  <div className="muted">{done.title} — سيظهر في طلبك القادم</div>
+                </div>
+              </div>
+            )}
+
+            <h2 className="h2" style={{ marginBottom: 16 }}>العروض المتاحة</h2>
+            <div className="stack" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
+              {rewards.map(renderRewardCard)}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -47,49 +120,7 @@ export default function Rewards() {
           <span className="h2">العروض المتاحة</span>
         </div>
 
-        {rewards.map((r) => {
-          const enough = user.points >= r.cost
-          const selected = pending?.id === r.id
-          return (
-            <article key={r.id} className={`card card-body reward-card${selected ? ' on' : ''}`}>
-              <div className="between" style={{ alignItems: 'flex-start' }}>
-                <div className="row" style={{ gap: 10, alignItems: 'flex-start' }}>
-                  <span className="menu-ico">
-                    <Gift size={18} />
-                  </span>
-                  <div>
-                    <div className="h2">{r.title}</div>
-                    <p className="muted">{r.desc}</p>
-                    <div className="chip" style={{ marginTop: 8 }}>
-                      <Sparkles size={12} />
-                      {r.cost.toLocaleString('ar-IQ')} نقطة
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {selected ? (
-                <div className="row" style={{ marginTop: 12 }}>
-                  <button type="button" className="btn" style={{ flex: 1 }} onClick={confirm}>
-                    تأكيد الاستبدال
-                  </button>
-                  <button type="button" className="btn-ghost" onClick={() => setPending(null)}>
-                    إلغاء
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  className="btn"
-                  style={{ width: '100%', marginTop: 12 }}
-                  disabled={!enough}
-                  onClick={() => setPending(r)}
-                >
-                  {enough ? 'استبدل' : 'نقاط غير كافية'}
-                </button>
-              )}
-            </article>
-          )
-        })}
+        {rewards.map(renderRewardCard)}
       </div>
     </>
   )
