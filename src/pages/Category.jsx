@@ -1,26 +1,9 @@
 import { Link, Navigate, useParams } from 'react-router'
 import { Store as StoreIcon } from 'lucide-react'
-import { useState, useEffect } from 'react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
+import { useIsDesktop } from '../hooks/useIsDesktop.js'
 import { categories, formatIQD, getProducts, stores, productName } from '../data/mock.js'
-
-const DESKTOP_BP = 900
-
-function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(
-    typeof window !== 'undefined' && window.innerWidth >= DESKTOP_BP
-  )
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const handleResize = () => setIsDesktop(window.innerWidth >= DESKTOP_BP)
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  return isDesktop
-}
 
 const hasOffer = (storeId) => getProducts(storeId).some((p) => p.oldPrice)
 

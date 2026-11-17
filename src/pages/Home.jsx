@@ -1,27 +1,10 @@
 import { Link } from 'react-router'
 import { Search, ShoppingBag, Star, ChevronLeft } from 'lucide-react'
-import { useState, useEffect } from 'react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
 import { useApp } from '../context/AppContext.jsx'
+import { useIsDesktop } from '../hooks/useIsDesktop.js'
 import { banners, categories, formatIQD, stores, getProducts } from '../data/mock.js'
-
-const DESKTOP_BP = 900
-
-function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(
-    typeof window !== 'undefined' && window.innerWidth >= DESKTOP_BP
-  )
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const handleResize = () => setIsDesktop(window.innerWidth >= DESKTOP_BP)
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  return isDesktop
-}
 
 const categoryHref = (id) => (id === 'butler' ? '/butler' : `/category/${id}`)
 

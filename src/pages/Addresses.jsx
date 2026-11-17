@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Check, MapPin, Plus } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import { useApp } from '../context/AppContext.jsx'
+import { useIsDesktop } from '../hooks/useIsDesktop.js'
 
 const persistAddresses = (next) => {
   try {
@@ -30,6 +31,7 @@ const emptyForm = { label: '', area: '', details: '', note: '' }
 
 export default function Addresses() {
   const { user, setUser, addresses, setAddresses } = useApp()
+  const isDesktop = useIsDesktop()
   const [form, setForm] = useState(emptyForm)
   const [open, setOpen] = useState(false)
 
@@ -61,86 +63,71 @@ export default function Addresses() {
     setOpen(false)
   }
 
+  const renderAddressCard = (addr, i) => {
+    const on = sameAddr(user.address, addr)
+    return (
+      <button
+        key={`${addr.label}-${i}`}
+        type="button"
+        className={`card card-body addr-card${on ? ' on' : ''}`}
+        onClick={() => select(addr)}
+      >
+        <div className="between" style={{ alignItems: 'flex-start' }}>
+          <div className="row" style={{ alignItems: 'flex-start', gap: 10 }}>
+            <MapPin size={20} color="#e01828" />
+            <div style={{ textAlign: 'right' }}>
+              <div className="h2">{addr.label}</div>
+              <div style={{ fontWeight: 700 }}>{addr.area}، {addr.city || 'بغداد'}</div>
+              <div className="muted">{addr.details}</div>
+              {addr.note && <div className="muted">{addr.note}</div>}
+            </div>
+          </div>
+          {on ? <span className="chip"><Check size={14} /> الحالي</span> : <span className="muted">اختيار</span>}
+        </div>
+      </button>
+    )
+  }
+
+  const renderForm = () => (
+    <form className="card card-body stack" onSubmit={add}>
+      <div className="h2">عنوان جديد</div>
+      <input className="input" placeholder="التسمية (المنزل، العمل…)" value={form.label} onChange={(e) => setForm({ ...form, label: e.target.value })} required />
+      <input className="input" placeholder="المنطقة (الكرادة، المنصور…)" value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })} required />
+      <input className="input" placeholder="التفاصيل: الشارع، البناية، الطابق" value={form.details} onChange={(e) => setForm({ ...form, details: e.target.value })} required />
+      <input className="input" placeholder="ملاحظة للكابتن (اختياري)" value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} />
+      <div className="row">
+        <button type="submit" className="btn" style={{ flex: 1 }}>حفظ واختيار</button>
+        <button type="button" className="btn-ghost" onClick={() => setOpen(false)}>إلغاء</button>
+      </div>
+    </form>
+  )
+
+  if (isDesktop) {
+    return (
+      <div className="desktop-page-card">
+        <h1 className="h1" style={{ fontSize: 24, marginBottom: 24 }}>العناوين</h1>
+        <div className="stack" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
+          {addresses.map(renderAddressCard)}
+        </div>
+        {open ? (
+          <div style={{ marginTop: 16, maxWidth: 500 }}>{renderForm()}</div>
+        ) : (
+          <button type="button" className="btn" style={{ marginTop: 16 }} onClick={() => setOpen(true)}>
+            <Plus size={18} /> إضافة عنوان
+          </button>
+        )}
+      </div>
+    )
+  }
+
   return (
     <>
       <TopBar title="العناوين" backTo="/profile" />
       <div className="page stack">
-        {addresses.map((addr, i) => {
-          const on = sameAddr(user.address, addr)
-          return (
-            <button
-              key={`${addr.label}-${i}`}
-              type="button"
-              className={`card card-body addr-card${on ? ' on' : ''}`}
-              onClick={() => select(addr)}
-            >
-              <div className="between" style={{ alignItems: 'flex-start' }}>
-                <div className="row" style={{ alignItems: 'flex-start', gap: 10 }}>
-                  <MapPin size={20} color="#e01828" />
-                  <div style={{ textAlign: 'right' }}>
-                    <div className="h2">{addr.label}</div>
-                    <div style={{ fontWeight: 700 }}>
-                      {addr.area}، {addr.city || 'بغداد'}
-                    </div>
-                    <div className="muted">{addr.details}</div>
-                    {addr.note ? <div className="muted">{addr.note}</div> : null}
-                  </div>
-                </div>
-                {on ? (
-                  <span className="chip">
-                    <Check size={14} /> الحالي
-                  </span>
-                ) : (
-                  <span className="muted">اختيار</span>
-                )}
-              </div>
-            </button>
-          )
-        })}
-
-        {open ? (
-          <form className="card card-body stack" onSubmit={add}>
-            <div className="h2">عنوان جديد</div>
-            <input
-              className="input"
-              placeholder="التسمية (المنزل، العمل…)"
-              value={form.label}
-              onChange={(e) => setForm({ ...form, label: e.target.value })}
-              required
-            />
-            <input
-              className="input"
-              placeholder="المنطقة (الكرادة، المنصور…)"
-              value={form.area}
-              onChange={(e) => setForm({ ...form, area: e.target.value })}
-              required
-            />
-            <input
-              className="input"
-              placeholder="التفاصيل: الشارع، البناية، الطابق"
-              value={form.details}
-              onChange={(e) => setForm({ ...form, details: e.target.value })}
-              required
-            />
-            <input
-              className="input"
-              placeholder="ملاحظة للكابتن (اختياري)"
-              value={form.note}
-              onChange={(e) => setForm({ ...form, note: e.target.value })}
-            />
-            <div className="row">
-              <button type="submit" className="btn" style={{ flex: 1 }}>
-                حفظ واختيار
-              </button>
-              <button type="button" className="btn-ghost" onClick={() => setOpen(false)}>
-                إلغاء
-              </button>
-            </div>
-          </form>
-        ) : (
+        {addresses.map(renderAddressCard)}
+        {open ? renderForm() : (
           <button type="button" className="btn" onClick={() => setOpen(true)}>
-            <Plus size={18} />
-            إضافة عنوان
+            <Plus size={18} /> إضافة عنوان
           </button>
         )}
       </div>
