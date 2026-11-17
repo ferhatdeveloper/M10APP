@@ -23,11 +23,15 @@ export default defineConfig({
       '@react-navigation/native',
       '@react-navigation/native-stack',
       '@react-navigation/bottom-tabs',
+      'react-native-safe-area-context',
+      'react-native-screens',
+      'react-native-gesture-handler',
     ],
   },
   resolve: {
     alias: {
       'react-native': 'react-native-web',
+      'react-native-safe-area-context': 'react-native-web',
     },
   },
   build: {
