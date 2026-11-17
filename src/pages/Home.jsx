@@ -1,9 +1,27 @@
 import { Link } from 'react-router'
-import { Search, ShoppingBag, Star } from 'lucide-react'
+import { Search, ShoppingBag, Star, ChevronLeft } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
 import { useApp } from '../context/AppContext.jsx'
-import { banners, categories, formatIQD, stores } from '../data/mock.js'
+import { banners, categories, formatIQD, stores, getProducts } from '../data/mock.js'
+
+const DESKTOP_BP = 900
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== 'undefined' && window.innerWidth >= DESKTOP_BP
+  )
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const handleResize = () => setIsDesktop(window.innerWidth >= DESKTOP_BP)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return isDesktop
+}
 
 const categoryHref = (id) => (id === 'butler' ? '/butler' : `/category/${id}`)
 
@@ -30,11 +48,156 @@ const itemWord = (n) => {
 
 export default function Home() {
   const { favorites, cartCount, cartTotal, cartStore } = useApp()
+  const isDesktop = useIsDesktop()
 
   const favStores = favorites
     .map((id) => stores.find((s) => s.id === id))
     .filter(Boolean)
   const nearbyStores = stores.filter((s) => !favorites.includes(s.id))
+
+  const dealProducts = stores
+    .filter(s => !s.comingSoon)
+    .flatMap(s => getProducts(s.id).filter(p => p.oldPrice).slice(0, 2))
+    .slice(0, 8)
+
+  if (isDesktop) {
+    return (
+      <div className="desktop-home">
+        <div className="banners">
+          {banners.map((b) => {
+            const imgSrc = b.id === 'b1' ? '/promo-banner.png' : b.image
+            const yellow = b.color === 'yellow'
+            return (
+              <Link
+                key={b.id}
+                to={bannerHref(b)}
+                className={`banner${imgSrc ? ' has-img' : ''}${yellow ? ' banner-yellow' : ''}`}
+              >
+                {imgSrc ? <img className="fly" src={imgSrc} alt={b.titleAr} /> : null}
+                <div className="banner-copy">
+                  <span
+                    className="chip"
+                    style={{
+                      marginBottom: 8,
+                      background: yellow ? '#fff' : 'rgba(255,255,255,0.2)',
+                      color: yellow ? '#e01828' : '#fff',
+                    }}
+                  >
+                    {bannerChip(b)}
+                  </span>
+                  <div className="h1">{b.titleAr}</div>
+                  <p style={{ opacity: 0.92, fontWeight: 600, marginTop: 4 }}>{b.subAr}</p>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
+
+        <div className="cats">
+          {categories.slice(0, 8).map((c) => (
+            <Link key={c.id} to={categoryHref(c.id)} className="cat">
+              <div
+                className={`cat-icon${c.id === 'offers' ? ' offer' : ''}${c.id === 'butler' ? ' butler' : ''}`}
+              >
+                {c.icon || '📦'}
+              </div>
+              <span>{c.nameAr || c.name || c.id}</span>
+            </Link>
+          ))}
+        </div>
+
+        {dealProducts.length > 0 && (
+          <section style={{ marginBottom: 32 }}>
+            <div className="section-title">
+              <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                🔥 عروض اليوم
+              </h2>
+              <Link to="/category/offers" className="muted" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                عرض الكل
+                <ChevronLeft size={16} />
+              </Link>
+            </div>
+            <div className="stack" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
+              {dealProducts.map((p, i) => (
+                <Link
+                  key={`${p.id}-${i}`}
+                  to={`/store/${p.storeId || stores[0].id}`}
+                  className="product-row"
+                  style={{ padding: 12 }}
+                >
+                  <div>
+                    <span className="chip" style={{ marginBottom: 6 }}>عرض</span>
+                    <div className="h2" style={{ fontSize: 14 }}>{p.nameAr || p.names?.ar || p.name}</div>
+                    <p className="muted" style={{ fontSize: 12 }}>{p.desc}</p>
+                    <div className="row" style={{ marginTop: 8 }}>
+                      <span className="price">{formatIQD(p.price)}</span>
+                      <span className="old-price">{formatIQD(p.oldPrice)}</span>
+                    </div>
+                  </div>
+                  <img src={p.image} alt={p.name} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 10 }} />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {favStores.length > 0 && (
+          <section style={{ marginBottom: 32 }}>
+            <div className="section-title">
+              <h2 className="h2 row" style={{ gap: 6 }}>
+                <Star size={18} fill="#f5c400" color="#f5c400" />
+                المفضلة
+              </h2>
+              <Link to="/favorites" className="muted" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                عرض الكل
+                <ChevronLeft size={16} />
+              </Link>
+            </div>
+            <div className="stack">
+              {favStores.map((store) => (
+                <StoreCard key={store.id} store={store} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section>
+          <div className="section-title">
+            <h2 className="h2">المتاجر القريبة</h2>
+            <span className="muted">{nearbyStores.length} متجر</span>
+          </div>
+          <div className="stack">
+            {nearbyStores.map((store) => (
+              <StoreCard key={store.id} store={store} />
+            ))}
+          </div>
+        </section>
+
+        {cartCount > 0 && (
+          <Link to="/cart" className="store-cart-bar">
+            <div>
+              <div className="row" style={{ gap: 6 }}>
+                <ShoppingBag size={16} />
+                <span>
+                  سلتك · {cartCount} {itemWord(cartCount)}
+                </span>
+              </div>
+              {cartStore ? (
+                <div style={{ color: '#bbb', fontSize: 12, fontWeight: 700, marginTop: 2 }}>
+                  {cartStore.name} · {formatIQD(cartTotal)}
+                </div>
+              ) : (
+                <div className="price" style={{ color: '#fff', marginTop: 2 }}>
+                  {formatIQD(cartTotal)}
+                </div>
+              )}
+            </div>
+            <span className="btn">عرض السلة</span>
+          </Link>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div>
