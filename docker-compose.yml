@@ -13,30 +13,14 @@ services:
     restart: unless-stopped
 
   # =============================================================
-  # m10-metro: Expo Metro dev server (Expo Go native bundle)
+  # m10-metro: Vite web build (desktop + mobile responsive)
   # =============================================================
-  # Traefik: https://metro.retailex.app:443 → 8081
-  # Host 8081 public (Android). QR: exp://metro.retailex.app
-  # EXFINPDKS compose kalıbı: --offline, 8081/19000/19001
-  # Not: soğuk/paralel hermes bundle Expo Go beyaz ekran üretir — start-metro.sh ısıtır.
+  # Domain: metro.retailex.app
+  # Traefik: https://metro.retailex.app:443 → 80
   m10-metro:
     build:
       context: .
       dockerfile: Dockerfile.metro
-    environment:
-      - CI=1
-      - EXPO_NO_TELEMETRY=1
-      - EXPO_NO_INTERACTIVE=1
-      - EXPO_NO_DOTENV=1
-      - EXPO_OFFLINE=1
-      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-      - PUBLIC_HOST=metro.retailex.app
-      - EXPO_PACKAGER_HOSTNAME=metro.retailex.app
-      - REACT_NATIVE_PACKAGER_HOSTNAME=metro.retailex.app
-      - EXPO_PACKAGER_PROXY_URL=https://metro.retailex.app:443
-      - EXPO_PORT=8081
     ports:
-      - "0.0.0.0:8081:8081"
-      - "0.0.0.0:19000:19000"
-      - "0.0.0.0:19001:19001"
+      - "0.0.0.0:8081:80"
     restart: unless-stopped
