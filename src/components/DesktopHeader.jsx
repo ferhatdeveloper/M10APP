@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router'
 import { Search, ShoppingCart, User, MapPin, Heart, ChevronDown, Globe, Grid3X3, ChevronLeft } from 'lucide-react'
 import { useApp } from '../context/AppContext.web.jsx'
 import { useI18n } from '../context/I18nContext.web.jsx'
-import { categories, formatIQD } from '../data/mock.web.js'
+import { categories, formatIQD, ui, getCategoryName } from '../data/mock.web.js'
 import m10Logo from '../assets/m10-logo.png'
 
 const languages = [
@@ -11,66 +11,6 @@ const languages = [
   { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
   { code: 'en', name: 'English', flag: '🇬🇧' },
 ]
-
-const ui = {
-  ar: {
-    search: 'ابحث في آلاف المنتجات...',
-    login: 'تسجيل الدخول',
-    register: 'إنشاء حساب',
-    orders: 'طلباتي',
-    favorites: 'المفضلة',
-    cart: 'سلة التسوق',
-    categories: 'التصنيفات',
-    offers: 'العروض',
-    meat: 'اللحوم',
-    ready: 'الدجاج',
-    drinks: 'المشروبات',
-    dairy: 'الألبان',
-    produce: 'الخضار والفواكه',
-    bakery: 'المخبوزات',
-    pantry: 'المؤن',
-    frozen: 'المجمدات',
-    household: 'التنظيف',
-  },
-  tr: {
-    search: 'Binlerce ürün içinde ara...',
-    login: 'Giriş Yap',
-    register: 'Üye Ol',
-    orders: 'Siparişlerim',
-    favorites: 'Favorilerim',
-    cart: 'Sepetim',
-    categories: 'Kategoriler',
-    offers: 'Kampanyalar',
-    meat: 'Et',
-    ready: 'Tavuk',
-    drinks: 'İçecekler',
-    dairy: 'Süt Ürünleri',
-    produce: 'Meyve & Sebze',
-    bakery: 'Fırın',
-    pantry: 'Temel Gıda',
-    frozen: 'Dondurulmuş',
-    household: 'Temizlik',
-  },
-  en: {
-    search: 'Search thousands of products...',
-    login: 'Sign In',
-    register: 'Register',
-    orders: 'My Orders',
-    favorites: 'Favorites',
-    cart: 'Cart',
-    categories: 'Categories',
-    offers: 'Offers',
-    meat: 'Meat',
-    ready: 'Chicken',
-    drinks: 'Drinks',
-    dairy: 'Dairy',
-    produce: 'Produce',
-    bakery: 'Bakery',
-    pantry: 'Pantry',
-    frozen: 'Frozen',
-    household: 'Household',
-  },
-}
 
 export default function DesktopHeader() {
   const { pathname } = useLocation()
@@ -192,7 +132,7 @@ export default function DesktopHeader() {
                     to={`/category/${cat.id}`}
                     onClick={() => setCatsOpen(false)}
                   >
-                    {t[cat.id] || cat.nameAr || cat.name}
+                    {getCategoryName(cat, lang)}
                     <ChevronLeft size={14} />
                   </Link>
                 ))}
@@ -202,16 +142,19 @@ export default function DesktopHeader() {
 
           {/* Nav Links */}
           <nav className="mgrs-nav-links">
-            {navCategories.map(id => (
-              <Link
-                key={id}
-                to={`/category/${id}`}
-                className={`${id === 'offers' ? 'hot' : ''} ${pathname === `/category/${id}` ? 'active' : ''}`}
-              >
-                {id === 'offers' && '🔥 '}
-                {t[id]}
-              </Link>
-            ))}
+            {navCategories.map(id => {
+              const cat = categories.find(c => c.id === id)
+              return (
+                <Link
+                  key={id}
+                  to={`/category/${id}`}
+                  className={`${id === 'offers' ? 'hot' : ''} ${pathname === `/category/${id}` ? 'active' : ''}`}
+                >
+                  {id === 'offers' && '🔥 '}
+                  {getCategoryName(cat, lang)}
+                </Link>
+              )
+            })}
           </nav>
         </div>
       </div>

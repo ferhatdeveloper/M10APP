@@ -2477,73 +2477,74 @@ button.radio {
   }
 
   /* ═══════════════════════════════════════════════════════════════════════════
-     M10 HOME PAGE - Metro Style (Clean, No Sidebar)
+     METRO STYLE HOME PAGE
      ═══════════════════════════════════════════════════════════════════════════ */
 
-  .m10-home {
+  .metro-home {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
   }
 
-  /* Flash Deals Banner */
-  .m10-flash {
+  /* Flash Deals Slider */
+  .metro-flash {
     margin-bottom: 24px;
   }
 
-  .m10-flash-bg {
+  .metro-flash-slide {
     background: linear-gradient(135deg, #e31e24 0%, #b71c1c 100%);
     border-radius: 16px;
-    padding: 40px;
+    padding: 50px 40px;
     position: relative;
     overflow: hidden;
   }
 
-  .m10-flash-bg::after {
+  .metro-flash-slide::before {
     content: '';
     position: absolute;
     top: -50%;
-    right: -20%;
-    width: 60%;
+    right: -10%;
+    width: 50%;
     height: 200%;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.08);
     transform: rotate(15deg);
   }
 
-  .m10-flash-content {
+  .metro-flash-content {
     position: relative;
     z-index: 1;
     color: #fff;
-    max-width: 500px;
+    max-width: 450px;
   }
 
-  .m10-flash-badge {
+  .metro-flash-badge {
     display: inline-block;
     background: rgba(255,255,255,0.2);
-    padding: 6px 14px;
+    padding: 8px 16px;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     margin-bottom: 16px;
   }
 
-  .m10-flash-content h1 {
-    font-size: 36px;
+  .metro-flash-content h1 {
+    font-size: 38px;
     font-weight: 900;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    line-height: 1.1;
   }
 
-  .m10-flash-content p {
+  .metro-flash-content p {
     font-size: 16px;
     opacity: 0.9;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
-  .m10-flash-btn {
+  .metro-flash-btn {
     display: inline-block;
     background: #fff;
     color: #e31e24;
-    padding: 12px 28px;
+    padding: 14px 32px;
     border-radius: 10px;
     font-size: 15px;
     font-weight: 800;
@@ -2551,28 +2552,26 @@ button.radio {
     transition: all 0.2s;
   }
 
-  .m10-flash-btn:hover {
+  .metro-flash-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
   }
 
-  /* Categories */
-  .m10-cats {
+  /* Categories Row */
+  .metro-cats {
     margin-bottom: 28px;
     overflow-x: auto;
     scrollbar-width: none;
   }
 
-  .m10-cats::-webkit-scrollbar {
-    display: none;
-  }
+  .metro-cats::-webkit-scrollbar { display: none; }
 
-  .m10-cats-scroll {
+  .metro-cats-scroll {
     display: flex;
     gap: 10px;
   }
 
-  .m10-cat {
+  .metro-cat {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2590,40 +2589,40 @@ button.radio {
     text-align: center;
   }
 
-  .m10-cat:hover {
+  .metro-cat:hover {
     border-color: #e31e24;
     background: #fef2f2;
   }
 
-  .m10-cat.hot {
+  .metro-cat.hot {
     background: #fef2f2;
     border-color: #fecaca;
   }
 
-  .m10-cat-icon {
+  .metro-cat-icon {
     font-size: 24px;
     line-height: 1;
   }
 
   /* Sections */
-  .m10-section {
-    margin-bottom: 32px;
+  .metro-section {
+    margin-bottom: 36px;
   }
 
-  .m10-section-head {
+  .metro-section-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 16px;
   }
 
-  .m10-section-head h2 {
+  .metro-section-head h2 {
     font-size: 20px;
     font-weight: 800;
     color: #222;
   }
 
-  .m10-section-head a {
+  .metro-section-head a {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -2633,12 +2632,10 @@ button.radio {
     font-weight: 600;
   }
 
-  .m10-section-head a:hover {
-    text-decoration: underline;
-  }
+  .metro-section-head a:hover { text-decoration: underline; }
 
   /* Products Row */
-  .m10-products-row {
+  .metro-products-row {
     display: flex;
     gap: 16px;
     overflow-x: auto;
@@ -2646,19 +2643,13 @@ button.radio {
     scrollbar-width: thin;
   }
 
-  .m10-products-row::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .m10-products-row::-webkit-scrollbar-thumb {
-    background: #ddd;
-    border-radius: 3px;
-  }
+  .metro-products-row::-webkit-scrollbar { height: 6px; }
+  .metro-products-row::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
 
   /* Product Card */
-  .m10-product {
-    min-width: 200px;
-    max-width: 200px;
+  .metro-product {
+    min-width: 180px;
+    max-width: 180px;
     background: #fff;
     border: 1px solid #eee;
     border-radius: 12px;
@@ -2667,113 +2658,224 @@ button.radio {
     transition: all 0.2s;
   }
 
-  .m10-product:hover {
+  .metro-product:hover {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     transform: translateY(-4px);
     border-color: #e31e24;
   }
 
-  .m10-product-badge {
+  .metro-product.compact {
+    min-width: 160px;
+    max-width: 160px;
+  }
+
+  .metro-product-badge {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 8px;
+    left: 8px;
     background: #e31e24;
     color: #fff;
-    padding: 4px 10px;
+    padding: 4px 8px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
     z-index: 2;
   }
 
-  .m10-product-img {
+  .metro-product-img {
     display: block;
-    position: relative;
     background: #fafafa;
+    position: relative;
   }
 
-  .m10-product-img::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    right: 10%;
-    height: 8px;
-    background: linear-gradient(to top, #e31e24, transparent);
-    border-radius: 50%;
-    opacity: 0.3;
-  }
-
-  .m10-product img {
+  .metro-product img {
     width: 100%;
-    height: 150px;
-    object-fit: contain;
-    padding: 10px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
   }
 
-  .m10-product-info {
-    padding: 14px;
-    border-top: 1px solid #f0f0f0;
+  .metro-product.compact img {
+    height: 110px;
   }
 
-  .m10-product-info h3 {
-    font-size: 14px;
-    font-weight: 700;
+  .metro-product-info {
+    padding: 12px;
+    position: relative;
+  }
+
+  .metro-product-info h3 {
+    font-size: 13px;
+    font-weight: 600;
     color: #222;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-right: 36px;
   }
 
-  .m10-product-cat {
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 10px;
-  }
-
-  .m10-product-price {
+  .metro-product-price {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 6px;
   }
 
-  .m10-product-price strong {
-    font-size: 16px;
+  .metro-product-price strong {
+    font-size: 14px;
     font-weight: 800;
-    color: #e31e24;
+    color: #222;
   }
 
-  .m10-product-price del {
-    font-size: 12px;
+  .metro-product-price del {
+    font-size: 11px;
     color: #aaa;
   }
 
-  .m10-add-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px;
+  .metro-add-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
     background: #e31e24;
     border: none;
-    border-radius: 8px;
+    border-radius: 50%;
     color: #fff;
-    font-size: 13px;
-    font-weight: 700;
+    display: grid;
+    place-items: center;
     cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(227, 30, 36, 0.3);
+  }
+
+  .metro-add-btn:hover {
+    background: #c41e24;
+    transform: scale(1.1);
+  }
+
+  /* Banner Section */
+  .metro-banner-section {
+    margin-bottom: 36px;
+  }
+
+  .metro-banner {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 180px;
+    margin-bottom: 16px;
+  }
+
+  .metro-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .metro-banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+  }
+
+  .metro-banner.green .metro-banner-overlay {
+    background: linear-gradient(90deg, rgba(76, 175, 80, 0.95) 0%, rgba(76, 175, 80, 0.7) 50%, transparent 100%);
+  }
+
+  .metro-banner.brown .metro-banner-overlay {
+    background: linear-gradient(90deg, rgba(107, 58, 32, 0.95) 0%, rgba(107, 58, 32, 0.7) 50%, transparent 100%);
+  }
+
+  .metro-banner-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    width: fit-content;
+  }
+
+  .metro-banner-logo {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .metro-banner-overlay h3 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    max-width: 300px;
+  }
+
+  .metro-banner-overlay p {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+
+  .metro-banner-products {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  /* Brands */
+  .metro-brands {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .metro-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #333;
+    min-width: 90px;
+    transition: transform 0.2s;
+  }
+
+  .metro-brand:hover {
+    transform: translateY(-4px);
+  }
+
+  .metro-brand-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 2px solid #eee;
     transition: all 0.2s;
   }
 
-  .m10-add-btn:hover {
-    background: #c41e24;
-    transform: scale(1.02);
+  .metro-brand:hover .metro-brand-logo {
+    border-color: currentColor;
+  }
+
+  .metro-brand span {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
   }
 
   /* Floating Cart */
-  .m10-float-cart {
+  .metro-float-cart {
     position: fixed;
     bottom: 20px;
     left: 50%;
@@ -2792,12 +2894,12 @@ button.radio {
     transition: all 0.2s;
   }
 
-  .m10-float-cart:hover {
+  .metro-float-cart:hover {
     transform: translateX(-50%) translateY(-4px);
     box-shadow: 0 12px 40px rgba(227, 30, 36, 0.6);
   }
 
-  .m10-float-count {
+  .metro-float-count {
     background: #fff;
     color: #e31e24;
     min-width: 24px;
@@ -2809,7 +2911,7 @@ button.radio {
     font-weight: 900;
   }
 
-  .m10-float-cart strong {
+  .metro-float-cart strong {
     background: rgba(255,255,255,0.2);
     padding: 6px 16px;
     border-radius: 20px;
