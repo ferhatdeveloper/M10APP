@@ -1318,12 +1318,13 @@ button.radio {
   /* Desktop Main Content */
   .desktop-main {
     flex: 1;
-    padding: 24px;
+    padding: 0;
     min-width: 0;
+    background: #fafafa;
   }
 
-  .desktop-main.with-sidebar {
-    padding-right: 24px;
+  .desktop-main.full-width {
+    max-width: 100%;
   }
 
   /* Override mobile styles for desktop */
@@ -2468,146 +2469,108 @@ button.radio {
   }
 
   /* ═══════════════════════════════════════════════════════════════════════════
-     MIGROS STYLE HOME PAGE
+     M10 HOME PAGE - Metro Style (Clean, No Sidebar)
      ═══════════════════════════════════════════════════════════════════════════ */
 
-  .mgs-home {
-    max-width: 1280px;
+  .m10-home {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
   }
 
-  /* Hero Slider */
-  .mgs-slider {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 16px;
+  /* Flash Deals Banner */
+  .m10-flash {
     margin-bottom: 24px;
   }
 
-  .mgs-slider-main {
+  .m10-flash-bg {
+    background: linear-gradient(135deg, #e31e24 0%, #b71c1c 100%);
+    border-radius: 16px;
+    padding: 40px;
     position: relative;
-    border-radius: 12px;
     overflow: hidden;
-    height: 320px;
   }
 
-  .mgs-slider-main img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .mgs-slider-content {
+  .m10-flash-bg::after {
+    content: '';
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 50%;
-    padding: 32px;
-    background: linear-gradient(to left, rgba(0,0,0,0.7), transparent);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    top: -50%;
+    right: -20%;
+    width: 60%;
+    height: 200%;
+    background: rgba(255,255,255,0.05);
+    transform: rotate(15deg);
+  }
+
+  .m10-flash-content {
+    position: relative;
+    z-index: 1;
     color: #fff;
+    max-width: 500px;
   }
 
-  .mgs-slider-badge {
-    background: #e31e24;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
+  .m10-flash-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
     font-weight: 700;
-    width: fit-content;
-    margin-bottom: 12px;
-  }
-
-  .mgs-slider-content h1 {
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 8px;
-  }
-
-  .mgs-slider-content p {
-    font-size: 14px;
-    opacity: 0.9;
     margin-bottom: 16px;
   }
 
-  .mgs-slider-btn {
-    background: #e31e24;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 700;
-    width: fit-content;
+  .m10-flash-content h1 {
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 10px;
   }
 
-  .mgs-slider-btn:hover {
-    background: #c41e24;
-  }
-
-  .mgs-slider-side {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .mgs-side-card {
-    flex: 1;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .mgs-side-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .mgs-side-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 16px;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    color: #fff;
-  }
-
-  .mgs-side-overlay span {
-    display: block;
+  .m10-flash-content p {
     font-size: 16px;
-    font-weight: 700;
+    opacity: 0.9;
+    margin-bottom: 20px;
   }
 
-  .mgs-side-overlay small {
-    font-size: 12px;
-    opacity: 0.8;
+  .m10-flash-btn {
+    display: inline-block;
+    background: #fff;
+    color: #e31e24;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.2s;
   }
 
-  /* Categories Row */
-  .mgs-cats {
-    margin-bottom: 24px;
+  .m10-flash-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  /* Categories */
+  .m10-cats {
+    margin-bottom: 28px;
     overflow-x: auto;
+    scrollbar-width: none;
   }
 
-  .mgs-cats-scroll {
+  .m10-cats::-webkit-scrollbar {
+    display: none;
+  }
+
+  .m10-cats-scroll {
     display: flex;
-    gap: 12px;
-    padding: 8px 0;
+    gap: 10px;
   }
 
-  .mgs-cat {
+  .m10-cat {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    padding: 12px 16px;
-    min-width: 90px;
+    padding: 14px 18px;
+    min-width: 85px;
     background: #fff;
     border: 1px solid #eee;
     border-radius: 12px;
@@ -2616,90 +2579,43 @@ button.radio {
     font-size: 12px;
     font-weight: 600;
     transition: all 0.2s;
+    text-align: center;
   }
 
-  .mgs-cat:hover {
+  .m10-cat:hover {
     border-color: #e31e24;
-    box-shadow: 0 4px 12px rgba(227, 30, 36, 0.1);
-  }
-
-  .mgs-cat-icon {
-    width: 44px;
-    height: 44px;
-    background: #f5f5f5;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    font-size: 22px;
-  }
-
-  .mgs-cat-icon.hot {
     background: #fef2f2;
   }
 
-  /* Campaign Banners */
-  .mgs-campaigns {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 32px;
+  .m10-cat.hot {
+    background: #fef2f2;
+    border-color: #fecaca;
   }
 
-  .mgs-camp {
-    padding: 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #fff;
-    transition: transform 0.2s;
-  }
-
-  .mgs-camp:hover {
-    transform: translateY(-4px);
-  }
-
-  .mgs-camp.red {
-    background: linear-gradient(135deg, #e31e24, #c41e24);
-  }
-
-  .mgs-camp.blue {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  }
-
-  .mgs-camp.gold {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-  }
-
-  .mgs-camp-text span {
-    display: block;
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .mgs-camp-text small {
-    font-size: 13px;
-    opacity: 0.9;
+  .m10-cat-icon {
+    font-size: 24px;
+    line-height: 1;
   }
 
   /* Sections */
-  .mgs-section {
+  .m10-section {
     margin-bottom: 32px;
   }
 
-  .mgs-section-head {
+  .m10-section-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 16px;
   }
 
-  .mgs-section-head h2 {
+  .m10-section-head h2 {
     font-size: 20px;
     font-weight: 800;
     color: #222;
   }
 
-  .mgs-section-head a {
+  .m10-section-head a {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -2709,37 +2625,32 @@ button.radio {
     font-weight: 600;
   }
 
-  .mgs-section-head a:hover {
+  .m10-section-head a:hover {
     text-decoration: underline;
   }
 
-  /* Products Row (Horizontal Scroll) */
-  .mgs-products {
+  /* Products Row */
+  .m10-products-row {
     display: flex;
     gap: 16px;
     overflow-x: auto;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
   }
 
-  .mgs-products::-webkit-scrollbar {
+  .m10-products-row::-webkit-scrollbar {
     height: 6px;
   }
 
-  .mgs-products::-webkit-scrollbar-thumb {
+  .m10-products-row::-webkit-scrollbar-thumb {
     background: #ddd;
     border-radius: 3px;
   }
 
-  /* Products Grid */
-  .mgs-products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-  }
-
   /* Product Card */
-  .mgs-product {
-    min-width: 180px;
+  .m10-product {
+    min-width: 200px;
+    max-width: 200px;
     background: #fff;
     border: 1px solid #eee;
     border-radius: 12px;
@@ -2748,40 +2659,56 @@ button.radio {
     transition: all 0.2s;
   }
 
-  .mgs-product:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  .m10-product:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     transform: translateY(-4px);
+    border-color: #e31e24;
   }
 
-  .mgs-product-badge {
+  .m10-product-badge {
     position: absolute;
     top: 10px;
     right: 10px;
     background: #e31e24;
     color: #fff;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 700;
-    z-index: 1;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    z-index: 2;
   }
 
-  .mgs-product-badge.pop {
-    background: #f59e0b;
+  .m10-product-img {
+    display: block;
+    position: relative;
+    background: #fafafa;
   }
 
-  .mgs-product img {
+  .m10-product-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 8px;
+    background: linear-gradient(to top, #e31e24, transparent);
+    border-radius: 50%;
+    opacity: 0.3;
+  }
+
+  .m10-product img {
     width: 100%;
-    height: 140px;
-    object-fit: cover;
-    background: #f8f8f8;
+    height: 150px;
+    object-fit: contain;
+    padding: 10px;
   }
 
-  .mgs-product-info {
-    padding: 12px;
+  .m10-product-info {
+    padding: 14px;
+    border-top: 1px solid #f0f0f0;
   }
 
-  .mgs-product-info h3 {
+  .m10-product-info h3 {
     font-size: 14px;
     font-weight: 700;
     color: #222;
@@ -2791,90 +2718,92 @@ button.radio {
     text-overflow: ellipsis;
   }
 
-  .mgs-product-info p {
+  .m10-product-cat {
     font-size: 12px;
     color: #888;
-    margin-bottom: 8px;
-  }
-
-  .mgs-product-price {
-    display: flex;
-    align-items: center;
-    gap: 8px;
     margin-bottom: 10px;
   }
 
-  .mgs-product-price strong {
-    font-size: 15px;
+  .m10-product-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .m10-product-price strong {
+    font-size: 16px;
+    font-weight: 800;
     color: #e31e24;
   }
 
-  .mgs-product-price del {
+  .m10-product-price del {
     font-size: 12px;
     color: #aaa;
   }
 
-  .mgs-add-btn {
+  .m10-add-btn {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
     padding: 10px;
-    background: #fff;
-    border: 2px solid #e31e24;
+    background: #e31e24;
+    border: none;
     border-radius: 8px;
-    color: #e31e24;
+    color: #fff;
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
   }
 
-  .mgs-add-btn:hover {
-    background: #e31e24;
-    color: #fff;
+  .m10-add-btn:hover {
+    background: #c41e24;
+    transform: scale(1.02);
   }
 
   /* Floating Cart */
-  .mgs-float-cart {
+  .m10-float-cart {
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     padding: 14px 28px;
-    background: #e31e24;
+    background: linear-gradient(135deg, #e31e24, #b71c1c);
     color: #fff;
     border-radius: 50px;
     text-decoration: none;
-    box-shadow: 0 8px 32px rgba(227, 30, 36, 0.4);
+    box-shadow: 0 8px 32px rgba(227, 30, 36, 0.5);
     z-index: 100;
     font-weight: 600;
+    transition: all 0.2s;
   }
 
-  .mgs-float-cart:hover {
+  .m10-float-cart:hover {
     transform: translateX(-50%) translateY(-4px);
-    box-shadow: 0 12px 40px rgba(227, 30, 36, 0.5);
+    box-shadow: 0 12px 40px rgba(227, 30, 36, 0.6);
   }
 
-  .mgs-float-count {
+  .m10-float-count {
     background: #fff;
     color: #e31e24;
-    min-width: 22px;
-    height: 22px;
+    min-width: 24px;
+    height: 24px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    font-size: 12px;
-    font-weight: 800;
+    font-size: 13px;
+    font-weight: 900;
   }
 
-  .mgs-float-cart strong {
+  .m10-float-cart strong {
     background: rgba(255,255,255,0.2);
-    padding: 6px 14px;
+    padding: 6px 16px;
     border-radius: 20px;
   }
 

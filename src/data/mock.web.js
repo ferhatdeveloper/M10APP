@@ -1,4 +1,5 @@
-/** M10 Market mock data - Web version (no require) */
+/** M10 Market mock data - Web version using kucoglu-menu.json */
+import menuData from './kucoglu-menu.json'
 
 export const KUCOGLU_STORE_ID = 'm10-market'
 export const DEFAULT_STORE_ID = 'm10-market'
@@ -27,9 +28,9 @@ export const productName = (p, lang = 'ar') => {
 export const stores = [
   {
     id: 'm10-market',
-    name: 'M10 Market',
-    nameEn: 'M10 Market',
-    nameTr: 'M10 Market',
+    name: menuData.store.name,
+    nameEn: menuData.store.nameEn,
+    nameTr: menuData.store.nameTr,
     category: 'offers',
     tags: ['سوبرماركت', 'Supermarket'],
     rating: 4.8,
@@ -38,239 +39,76 @@ export const stores = [
     fee: 2500,
     minOrder: 10000,
     status: 'open',
-    cover: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800',
-  },
-  {
-    id: 'fresh-market',
-    name: 'سوق الطازج',
-    nameEn: 'Fresh Market',
-    nameTr: 'Taze Market',
-    category: 'produce',
-    tags: ['خضار', 'فواكه'],
-    rating: 4.6,
-    reviews: 1800,
-    eta: '20-30',
-    fee: 2000,
-    minOrder: 8000,
-    status: 'open',
-    cover: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800',
+    cover: menuData.store.cover,
+    logo: menuData.store.logo,
+    city: menuData.store.city,
+    cityEn: menuData.store.cityEn,
+    area: menuData.store.area,
+    phone: menuData.store.phone,
   },
 ]
 
-const sampleProducts = [
-  { 
-    id: 'ko-meat-meal-rice', 
-    name: 'وجبة لحم مع رز', 
-    nameAr: 'وجبة لحم مع رز',
-    nameEn: 'Meat Meal & Rice',
-    nameTr: 'Et Yemek & Pilav',
-    price: 10000, 
-    oldPrice: 12500,
-    image: 'https://menu.kucoglu.restaurant/assets/branch/350070b98d6cc8dd7ade992217fac9317b0ddf16d085d80d914fb81c074ab1de.webp', 
-    aisle: 'meat',
-    desc: 'اللحوم',
-    popular: true
-  },
-  { 
-    id: 'ko-iskender', 
-    name: 'إسكندر', 
-    nameAr: 'إسكندر',
-    nameEn: 'Iskender',
-    nameTr: 'İskender',
-    price: 12000, 
-    oldPrice: 15000,
-    image: 'https://menu.kucoglu.restaurant/assets/branch/3b19aac4b3afc24912433b5abf30e098e31c6e71e3172e473679e07527d48b0f.webp', 
-    aisle: 'meat',
-    desc: 'اللحوم',
-    popular: true
-  },
-  { 
-    id: 'ko-meat-roll', 
-    name: 'رول لحم', 
-    nameAr: 'رول لحم',
-    nameEn: 'Meat Roll',
-    nameTr: 'Et Dürüm',
-    price: 4500, 
-    image: 'https://menu.kucoglu.restaurant/assets/branch/393ad472653dd16e59ae93a45b7e4a2411e613f97bb53e9ec7058a8858141452.webp', 
-    aisle: 'meat',
-    desc: 'اللحوم'
-  },
-  { 
-    id: 'ko-chicken-iskender', 
-    name: 'إسكندر دجاج', 
-    nameAr: 'إسكندر دجاج',
-    nameEn: 'Chicken Iskender',
-    nameTr: 'Tavuk İskender',
-    price: 10000, 
-    oldPrice: 12000,
-    image: 'https://menu.kucoglu.restaurant/assets/branch/d4b8bd5e55fd78ba731e32e2b31e0a1b1c3c5f3ec1d1f4a4b6a8c0e2d4f6a8c0.webp', 
-    aisle: 'ready',
-    desc: 'دجاج',
-    popular: true
-  },
-  { 
-    id: 'ko-chicken-roll', 
-    name: 'رول دجاج', 
-    nameAr: 'رول دجاج',
-    nameEn: 'Chicken Roll',
-    nameTr: 'Tavuk Dürüm',
-    price: 3500, 
-    image: 'https://menu.kucoglu.restaurant/assets/branch/e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2.webp', 
-    aisle: 'ready',
-    desc: 'دجاج'
-  },
-  { 
-    id: 'ko-ayran', 
-    name: 'عيران', 
-    nameAr: 'عيران',
-    nameEn: 'Ayran',
-    nameTr: 'Ayran',
-    price: 1500, 
-    image: 'https://images.unsplash.com/photo-1626201850129-a4a7cac0c06f?w=300', 
-    aisle: 'drinks',
-    desc: 'مشروبات'
-  },
-  { 
-    id: 'ko-cola', 
-    name: 'كولا', 
-    nameAr: 'كولا',
-    nameEn: 'Cola',
-    nameTr: 'Kola',
-    price: 2000, 
-    oldPrice: 2500,
-    image: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=300', 
-    aisle: 'drinks',
-    desc: 'مشروبات'
-  },
-  { 
-    id: 'ko-water', 
-    name: 'ماء', 
-    nameAr: 'ماء',
-    nameEn: 'Water',
-    nameTr: 'Su',
-    price: 500, 
-    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300', 
-    aisle: 'drinks',
-    desc: 'مشروبات'
-  },
-  { 
-    id: 'p-milk', 
-    name: 'حليب طازج', 
-    nameAr: 'حليب طازج',
-    nameEn: 'Fresh Milk',
-    nameTr: 'Taze Süt',
-    price: 2500, 
-    oldPrice: 3200,
-    image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300', 
-    aisle: 'dairy',
-    desc: '1 لتر - طازج يومياً'
-  },
-  { 
-    id: 'p-bread', 
-    name: 'خبز عربي', 
-    nameAr: 'خبز عربي',
-    nameEn: 'Arabic Bread',
-    nameTr: 'Arap Ekmeği',
-    price: 1500, 
-    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300', 
-    aisle: 'bakery',
-    desc: 'طازج من المخبز'
-  },
-  { 
-    id: 'p-tomato', 
-    name: 'طماطم طازجة', 
-    nameAr: 'طماطم طازجة',
-    nameEn: 'Fresh Tomatoes',
-    nameTr: 'Taze Domates',
-    price: 3000, 
-    oldPrice: 4000,
-    image: 'https://images.unsplash.com/photo-1546470427-227c7f3f5c71?w=300', 
-    aisle: 'produce',
-    desc: '1 كيلو - عضوي'
-  },
-  { 
-    id: 'p-rice', 
-    name: 'أرز بسمتي', 
-    nameAr: 'أرز بسمتي',
-    nameEn: 'Basmati Rice',
-    nameTr: 'Basmati Pirinç',
-    price: 8000, 
-    image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300', 
-    aisle: 'pantry',
-    desc: '2 كيلو - هندي أصلي'
-  },
-  { 
-    id: 'p-olive-oil', 
-    name: 'زيت زيتون', 
-    nameAr: 'زيت زيتون بكر',
-    nameEn: 'Olive Oil',
-    nameTr: 'Zeytinyağı',
-    price: 15000, 
-    oldPrice: 18000,
-    image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300', 
-    aisle: 'pantry',
-    desc: '500 مل - إسباني'
-  },
-  { 
-    id: 'p-eggs', 
-    name: 'بيض عضوي', 
-    nameAr: 'بيض عضوي',
-    nameEn: 'Organic Eggs',
-    nameTr: 'Organik Yumurta',
-    price: 6000, 
-    image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=300', 
-    aisle: 'dairy',
-    desc: '30 بيضة - مزرعة محلية'
-  },
-  { 
-    id: 'p-cheese', 
-    name: 'جبنة بيضاء', 
-    nameAr: 'جبنة بيضاء',
-    nameEn: 'White Cheese',
-    nameTr: 'Beyaz Peynir',
-    price: 7500, 
-    oldPrice: 9000,
-    image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=300', 
-    aisle: 'dairy',
-    desc: '500 غرام - محلي'
-  },
-  { 
-    id: 'p-orange', 
-    name: 'برتقال طازج', 
-    nameAr: 'برتقال طازج',
-    nameEn: 'Fresh Oranges',
-    nameTr: 'Taze Portakal',
-    price: 5000, 
-    image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=300', 
-    aisle: 'produce',
-    desc: '1 كيلو'
-  },
-]
+const rawProducts = menuData.products.map(p => ({
+  id: p.id,
+  name: p.name,
+  nameAr: p.names?.ar || p.name,
+  nameEn: p.names?.en || p.name,
+  nameTr: p.names?.tr || p.name,
+  names: p.names,
+  price: p.price,
+  oldPrice: p.popular ? Math.round(p.price * 1.25) : null,
+  image: p.image,
+  images: p.images,
+  aisle: p.aisle,
+  category: p.category,
+  categoryAr: p.categoryAr,
+  desc: p.descs?.ar || p.desc,
+  descs: p.descs,
+  popular: p.popular,
+  variants: p.variants,
+  unit: p.unit,
+  stock: p.stock,
+  brand: p.brand,
+}))
 
 export const getStore = (id) => stores.find(s => s.id === id) || stores[0]
 
-export const getProducts = (storeId) => sampleProducts
+export const getProducts = (storeId) => rawProducts
 
-export const getProduct = (storeId, productId) => sampleProducts.find(p => p.id === productId)
+export const getProductsByCategory = (categoryId) => {
+  if (categoryId === 'offers') return rawProducts.filter(p => p.popular || p.oldPrice)
+  return rawProducts.filter(p => p.aisle === categoryId || p.category?.toLowerCase() === categoryId)
+}
+
+export const getProduct = (storeId, productId) => rawProducts.find(p => p.id === productId)
 
 export const categories = [
-  { id: 'offers', name: 'العروض', nameAr: 'العروض', nameEn: 'Offers' },
-  { id: 'meat', name: 'اللحوم', nameAr: 'اللحوم', nameEn: 'Meat' },
-  { id: 'dairy', name: 'الألبان', nameAr: 'الألبان', nameEn: 'Dairy' },
-  { id: 'produce', name: 'خضار وفواكه', nameAr: 'خضار وفواكه', nameEn: 'Produce' },
-  { id: 'bakery', name: 'المخبوزات', nameAr: 'المخبوزات', nameEn: 'Bakery' },
-  { id: 'pantry', name: 'المؤن', nameAr: 'المؤن', nameEn: 'Pantry' },
-  { id: 'drinks', name: 'المشروبات', nameAr: 'المشروبات', nameEn: 'Drinks' },
-  { id: 'snacks', name: 'وجبات خفيفة', nameAr: 'وجبات خفيفة', nameEn: 'Snacks' },
-  { id: 'frozen', name: 'المجمدات', nameAr: 'المجمدات', nameEn: 'Frozen' },
-  { id: 'household', name: 'تنظيف', nameAr: 'تنظيف', nameEn: 'Household' },
-  { id: 'personal', name: 'العناية الشخصية', nameAr: 'العناية', nameEn: 'Personal Care' },
+  { id: 'offers', name: 'العروض', nameAr: 'العروض', nameEn: 'Offers', nameTr: 'Kampanyalar', icon: '🔥' },
+  { id: 'meat', name: 'اللحوم', nameAr: 'اللحوم', nameEn: 'Meat', nameTr: 'Et', icon: '🥩' },
+  { id: 'ready', name: 'الدجاج', nameAr: 'الدجاج', nameEn: 'Chicken', nameTr: 'Tavuk', icon: '🍗' },
+  { id: 'drinks', name: 'المشروبات', nameAr: 'المشروبات', nameEn: 'Drinks', nameTr: 'İçecekler', icon: '🥤' },
+  { id: 'dairy', name: 'الألبان', nameAr: 'ألبان وبيض', nameEn: 'Dairy & Eggs', nameTr: 'Süt Ürünleri', icon: '🥛' },
+  { id: 'produce', name: 'خضار وفواكه', nameAr: 'خضار وفواكه', nameEn: 'Vegetables & Fruits', nameTr: 'Sebze & Meyve', icon: '🥬' },
+  { id: 'bakery', name: 'المخبوزات', nameAr: 'خبز ومخبز', nameEn: 'Bread & Bakery', nameTr: 'Ekmek & Fırın', icon: '🥖' },
+  { id: 'pantry', name: 'المؤن', nameAr: 'مواد غذائية', nameEn: 'Grocery', nameTr: 'Temel Gıda', icon: '🫙' },
+  { id: 'frozen', name: 'المجمدات', nameAr: 'المجمدات', nameEn: 'Frozen', nameTr: 'Dondurulmuş', icon: '❄️' },
+  { id: 'snacks', name: 'سناكات', nameAr: 'سناكات', nameEn: 'Snacks', nameTr: 'Atıştırmalık', icon: '🍿' },
+  { id: 'household', name: 'تنظيف', nameAr: 'تنظيف', nameEn: 'Cleaning', nameTr: 'Temizlik', icon: '🧹' },
+  { id: 'personal', name: 'العناية', nameAr: 'عناية شخصية', nameEn: 'Personal Care', nameTr: 'Kişisel Bakım', icon: '🧴' },
+  { id: 'home', name: 'المنزل', nameAr: 'إكسسوارات المنزل', nameEn: 'Home', nameTr: 'Ev Aksesuarları', icon: '🏠' },
 ]
 
+export const getCategoryName = (cat, lang = 'ar') => {
+  if (!cat) return ''
+  if (lang === 'tr') return cat.nameTr || cat.nameEn || cat.name
+  if (lang === 'en') return cat.nameEn || cat.name
+  return cat.nameAr || cat.name
+}
+
 export const banners = [
-  { id: 'b1', title: 'عروض الأسبوع', image: 'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=600', color: '#e01828' },
-  { id: 'b2', title: 'منتجات طازجة', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600', color: '#2e7d32' },
-  { id: 'b3', title: 'توصيل سريع', image: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=600', color: '#1565c0' },
+  { id: 'b1', title: 'عروض الأسبوع', titleEn: 'Weekly Offers', titleTr: 'Haftalık Kampanyalar', image: menuData.store.cover, color: '#e01828' },
+  { id: 'b2', title: 'منتجات طازجة', titleEn: 'Fresh Products', titleTr: 'Taze Ürünler', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600', color: '#2e7d32' },
+  { id: 'b3', title: 'توصيل سريع', titleEn: 'Fast Delivery', titleTr: 'Hızlı Teslimat', image: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=600', color: '#1565c0' },
 ]
 
 export const rewards = [
@@ -281,13 +119,13 @@ export const rewards = [
 
 export const user = {
   name: 'مستخدم M10',
-  phone: '0770 123 4567',
+  phone: '+9647509703030',
   points: 2500,
   tier: 'Gold',
   address: {
     label: 'المنزل',
-    city: 'بغداد',
-    area: 'المنصور',
-    details: 'شارع 14 رمضان',
+    city: menuData.store.city,
+    area: menuData.store.area,
+    details: 'Ashty Road',
   },
 }
