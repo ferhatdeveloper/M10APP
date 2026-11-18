@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router'
 import { Search, ShoppingCart, User, MapPin, Heart, Package, ChevronDown } from 'lucide-react'
-import { useApp } from '../context/AppContext.jsx'
-import { categories, formatIQD, DEFAULT_STORE_ID, storeName } from '../data/mock.js'
+import { useApp } from '../context/AppContext.web.jsx'
+import { categories, formatIQD, DEFAULT_STORE_ID, storeName } from '../data/mock.web.js'
 import Logo from './Logo.jsx'
 
 export default function DesktopHeader() {

@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { MapPin, Phone, Wallet, Bike, Home, Package } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
-import { useApp } from '../context/AppContext.jsx'
-import { getStore, getProduct, formatIQD } from '../data/mock.js'
+import { useApp } from '../context/AppContext.web.jsx'
+import { getStore, getProduct, formatIQD } from '../data/mock.web.js'
 import { orderStep } from './Orders.jsx'
 
 const STEPS = [

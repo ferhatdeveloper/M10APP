@@ -1,6 +1,6 @@
 import { Bell, Menu, Moon, Search, Sun } from 'lucide-react-native'
 import { Pressable, Text, TextInput, View } from 'react-native'
-import { useI18n } from '../../context/I18nContext'
+import { useI18n } from '../../context/I18nContext.web.jsx'
 
 export default function AdminTopbar({ theme, onOpenSidebar, onOpenNotifications, unreadCount, onToggleTheme }) {
   const c = theme.colors

@@ -7,7 +7,7 @@ import SearchField from '../components/SearchField'
 import StoreCard from '../components/StoreCard'
 import ProductImage from '../components/ProductImage'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { collections, formatIQD, getNearestStore, productName, searchCatalog, storeName } from '../data/mock'
 import { colors, radius, shadow } from '../theme'
 

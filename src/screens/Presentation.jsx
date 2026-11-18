@@ -26,7 +26,7 @@ import PhoneMockup, {
   MockStore,
   MockTracking,
 } from '../components/PhoneMockup'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { colors, radius, shadow } from '../theme'
 import { PRESENTATION_META, PRESENTATION_SLIDES, PRESENTATION_TOTAL } from '../data/presentation'
 

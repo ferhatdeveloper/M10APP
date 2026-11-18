@@ -1,9 +1,9 @@
 import { Link } from 'react-router'
 import { Package, RotateCcw, ShoppingBag } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { getStore, formatIQD, getProduct } from '../data/mock.js'
+import { getStore, formatIQD, getProduct } from '../data/mock.web.js'
 
 const STEPS = ['تم التأكيد', 'يحضّر الطلب', 'في الطريق', 'تم التوصيل']
 

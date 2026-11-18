@@ -3,7 +3,7 @@ import { ActivityIndicator, View } from 'react-native'
 import { Sparkles } from 'lucide-react-native'
 import SectionHeader from '../components/SectionHeader'
 import { useApp } from '../../../context/AppContext'
-import { useI18n } from '../../../context/I18nContext'
+import { useI18n } from '../../../context/I18nContext.web.jsx'
 
 const AdminAIInner = lazy(() => import('../../AdminAI'))
 

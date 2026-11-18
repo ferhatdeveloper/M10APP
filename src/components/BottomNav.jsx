@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router'
 import { Home, Search, Receipt, Heart, User } from 'lucide-react'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 
 const items = [
   { to: '/', icon: Home, label: 'الرئيسية', end: true },

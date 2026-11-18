@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react'
 import { Animated, Pressable, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Bell } from 'lucide-react-native'
-import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
-import { notifBody, notifTitle } from '../data/mock'
+import { useApp } from '../context/AppContext.web.jsx'
+import { useI18n } from '../context/I18nContext.web.jsx'
+import { notifBody, notifTitle } from '../data/mock.web.js'
 import { colors } from '../theme'
 
 export default function InAppToast({ navigationRef }) {

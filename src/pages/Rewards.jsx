@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Check, Gift, Sparkles } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { rewards, formatIQD } from '../data/mock.js'
+import { rewards, formatIQD } from '../data/mock.web.js'
 
 export default function Rewards() {
   const { user, redeemReward } = useApp()

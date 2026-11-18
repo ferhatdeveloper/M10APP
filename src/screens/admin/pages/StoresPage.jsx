@@ -3,7 +3,7 @@ import { Pressable, Text, TextInput, View } from 'react-native'
 import { Clock, DollarSign, MapPin, Phone, Save, Store as StoreIcon } from 'lucide-react-native'
 import { useApp } from '../../../context/AppContext'
 import { storeName } from '../../../data/mock'
-import { useI18n } from '../../../context/I18nContext'
+import { useI18n } from '../../../context/I18nContext.web.jsx'
 import SectionHeader from '../components/SectionHeader'
 
 export default function StoresPage({ theme, isRTL }) {

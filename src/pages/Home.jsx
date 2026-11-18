@@ -2,9 +2,9 @@ import { Link } from 'react-router'
 import { Search, ShoppingBag, Star, ChevronLeft } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { banners, categories, formatIQD, stores, getProducts } from '../data/mock.js'
+import { banners, categories, formatIQD, stores, getProducts } from '../data/mock.web.js'
 
 const categoryHref = (id) => (id === 'butler' ? '/butler' : `/category/${id}`)
 

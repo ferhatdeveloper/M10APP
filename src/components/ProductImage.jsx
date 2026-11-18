@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Image } from 'react-native'
-import { aisleFallback, fallbackProductImg, src } from '../utils/images'
+import { aisleFallback, fallbackProductImg, src } from '../utils/images.web.js'
 
 /**
  * Product photo with onError safety net — never leaves a blank gray box.

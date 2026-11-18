@@ -4,7 +4,7 @@ import { ChefHat, Clock, Play, ShoppingCart } from 'lucide-react-native'
 import TopBar from '../components/TopBar'
 import SoftPress from '../components/SoftPress'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import {
   formatIQD,
   listTitle,

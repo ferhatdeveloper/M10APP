@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native'
 import { WifiOff } from 'lucide-react-native'
-import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useApp } from '../context/AppContext.web.jsx'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { colors } from '../theme'
 
 export default function OfflineBanner() {

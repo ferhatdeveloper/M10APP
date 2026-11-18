@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react'
 import { Banknote, ChevronLeft, Clock3, CreditCard, MapPin } from 'lucide-react'
 import { Link, useNavigate } from 'react-router'
 import TopBar from '../components/TopBar.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { formatIQD, getProduct } from '../data/mock.js'
+import { formatIQD, getProduct } from '../data/mock.web.js'
 
 function buildSlots() {
   const slots = []

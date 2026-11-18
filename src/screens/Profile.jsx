@@ -25,7 +25,7 @@ import TopBar from '../components/TopBar'
 import SoftPress from '../components/SoftPress'
 import Logo from '../components/Logo'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { colors, shadow } from '../theme'
 
 function MenuRow({ icon: Icon, label, hint, onPress, isRTL, last }) {

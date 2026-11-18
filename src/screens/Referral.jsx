@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Gift, Share2 } from 'lucide-react-native'
 import TopBar from '../components/TopBar'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { REFERRAL_BONUS, REFERRAL_REDEEM_BONUS } from '../data/mock'
 import { colors } from '../theme'
 

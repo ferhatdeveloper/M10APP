@@ -3,7 +3,7 @@ import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ChevronDown, ChevronUp, Headphones, Mail, MessageCircle, Phone } from 'lucide-react-native'
 import TopBar from '../components/TopBar'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { supportFaqs } from '../data/mock'
 import { colors, radius } from '../theme'
 

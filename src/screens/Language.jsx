@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import Logo from '../components/Logo'
 import { colors } from '../theme'
 

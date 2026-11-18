@@ -1,5 +1,5 @@
 import { Link, useLocation, useParams } from 'react-router'
-import { categories } from '../data/mock.js'
+import { categories } from '../data/mock.web.js'
 import { 
   Beef, Drumstick, GlassWater, Milk, Apple, Croissant, 
   Package, Cookie, Snowflake, Sparkles, Home, User, Gift

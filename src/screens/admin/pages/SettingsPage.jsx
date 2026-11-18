@@ -1,7 +1,7 @@
 import { Alert, Pressable, Switch, Text, View } from 'react-native'
 import { Bell, Download, Globe, Lock, Moon, Trash2, Upload } from 'lucide-react-native'
 import { useApp } from '../../../context/AppContext'
-import { useI18n } from '../../../context/I18nContext'
+import { useI18n } from '../../../context/I18nContext.web.jsx'
 import useAdminTheme from '../hooks/useAdminTheme'
 import SectionHeader from '../components/SectionHeader'
 
