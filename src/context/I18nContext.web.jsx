@@ -1,29 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { dictionaries, LANGS, t as translate } from '../i18n'
 
 const I18nContext = createContext(null)
-
-// Simple Arabic translations for web
-const translations = {
-  ar: {
-    // Add any needed translations here
-  }
-}
-
-const LANGS = [
-  { code: 'ar', name: 'العربية', nameEn: 'Arabic' },
-  { code: 'en', name: 'English', nameEn: 'English' },
-  { code: 'tr', name: 'Türkçe', nameEn: 'Turkish' },
-]
-
-const t = (dict, key, vars) => {
-  let str = dict[key] || key
-  if (vars) {
-    Object.keys(vars).forEach(k => {
-      str = str.replace(`{${k}}`, vars[k])
-    })
-  }
-  return str
-}
 
 export function I18nProvider({ children }) {
   const [lang, setLangState] = useState('ar')
@@ -47,20 +25,21 @@ export function I18nProvider({ children }) {
 
   useEffect(() => {
     const savedLang = localStorage.getItem('m10-lang')
-    if (savedLang) setLangState(savedLang)
+    if (savedLang && dictionaries[savedLang]) setLangState(savedLang)
     const savedDir = localStorage.getItem('m10-dir')
     if (savedDir) setDirModeState(savedDir)
   }, [])
 
-  const dict = translations[lang] || translations.ar
+  const dict = dictionaries[lang] || dictionaries.ar
   const langIsRTL = lang === 'ar' || lang === 'ckb'
   const isRTL = dirMode === 'rtl' ? true : dirMode === 'ltr' ? false : langIsRTL
+  const t = (key, vars) => translate(dict, key, vars)
 
   const value = useMemo(
     () => ({
       lang,
       setLang,
-      t: (key, vars) => t(dict, key, vars),
+      t,
       isRTL,
       dirMode,
       setDirMode,
