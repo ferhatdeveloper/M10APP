@@ -45,137 +45,126 @@ export default function Home() {
 
   if (isDesktop) {
     return (
-      <div className="desktop-home">
-        <div className="banners">
-          {banners.map((b) => {
-            const imgSrc = b.id === 'b1' ? '/promo-banner.png' : b.image
-            const yellow = b.color === 'yellow'
-            return (
-              <Link
-                key={b.id}
-                to={bannerHref(b)}
-                className={`banner${imgSrc ? ' has-img' : ''}${yellow ? ' banner-yellow' : ''}`}
-              >
-                {imgSrc ? <img className="fly" src={imgSrc} alt={b.titleAr} /> : null}
-                <div className="banner-copy">
-                  <span
-                    className="chip"
-                    style={{
-                      marginBottom: 8,
-                      background: yellow ? '#fff' : 'rgba(255,255,255,0.2)',
-                      color: yellow ? '#e01828' : '#fff',
-                    }}
-                  >
-                    {bannerChip(b)}
-                  </span>
-                  <div className="h1">{b.titleAr}</div>
-                  <p style={{ opacity: 0.92, fontWeight: 600, marginTop: 4 }}>{b.subAr}</p>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-
-        <div className="cats">
-          {categories.slice(0, 8).map((c) => (
-            <Link key={c.id} to={categoryHref(c.id)} className="cat">
-              <div
-                className={`cat-icon${c.id === 'offers' ? ' offer' : ''}${c.id === 'butler' ? ' butler' : ''}`}
-              >
-                {c.icon || '📦'}
-              </div>
-              <span>{c.nameAr || c.name || c.id}</span>
-            </Link>
-          ))}
-        </div>
-
-        {dealProducts.length > 0 && (
-          <section style={{ marginBottom: 32 }}>
-            <div className="section-title">
-              <h2 className="h2" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                🔥 عروض اليوم
-              </h2>
-              <Link to="/category/offers" className="muted" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                عرض الكل
-                <ChevronLeft size={16} />
-              </Link>
+      <div className="desktop-home-2027">
+        {/* Hero Banner Section */}
+        <section className="dh2-hero">
+          <div className="dh2-hero-main">
+            <div className="dh2-hero-content">
+              <span className="dh2-hero-badge">عروض حصرية</span>
+              <h1 className="dh2-hero-title">تسوق بذكاء، وفر أكثر</h1>
+              <p className="dh2-hero-desc">احصل على خصم يصل إلى 50% على منتجات مختارة. التوصيل خلال 30 دقيقة.</p>
+              <Link to="/category/offers" className="dh2-hero-btn">تصفح العروض</Link>
             </div>
-            <div className="stack" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
+            <div className="dh2-hero-image">
+              <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=600" alt="عروض" />
+            </div>
+          </div>
+          <div className="dh2-hero-cards">
+            <Link to="/category/produce" className="dh2-promo-card green">
+              <span className="dh2-promo-label">طازج يومياً</span>
+              <span className="dh2-promo-title">خضار وفواكه</span>
+              <span className="dh2-promo-link">تسوق الآن ←</span>
+            </Link>
+            <Link to="/category/meat" className="dh2-promo-card red">
+              <span className="dh2-promo-label">جودة عالية</span>
+              <span className="dh2-promo-title">لحوم طازجة</span>
+              <span className="dh2-promo-link">تسوق الآن ←</span>
+            </Link>
+          </div>
+        </section>
+
+        {/* Quick Categories */}
+        <section className="dh2-categories">
+          <h2 className="dh2-section-title">تسوق حسب التصنيف</h2>
+          <div className="dh2-cat-grid">
+            {categories.slice(0, 10).map((c) => (
+              <Link key={c.id} to={categoryHref(c.id)} className="dh2-cat-card">
+                <div className={`dh2-cat-icon ${c.id === 'offers' ? 'offers' : ''}`}>
+                  {c.id === 'offers' && '🔥'}
+                  {c.id === 'meat' && '🥩'}
+                  {c.id === 'dairy' && '🥛'}
+                  {c.id === 'produce' && '🥬'}
+                  {c.id === 'bakery' && '🥖'}
+                  {c.id === 'pantry' && '🫙'}
+                  {c.id === 'drinks' && '🥤'}
+                  {c.id === 'snacks' && '🍿'}
+                  {c.id === 'frozen' && '❄️'}
+                  {c.id === 'household' && '🧹'}
+                  {c.id === 'personal' && '🧴'}
+                </div>
+                <span className="dh2-cat-name">{c.nameAr || c.name}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Deal Products */}
+        {dealProducts.length > 0 && (
+          <section className="dh2-section">
+            <div className="dh2-section-header">
+              <h2 className="dh2-section-title">
+                <span className="dh2-fire">🔥</span> عروض اليوم
+              </h2>
+              <Link to="/category/offers" className="dh2-section-link">عرض الكل ←</Link>
+            </div>
+            <div className="dh2-products-grid">
               {dealProducts.map((p, i) => (
-                <Link
-                  key={`${p.id}-${i}`}
-                  to={`/store/${p.storeId || stores[0].id}`}
-                  className="product-row"
-                  style={{ padding: 12 }}
-                >
-                  <div>
-                    <span className="chip" style={{ marginBottom: 6 }}>عرض</span>
-                    <div className="h2" style={{ fontSize: 14 }}>{p.nameAr || p.names?.ar || p.name}</div>
-                    <p className="muted" style={{ fontSize: 12 }}>{p.desc}</p>
-                    <div className="row" style={{ marginTop: 8 }}>
-                      <span className="price">{formatIQD(p.price)}</span>
-                      <span className="old-price">{formatIQD(p.oldPrice)}</span>
+                <Link key={`${p.id}-${i}`} to={`/store/${p.storeId || stores[0].id}`} className="dh2-product-card">
+                  <div className="dh2-product-badge">خصم</div>
+                  <img src={p.image} alt={p.name} className="dh2-product-img" />
+                  <div className="dh2-product-info">
+                    <h3 className="dh2-product-name">{p.nameAr || p.names?.ar || p.name}</h3>
+                    <p className="dh2-product-desc">{p.desc}</p>
+                    <div className="dh2-product-prices">
+                      <span className="dh2-price-current">{formatIQD(p.price)}</span>
+                      <span className="dh2-price-old">{formatIQD(p.oldPrice)}</span>
                     </div>
+                    <button className="dh2-add-btn">أضف للسلة</button>
                   </div>
-                  <img src={p.image} alt={p.name} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 10 }} />
                 </Link>
               ))}
             </div>
           </section>
         )}
 
-        {favStores.length > 0 && (
-          <section style={{ marginBottom: 32 }}>
-            <div className="section-title">
-              <h2 className="h2 row" style={{ gap: 6 }}>
-                <Star size={18} fill="#f5c400" color="#f5c400" />
-                المفضلة
-              </h2>
-              <Link to="/favorites" className="muted" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                عرض الكل
-                <ChevronLeft size={16} />
-              </Link>
-            </div>
-            <div className="stack">
-              {favStores.map((store) => (
-                <StoreCard key={store.id} store={store} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        <section>
-          <div className="section-title">
-            <h2 className="h2">المتاجر القريبة</h2>
-            <span className="muted">{nearbyStores.length} متجر</span>
+        {/* Stores Section */}
+        <section className="dh2-section">
+          <div className="dh2-section-header">
+            <h2 className="dh2-section-title">المتاجر القريبة</h2>
+            <span className="dh2-section-count">{stores.length} متجر متاح</span>
           </div>
-          <div className="stack">
-            {nearbyStores.map((store) => (
-              <StoreCard key={store.id} store={store} />
+          <div className="dh2-stores-grid">
+            {stores.map((store) => (
+              <Link key={store.id} to={`/store/${store.id}`} className="dh2-store-card">
+                <div className="dh2-store-img-wrap">
+                  <img src={store.cover} alt={store.name} className="dh2-store-img" />
+                  <span className="dh2-store-status open">متاح الآن</span>
+                </div>
+                <div className="dh2-store-info">
+                  <h3 className="dh2-store-name">{store.name}</h3>
+                  <div className="dh2-store-meta">
+                    <span className="dh2-store-rating">
+                      <Star size={14} fill="#f5c400" color="#f5c400" />
+                      {store.rating}
+                    </span>
+                    <span className="dh2-store-time">⏱ {store.eta} دقيقة</span>
+                    <span className="dh2-store-fee">توصيل {formatIQD(store.fee)}</span>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </section>
 
+        {/* Floating Cart */}
         {cartCount > 0 && (
-          <Link to="/cart" className="store-cart-bar">
-            <div>
-              <div className="row" style={{ gap: 6 }}>
-                <ShoppingBag size={16} />
-                <span>
-                  سلتك · {cartCount} {itemWord(cartCount)}
-                </span>
-              </div>
-              {cartStore ? (
-                <div style={{ color: '#bbb', fontSize: 12, fontWeight: 700, marginTop: 2 }}>
-                  {cartStore.name} · {formatIQD(cartTotal)}
-                </div>
-              ) : (
-                <div className="price" style={{ color: '#fff', marginTop: 2 }}>
-                  {formatIQD(cartTotal)}
-                </div>
-              )}
+          <Link to="/cart" className="dh2-floating-cart">
+            <div className="dh2-cart-left">
+              <ShoppingBag size={20} />
+              <span className="dh2-cart-count">{cartCount}</span>
+              <span>عرض السلة</span>
             </div>
-            <span className="btn">عرض السلة</span>
+            <span className="dh2-cart-total">{formatIQD(cartTotal)}</span>
           </Link>
         )}
       </div>

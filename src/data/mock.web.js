@@ -58,12 +58,91 @@ export const stores = [
 ]
 
 const sampleProducts = [
-  { id: 'p1', name: 'حليب طازج', nameEn: 'Fresh Milk', price: 2500, image: 'https://via.placeholder.com/200', aisle: 'dairy' },
-  { id: 'p2', name: 'خبز عربي', nameEn: 'Arabic Bread', price: 1500, image: 'https://via.placeholder.com/200', aisle: 'bakery' },
-  { id: 'p3', name: 'طماطم', nameEn: 'Tomatoes', price: 3000, image: 'https://via.placeholder.com/200', aisle: 'produce' },
-  { id: 'p4', name: 'دجاج طازج', nameEn: 'Fresh Chicken', price: 12000, image: 'https://via.placeholder.com/200', aisle: 'meat' },
-  { id: 'p5', name: 'أرز بسمتي', nameEn: 'Basmati Rice', price: 8000, image: 'https://via.placeholder.com/200', aisle: 'pantry' },
-  { id: 'p6', name: 'زيت زيتون', nameEn: 'Olive Oil', price: 15000, image: 'https://via.placeholder.com/200', aisle: 'pantry' },
+  { 
+    id: 'p1', 
+    name: 'حليب طازج', 
+    nameAr: 'حليب طازج',
+    nameEn: 'Fresh Milk', 
+    price: 2500, 
+    oldPrice: 3200,
+    image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300', 
+    aisle: 'dairy',
+    desc: '1 لتر - طازج يومياً'
+  },
+  { 
+    id: 'p2', 
+    name: 'خبز عربي', 
+    nameAr: 'خبز عربي',
+    nameEn: 'Arabic Bread', 
+    price: 1500, 
+    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300', 
+    aisle: 'bakery',
+    desc: 'طازج من المخبز'
+  },
+  { 
+    id: 'p3', 
+    name: 'طماطم طازجة', 
+    nameAr: 'طماطم طازجة',
+    nameEn: 'Fresh Tomatoes', 
+    price: 3000, 
+    oldPrice: 4000,
+    image: 'https://images.unsplash.com/photo-1546470427-227c7f3f5c71?w=300', 
+    aisle: 'produce',
+    desc: '1 كيلو - عضوي'
+  },
+  { 
+    id: 'p4', 
+    name: 'دجاج طازج', 
+    nameAr: 'دجاج طازج',
+    nameEn: 'Fresh Chicken', 
+    price: 12000, 
+    oldPrice: 15000,
+    image: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=300', 
+    aisle: 'meat',
+    desc: '1 كيلو - بدون هرمونات'
+  },
+  { 
+    id: 'p5', 
+    name: 'أرز بسمتي', 
+    nameAr: 'أرز بسمتي',
+    nameEn: 'Basmati Rice', 
+    price: 8000, 
+    image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300', 
+    aisle: 'pantry',
+    desc: '2 كيلو - هندي أصلي'
+  },
+  { 
+    id: 'p6', 
+    name: 'زيت زيتون', 
+    nameAr: 'زيت زيتون بكر',
+    nameEn: 'Olive Oil', 
+    price: 15000, 
+    oldPrice: 18000,
+    image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300', 
+    aisle: 'pantry',
+    desc: '500 مل - إسباني'
+  },
+  { 
+    id: 'p7', 
+    name: 'عصير برتقال', 
+    nameAr: 'عصير برتقال طبيعي',
+    nameEn: 'Orange Juice', 
+    price: 4500, 
+    oldPrice: 5500,
+    image: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=300', 
+    aisle: 'drinks',
+    desc: '1 لتر - 100% طبيعي'
+  },
+  { 
+    id: 'p8', 
+    name: 'بيض عضوي', 
+    nameAr: 'بيض عضوي',
+    nameEn: 'Organic Eggs', 
+    price: 6000, 
+    image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=300', 
+    aisle: 'dairy',
+    desc: '30 بيضة - مزرعة محلية'
+  },
 ]
 
 export const getStore = (id) => stores.find(s => s.id === id) || stores[0]
@@ -73,17 +152,17 @@ export const getProducts = (storeId) => sampleProducts
 export const getProduct = (storeId, productId) => sampleProducts.find(p => p.id === productId)
 
 export const categories = [
-  { id: 'offers', name: 'العروض', nameEn: 'Offers', icon: '🔥' },
-  { id: 'meat', name: 'اللحوم', nameEn: 'Meat', icon: '🥩' },
-  { id: 'dairy', name: 'الألبان', nameEn: 'Dairy', icon: '🥛' },
-  { id: 'produce', name: 'خضار وفواكه', nameEn: 'Produce', icon: '🥬' },
-  { id: 'bakery', name: 'المخبوزات', nameEn: 'Bakery', icon: '🥖' },
-  { id: 'pantry', name: 'المؤن', nameEn: 'Pantry', icon: '🫙' },
-  { id: 'drinks', name: 'المشروبات', nameEn: 'Drinks', icon: '🥤' },
-  { id: 'snacks', name: 'وجبات خفيفة', nameEn: 'Snacks', icon: '🍿' },
-  { id: 'frozen', name: 'المجمدات', nameEn: 'Frozen', icon: '🧊' },
-  { id: 'household', name: 'تنظيف المنزل', nameEn: 'Household', icon: '🧹' },
-  { id: 'personal', name: 'العناية الشخصية', nameEn: 'Personal Care', icon: '🧴' },
+  { id: 'offers', name: 'العروض', nameAr: 'العروض', nameEn: 'Offers' },
+  { id: 'meat', name: 'اللحوم', nameAr: 'اللحوم', nameEn: 'Meat' },
+  { id: 'dairy', name: 'الألبان', nameAr: 'الألبان', nameEn: 'Dairy' },
+  { id: 'produce', name: 'خضار وفواكه', nameAr: 'خضار وفواكه', nameEn: 'Produce' },
+  { id: 'bakery', name: 'المخبوزات', nameAr: 'المخبوزات', nameEn: 'Bakery' },
+  { id: 'pantry', name: 'المؤن', nameAr: 'المؤن', nameEn: 'Pantry' },
+  { id: 'drinks', name: 'المشروبات', nameAr: 'المشروبات', nameEn: 'Drinks' },
+  { id: 'snacks', name: 'وجبات خفيفة', nameAr: 'وجبات خفيفة', nameEn: 'Snacks' },
+  { id: 'frozen', name: 'المجمدات', nameAr: 'المجمدات', nameEn: 'Frozen' },
+  { id: 'household', name: 'تنظيف', nameAr: 'تنظيف', nameEn: 'Household' },
+  { id: 'personal', name: 'العناية الشخصية', nameAr: 'العناية', nameEn: 'Personal Care' },
 ]
 
 export const banners = [

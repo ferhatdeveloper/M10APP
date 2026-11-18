@@ -1,100 +1,149 @@
-import { Link, useLocation } from 'react-router'
-import { Search, ShoppingCart, User, MapPin, Heart, Package, ChevronDown } from 'lucide-react'
+import { useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router'
+import { Search, ShoppingCart, User, MapPin, Heart, Package, ChevronDown, Menu, X } from 'lucide-react'
 import { useApp } from '../context/AppContext.web.jsx'
 import { categories, formatIQD, DEFAULT_STORE_ID, storeName } from '../data/mock.web.js'
 import Logo from './Logo.jsx'
 
 export default function DesktopHeader() {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const { cartCount, cartTotal, favorites, user, getLiveStore } = useApp()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
   const defaultStore = getLiveStore(DEFAULT_STORE_ID)
-  const activeStoreName = defaultStore ? storeName(defaultStore, 'ar') : 'M10'
 
   const mainCategories = categories.filter(c => 
-    ['meat', 'ready', 'drinks', 'dairy', 'produce', 'bakery', 'pantry', 'snacks', 'frozen', 'household'].includes(c.id)
-  ).slice(0, 8)
+    ['offers', 'meat', 'dairy', 'produce', 'bakery', 'drinks', 'snacks', 'frozen', 'household'].includes(c.id)
+  ).slice(0, 9)
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+    }
+  }
 
   return (
-    <header className="desktop-header">
-      <div className="desktop-header-top">
-        <div className="desktop-header-inner">
-          <Link to="/" className="desktop-logo">
-            <Logo size={36} onBrand />
-            <span className="desktop-logo-text">M10</span>
+    <header className="desktop-header-2027">
+      {/* Top Bar - Utility */}
+      <div className="dh-utility-bar">
+        <div className="dh-container">
+          <div className="dh-utility-left">
+            <span>🚚 توصيل مجاني للطلبات فوق 50,000 د.ع</span>
+          </div>
+          <div className="dh-utility-right">
+            <Link to="/profile">حسابي</Link>
+            <span className="dh-utility-divider">|</span>
+            <Link to="/orders">تتبع الطلب</Link>
+            <span className="dh-utility-divider">|</span>
+            <span>العربية</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <div className="dh-main">
+        <div className="dh-container">
+          {/* Logo */}
+          <Link to="/" className="dh-logo">
+            <div className="dh-logo-mark">
+              <Logo size={32} onBrand />
+            </div>
+            <div className="dh-logo-text">
+              <span className="dh-logo-name">M10</span>
+              <span className="dh-logo-tagline">سوبرماركت</span>
+            </div>
           </Link>
 
-          <div className="desktop-location">
-            <MapPin size={16} />
-            <div className="desktop-location-text">
-              <span className="desktop-location-label">التوصيل إلى</span>
-              <span className="desktop-location-address">
-                {user?.address?.area}، {user?.address?.city}
+          {/* Location Selector */}
+          <button className="dh-location">
+            <MapPin size={18} className="dh-location-icon" />
+            <div className="dh-location-info">
+              <span className="dh-location-label">التوصيل إلى</span>
+              <span className="dh-location-address">
+                {user?.address?.area || 'المنصور'}، {user?.address?.city || 'بغداد'}
+                <ChevronDown size={14} />
               </span>
             </div>
-            <ChevronDown size={14} />
-          </div>
+          </button>
 
-          <Link to="/search" className="desktop-search">
-            <Search size={18} />
-            <span>ابحث عن منتجات...</span>
-          </Link>
+          {/* Search Bar - Main Focus */}
+          <form className={`dh-search ${searchFocused ? 'focused' : ''}`} onSubmit={handleSearch}>
+            <Search size={20} className="dh-search-icon" />
+            <input
+              type="text"
+              placeholder="ابحث عن المنتجات، الماركات، الفئات..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+            />
+            <button type="submit" className="dh-search-btn">بحث</button>
+          </form>
 
-          <nav className="desktop-nav-icons">
-            <Link to="/favorites" className="desktop-nav-icon" title="المفضلة">
-              <Heart size={22} />
-              {favorites.length > 0 && (
-                <span className="desktop-nav-badge">{favorites.length}</span>
-              )}
-              <span className="desktop-nav-label">المفضلة</span>
+          {/* Actions */}
+          <nav className="dh-actions">
+            <Link to="/favorites" className="dh-action">
+              <div className="dh-action-icon">
+                <Heart size={22} />
+                {favorites.length > 0 && (
+                  <span className="dh-action-badge">{favorites.length}</span>
+                )}
+              </div>
+              <span className="dh-action-label">المفضلة</span>
             </Link>
 
-            <Link to="/orders" className="desktop-nav-icon" title="طلباتي">
-              <Package size={22} />
-              <span className="desktop-nav-label">طلباتي</span>
+            <Link to="/orders" className="dh-action">
+              <div className="dh-action-icon">
+                <Package size={22} />
+              </div>
+              <span className="dh-action-label">طلباتي</span>
             </Link>
 
-            <Link to="/profile" className="desktop-nav-icon" title="حسابي">
-              <User size={22} />
-              <span className="desktop-nav-label">حسابي</span>
+            <Link to="/profile" className="dh-action">
+              <div className="dh-action-icon">
+                <User size={22} />
+              </div>
+              <span className="dh-action-label">حسابي</span>
             </Link>
 
-            <Link to="/cart" className="desktop-cart-btn">
-              <ShoppingCart size={20} />
-              {cartCount > 0 ? (
-                <>
-                  <span className="desktop-cart-count">{cartCount}</span>
-                  <span className="desktop-cart-total">{formatIQD(cartTotal)}</span>
-                </>
-              ) : (
-                <span className="desktop-cart-text">السلة</span>
-              )}
+            <Link to="/cart" className="dh-cart">
+              <div className="dh-cart-icon">
+                <ShoppingCart size={22} />
+                {cartCount > 0 && (
+                  <span className="dh-cart-badge">{cartCount}</span>
+                )}
+              </div>
+              <div className="dh-cart-info">
+                <span className="dh-cart-label">السلة</span>
+                {cartCount > 0 && (
+                  <span className="dh-cart-total">{formatIQD(cartTotal)}</span>
+                )}
+              </div>
             </Link>
           </nav>
         </div>
       </div>
 
-      <div className="desktop-header-bottom">
-        <div className="desktop-header-inner">
-          <nav className="desktop-categories-nav">
+      {/* Categories Navigation */}
+      <div className="dh-nav">
+        <div className="dh-container">
+          <nav className="dh-nav-links">
             <Link
               to="/"
-              className={`desktop-cat-link ${pathname === '/' ? 'active' : ''}`}
+              className={`dh-nav-link ${pathname === '/' ? 'active' : ''}`}
             >
               الرئيسية
-            </Link>
-            <Link
-              to="/category/offers"
-              className={`desktop-cat-link offers ${pathname === '/category/offers' ? 'active' : ''}`}
-            >
-              🔥 العروض
             </Link>
             {mainCategories.map(cat => (
               <Link
                 key={cat.id}
                 to={`/category/${cat.id}`}
-                className={`desktop-cat-link ${pathname === `/category/${cat.id}` ? 'active' : ''}`}
+                className={`dh-nav-link ${cat.id === 'offers' ? 'offers' : ''} ${pathname === `/category/${cat.id}` ? 'active' : ''}`}
               >
-                {cat.nameAr || cat.name || cat.id}
+                {cat.id === 'offers' && <span className="dh-nav-fire">🔥</span>}
+                {cat.nameAr || cat.name}
               </Link>
             ))}
           </nav>
