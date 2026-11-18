@@ -17,7 +17,10 @@ export default defineConfig({
     extensions: ['.web.jsx', '.web.js', '.web.tsx', '.web.ts', '.jsx', '.js', '.tsx', '.ts', '.json'],
     alias: [
       { find: /^react-native$/, replacement: 'react-native-web' },
-      { find: /^react-native\/(.*)/, replacement: 'react-native-web' },
+      { find: /^react-native\/(.*)/, replacement: 'react-native-web/$1' },
+      // lucide-react-native pulls bare "react-native" peers; use web package on Vite
+      { find: /^lucide-react-native$/, replacement: 'lucide-react' },
+      { find: /^lucide-react-native\/(.*)/, replacement: 'lucide-react/$1' },
       { find: /^expo-modules-core(.*)/, replacement: path.resolve(__dirname, 'src/polyfills/expo-mock.js') },
       { find: /^expo-network(.*)/, replacement: path.resolve(__dirname, 'src/polyfills/expo-mock.js') },
       { find: /^expo\/(.*)/, replacement: path.resolve(__dirname, 'src/polyfills/expo-mock.js') },
