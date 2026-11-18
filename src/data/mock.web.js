@@ -4,6 +4,42 @@ import menuData from './kucoglu-menu.json'
 export const KUCOGLU_STORE_ID = 'm10-market'
 export const DEFAULT_STORE_ID = 'm10-market'
 
+const fallbackImages = {
+  meat: [
+    'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=400',
+    'https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=400',
+    'https://images.unsplash.com/photo-1558030006-450675393462?w=400',
+    'https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=400',
+    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400',
+    'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400',
+  ],
+  ready: [
+    'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400',
+    'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400',
+    'https://images.unsplash.com/photo-1562967914-608f82629710?w=400',
+    'https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400',
+    'https://images.unsplash.com/photo-1606728035253-49e8a23146de?w=400',
+    'https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?w=400',
+  ],
+  drinks: [
+    'https://images.unsplash.com/photo-1546171753-97d7676e4602?w=400',
+    'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=400',
+    'https://images.unsplash.com/photo-1570831739435-6601aa3fa4fb?w=400',
+    'https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?w=400',
+    'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400',
+    'https://images.unsplash.com/photo-1603394630850-69b3def7a05d?w=400',
+    'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=400',
+    'https://images.unsplash.com/photo-1606168094336-48f205276929?w=400',
+    'https://images.unsplash.com/photo-1598614187854-26a60e982dc4?w=400',
+  ],
+  default: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400',
+}
+
+const getFallbackImage = (aisle, index) => {
+  const images = fallbackImages[aisle] || [fallbackImages.default]
+  return images[index % images.length]
+}
+
 export const formatIQD = (n, lang = 'ar') => {
   const loc = lang === 'en' ? 'en-US' : lang === 'tr' ? 'tr-TR' : 'ar-IQ'
   const num = Number(n).toLocaleString(loc)
@@ -39,8 +75,8 @@ export const stores = [
     fee: 2500,
     minOrder: 10000,
     status: 'open',
-    cover: menuData.store.cover,
-    logo: menuData.store.logo,
+    cover: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800',
+    logo: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200',
     city: menuData.store.city,
     cityEn: menuData.store.cityEn,
     area: menuData.store.area,
@@ -48,7 +84,7 @@ export const stores = [
   },
 ]
 
-const rawProducts = menuData.products.map(p => ({
+const rawProducts = menuData.products.map((p, index) => ({
   id: p.id,
   name: p.name,
   nameAr: p.names?.ar || p.name,
@@ -57,8 +93,8 @@ const rawProducts = menuData.products.map(p => ({
   names: p.names,
   price: p.price,
   oldPrice: p.popular ? Math.round(p.price * 1.25) : null,
-  image: p.image,
-  images: p.images,
+  image: getFallbackImage(p.aisle, index),
+  images: [getFallbackImage(p.aisle, index)],
   aisle: p.aisle,
   category: p.category,
   categoryAr: p.categoryAr,
@@ -106,7 +142,7 @@ export const getCategoryName = (cat, lang = 'ar') => {
 }
 
 export const banners = [
-  { id: 'b1', title: 'عروض الأسبوع', titleEn: 'Weekly Offers', titleTr: 'Haftalık Kampanyalar', image: menuData.store.cover, color: '#e01828' },
+  { id: 'b1', title: 'عروض الأسبوع', titleEn: 'Weekly Offers', titleTr: 'Haftalık Kampanyalar', image: 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=600', color: '#e01828' },
   { id: 'b2', title: 'منتجات طازجة', titleEn: 'Fresh Products', titleTr: 'Taze Ürünler', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600', color: '#2e7d32' },
   { id: 'b3', title: 'توصيل سريع', titleEn: 'Fast Delivery', titleTr: 'Hızlı Teslimat', image: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=600', color: '#1565c0' },
 ]
