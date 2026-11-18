@@ -6,7 +6,7 @@ import TopBar from '../components/TopBar'
 import Logo from '../components/Logo'
 import SoftPress from '../components/SoftPress'
 import { formatIqPhone, isValidIqPhone, useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { DEMO_ACCOUNTS } from '../data/mock'
 import { colors } from '../theme'
 

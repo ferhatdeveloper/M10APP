@@ -16,7 +16,7 @@ import { Box, Camera, RotateCcw, ShoppingBag, X } from 'lucide-react-native'
 import SoftPress from '../components/SoftPress'
 import ARModelScene from '../components/ARModelScene'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import {
   arModelRemoteUrl,
   arModelScale,

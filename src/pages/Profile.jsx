@@ -12,9 +12,9 @@ import {
 } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import Logo from '../components/Logo.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { formatIQD } from '../data/mock.js'
+import { formatIQD } from '../data/mock.web.js'
 
 const LINKS = [
   { to: '/orders', icon: Receipt, label: 'الطلبات', hint: 'تتبع وإعادة الطلب' },

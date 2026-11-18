@@ -4,7 +4,7 @@ import { Search as SearchIcon } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { categories, formatIQD, getProducts, stores, productName } from '../data/mock.js'
+import { categories, formatIQD, getProducts, stores, productName } from '../data/mock.web.js'
 
 const catalog = stores.flatMap((store) =>
   getProducts(store.id).map((p) => ({

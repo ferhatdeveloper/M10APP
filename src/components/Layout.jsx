@@ -2,7 +2,6 @@ import { Outlet, useLocation } from 'react-router'
 import { useState, useEffect } from 'react'
 import BottomNav from './BottomNav.jsx'
 import DesktopHeader from './DesktopHeader.jsx'
-import CategorySidebar from './CategorySidebar.jsx'
 
 const hideNav = ['/checkout', '/cart']
 const DESKTOP_BP = 900
@@ -26,23 +25,14 @@ export default function Layout() {
   const { pathname } = useLocation()
   const isDesktop = useIsDesktop()
   const showNav = !hideNav.includes(pathname) && !pathname.startsWith('/track/')
-  const showSidebar = isDesktop && (
-    pathname === '/' ||
-    pathname.startsWith('/category/') ||
-    pathname.startsWith('/store/') ||
-    pathname === '/search'
-  )
 
   if (isDesktop) {
     return (
       <div className="desktop-shell">
         <DesktopHeader />
-        <div className="desktop-layout">
-          {showSidebar && <CategorySidebar />}
-          <main className={`desktop-main ${showSidebar ? 'with-sidebar' : ''}`}>
-            <Outlet />
-          </main>
-        </div>
+        <main className="desktop-main full-width">
+          <Outlet />
+        </main>
       </div>
     )
   }

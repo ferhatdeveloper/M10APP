@@ -1,9 +1,9 @@
 import { Clock3, Star, Truck, ShoppingBag, Plus, Minus } from 'lucide-react'
 import { Link, useParams } from 'react-router'
 import TopBar from '../components/TopBar.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { formatIQD, getProducts, getStore, productName } from '../data/mock.js'
+import { formatIQD, getProducts, getStore, productName } from '../data/mock.web.js'
 
 const statusMap = {
   open: { label: 'مفتوح', cls: 'badge-open' },

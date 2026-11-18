@@ -1,6 +1,6 @@
 import { Bell, CheckCheck, Clock, Package, Sparkles, UserPlus, Boxes, X } from 'lucide-react-native'
 import { Modal, Pressable, ScrollView, Text, View } from 'react-native'
-import { useI18n } from '../../context/I18nContext'
+import { useI18n } from '../../context/I18nContext.web.jsx'
 
 const KIND_ICON = {
   order: Package,

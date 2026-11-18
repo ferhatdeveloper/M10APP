@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 import { AlertTriangle, Boxes, PackageCheck, Plus, RefreshCw } from 'lucide-react-native'
 import { useApp } from '../../../context/AppContext'
 import { DEFAULT_STORE_ID, formatIQD, productName } from '../../../data/mock'
-import { useI18n } from '../../../context/I18nContext'
+import { useI18n } from '../../../context/I18nContext.web.jsx'
 import SectionHeader from '../components/SectionHeader'
 
 const movement = (i) => ({

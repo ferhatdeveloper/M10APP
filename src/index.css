@@ -1318,12 +1318,13 @@ button.radio {
   /* Desktop Main Content */
   .desktop-main {
     flex: 1;
-    padding: 24px;
+    padding: 0;
     min-width: 0;
+    background: #fafafa;
   }
 
-  .desktop-main.with-sidebar {
-    padding-right: 24px;
+  .desktop-main.full-width {
+    max-width: 100%;
   }
 
   /* Override mobile styles for desktop */
@@ -1977,6 +1978,1545 @@ button.radio {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   M10 2027 DESKTOP DESIGN SYSTEM
+   Modern, clean, professional - inspired by Migros, A101, Getir
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     MIGROS CLONE - EXACT STYLE 2027
+     ═══════════════════════════════════════════════════════════════════════════ */
+  
+  .mgrs {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .mgrs-wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Top Bar - M10 Red */
+  .mgrs-top {
+    background: linear-gradient(90deg, #c41e24 0%, #e31e24 100%);
+    padding: 6px 0;
+    font-size: 12px;
+  }
+
+  .mgrs-top .mgrs-wrap {
+    justify-content: flex-end;
+  }
+
+  .mgrs-top-r {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #fff;
+  }
+
+  .mgrs-top-r a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .mgrs-top-r a:hover {
+    text-decoration: underline;
+  }
+
+  .mgrs-top-r span {
+    opacity: 0.5;
+  }
+
+  /* Language Dropdown */
+  .mgrs-lang {
+    position: relative;
+  }
+
+  .mgrs-lang > button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .mgrs-lang-dd {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+    min-width: 140px;
+    z-index: 100;
+  }
+
+  .mgrs-lang-dd button {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    background: none;
+    text-align: right;
+    font-size: 13px;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .mgrs-lang-dd button:hover {
+    background: #f5f5f5;
+  }
+
+  .mgrs-lang-dd button.active {
+    background: #fef2f2;
+    color: #e31e24;
+    font-weight: 600;
+  }
+
+  /* Main Header */
+  .mgrs-main {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .mgrs-main .mgrs-wrap {
+    gap: 24px;
+  }
+
+  /* Logo */
+  .mgrs-logo {
+    text-decoration: none;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .mgrs-logo-img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .mgrs-logo-box {
+    width: 70px;
+    height: 42px;
+    background: linear-gradient(135deg, #e31e24 0%, #c41e24 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+
+  /* Search Bar - Migros exact style */
+  .mgrs-search {
+    flex: 1;
+    max-width: 600px;
+    display: flex;
+    border: 2px solid #e31e24;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .mgrs-search input {
+    flex: 1;
+    border: none;
+    padding: 12px 16px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .mgrs-search input::placeholder {
+    color: #999;
+  }
+
+  .mgrs-search button {
+    background: #e31e24;
+    border: none;
+    padding: 0 20px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .mgrs-search button:hover {
+    background: #b71c1c;
+  }
+
+  /* Actions */
+  .mgrs-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: auto;
+  }
+
+  .mgrs-act {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    text-decoration: none;
+    color: #333;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .mgrs-act:hover {
+    background: #f5f5f5;
+    color: #e31e24;
+  }
+
+  .mgrs-badge {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    min-width: 16px;
+    height: 16px;
+    background: #e31e24;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 99px;
+    display: grid;
+    place-items: center;
+  }
+
+  /* Cart */
+  .mgrs-cart {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: #e31e24;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .mgrs-cart:hover {
+    background: #b71c1c;
+  }
+
+  .mgrs-cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    background: #fff;
+    color: #e31e24;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 99px;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .mgrs-cart-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 11px;
+  }
+
+  .mgrs-cart-info strong {
+    font-size: 14px;
+  }
+
+  /* Navigation */
+  .mgrs-nav {
+    background: #333;
+  }
+
+  .mgrs-nav .mgrs-wrap {
+    gap: 0;
+    padding: 0;
+  }
+
+  /* Categories Button */
+  .mgrs-cats-wrap {
+    position: relative;
+  }
+
+  .mgrs-cats-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    background: #e31e24;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mgrs-cats-btn:hover {
+    background: #b71c1c;
+  }
+
+  .mgrs-cats-dd {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #fff;
+    min-width: 240px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    border-radius: 0 0 8px 8px;
+    z-index: 100;
+  }
+
+  .mgrs-cats-dd a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .mgrs-cats-dd a:hover {
+    background: #fef2f2;
+    color: #e31e24;
+  }
+
+  .mgrs-cats-dd a:last-child {
+    border-bottom: none;
+  }
+
+  /* Nav Links */
+  .mgrs-nav-links {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    padding-right: 20px;
+  }
+
+  .mgrs-nav-links a {
+    padding: 14px 16px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  .mgrs-nav-links a:hover {
+    opacity: 1;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .mgrs-nav-links a.active {
+    background: rgba(255,255,255,0.15);
+    opacity: 1;
+  }
+
+  .mgrs-nav-links a.hot {
+    color: #ffeb3b;
+  }
+
+  /* Modern Category Sidebar 2027 */
+  .category-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: #fff;
+    border-left: 1px solid #f0f0f0;
+    padding: 24px 0;
+    position: sticky;
+    top: 140px;
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+
+  .sidebar-title {
+    padding: 0 24px 20px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #222;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 12px;
+  }
+
+  .sidebar-nav {
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    color: #444;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .sidebar-link:hover {
+    background: #f8f8f8;
+    color: #222;
+  }
+
+  .sidebar-link.active {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    color: #e31e24;
+    font-weight: 600;
+  }
+
+  .sidebar-link.active .sidebar-icon {
+    background: #e31e24;
+    color: #fff;
+  }
+
+  .sidebar-link.offers {
+    color: #e31e24;
+  }
+
+  .sidebar-icon {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    background: #f5f5f5;
+    border-radius: 10px;
+    color: #666;
+    transition: all 0.2s;
+  }
+
+  .sidebar-link:hover .sidebar-icon {
+    background: #eee;
+    color: #444;
+  }
+
+  .sidebar-icon.offers {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    color: #e31e24;
+  }
+
+  /* Modern Main Content Area */
+  .desktop-main.with-sidebar {
+    flex: 1;
+    padding: 28px 32px;
+    background: #fafafa;
+    min-height: calc(100vh - 140px);
+  }
+
+  /* Modern Product Cards */
+  .desktop-product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  /* Modern Store Cards */
+  .desktop-stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  /* Section Headers */
+  .desktop-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .desktop-section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #222;
+  }
+
+  .desktop-section-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e31e24;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .desktop-section-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     METRO STYLE HOME PAGE
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .metro-home {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Flash Deals Slider */
+  .metro-flash {
+    margin-bottom: 24px;
+  }
+
+  .metro-flash-slide {
+    background: linear-gradient(135deg, #e31e24 0%, #b71c1c 100%);
+    border-radius: 16px;
+    padding: 50px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metro-flash-slide::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 50%;
+    height: 200%;
+    background: rgba(255,255,255,0.08);
+    transform: rotate(15deg);
+  }
+
+  .metro-flash-content {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    max-width: 450px;
+  }
+
+  .metro-flash-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .metro-flash-content h1 {
+    font-size: 38px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    line-height: 1.1;
+  }
+
+  .metro-flash-content p {
+    font-size: 16px;
+    opacity: 0.9;
+    margin-bottom: 24px;
+  }
+
+  .metro-flash-btn {
+    display: inline-block;
+    background: #fff;
+    color: #e31e24;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .metro-flash-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  }
+
+  /* Categories Row */
+  .metro-cats {
+    margin-bottom: 28px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .metro-cats::-webkit-scrollbar { display: none; }
+
+  .metro-cats-scroll {
+    display: flex;
+    gap: 10px;
+  }
+
+  .metro-cat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    min-width: 85px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #333;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .metro-cat:hover {
+    border-color: #e31e24;
+    background: #fef2f2;
+  }
+
+  .metro-cat.hot {
+    background: #fef2f2;
+    border-color: #fecaca;
+  }
+
+  .metro-cat-icon {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  /* Sections */
+  .metro-section {
+    margin-bottom: 36px;
+  }
+
+  .metro-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .metro-section-head h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #222;
+  }
+
+  .metro-section-head a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #e31e24;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .metro-section-head a:hover { text-decoration: underline; }
+
+  /* Products Row */
+  .metro-products-row {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+  }
+
+  .metro-products-row::-webkit-scrollbar { height: 6px; }
+  .metro-products-row::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
+  /* Product Card */
+  .metro-product {
+    min-width: 180px;
+    max-width: 180px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  .metro-product:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    border-color: #e31e24;
+  }
+
+  .metro-product.compact {
+    min-width: 160px;
+    max-width: 160px;
+  }
+
+  .metro-product-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #e31e24;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    z-index: 2;
+  }
+
+  .metro-product-img {
+    display: block;
+    background: #fafafa;
+    position: relative;
+  }
+
+  .metro-product img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .metro-product.compact img {
+    height: 110px;
+  }
+
+  .metro-product-info {
+    padding: 12px;
+    position: relative;
+  }
+
+  .metro-product-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 36px;
+  }
+
+  .metro-product-price {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .metro-product-price strong {
+    font-size: 14px;
+    font-weight: 800;
+    color: #222;
+  }
+
+  .metro-product-price del {
+    font-size: 11px;
+    color: #aaa;
+  }
+
+  .metro-add-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: #e31e24;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(227, 30, 36, 0.3);
+  }
+
+  .metro-add-btn:hover {
+    background: #c41e24;
+    transform: scale(1.1);
+  }
+
+  /* Banner Section */
+  .metro-banner-section {
+    margin-bottom: 36px;
+  }
+
+  .metro-banner {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 180px;
+    margin-bottom: 16px;
+  }
+
+  .metro-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .metro-banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+  }
+
+  .metro-banner.green .metro-banner-overlay {
+    background: linear-gradient(90deg, rgba(76, 175, 80, 0.95) 0%, rgba(76, 175, 80, 0.7) 50%, transparent 100%);
+  }
+
+  .metro-banner.brown .metro-banner-overlay {
+    background: linear-gradient(90deg, rgba(107, 58, 32, 0.95) 0%, rgba(107, 58, 32, 0.7) 50%, transparent 100%);
+  }
+
+  .metro-banner-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    width: fit-content;
+  }
+
+  .metro-banner-logo {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .metro-banner-overlay h3 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    max-width: 300px;
+  }
+
+  .metro-banner-overlay p {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+
+  .metro-banner-products {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  /* Brands */
+  .metro-brands {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .metro-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #333;
+    min-width: 90px;
+    transition: transform 0.2s;
+  }
+
+  .metro-brand:hover {
+    transform: translateY(-4px);
+  }
+
+  .metro-brand-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 2px solid #eee;
+    transition: all 0.2s;
+  }
+
+  .metro-brand:hover .metro-brand-logo {
+    border-color: currentColor;
+  }
+
+  .metro-brand span {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* Floating Cart */
+  .metro-float-cart {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #e31e24, #b71c1c);
+    color: #fff;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 8px 32px rgba(227, 30, 36, 0.5);
+    z-index: 100;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .metro-float-cart:hover {
+    transform: translateX(-50%) translateY(-4px);
+    box-shadow: 0 12px 40px rgba(227, 30, 36, 0.6);
+  }
+
+  .metro-float-count {
+    background: #fff;
+    color: #e31e24;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .metro-float-cart strong {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 16px;
+    border-radius: 20px;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     CATEGORY SECTIONS - Banner + 2x4 Products Grid with Slider
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .cat-section {
+    margin-bottom: 40px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  /* Section Header */
+  .cat-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .cat-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a1a2e;
+    margin: 0;
+  }
+
+  .cat-section-line {
+    width: 4px;
+    height: 24px;
+    border-radius: 2px;
+  }
+
+  .cat-section-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cat-section-filters button {
+    background: none;
+    border: none;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .cat-section-filters button:hover {
+    color: #1a1a2e;
+  }
+
+  .cat-section-filters button.active {
+    color: #2563eb;
+    background: #eff6ff;
+  }
+
+  .cat-section-sep {
+    color: #ddd;
+    margin: 0 4px;
+  }
+
+  .cat-section-filters a {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+  }
+
+  .cat-section-filters a:hover {
+    text-decoration: underline;
+  }
+
+  /* Section Content */
+  .cat-section-content {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+  }
+
+  /* Banner */
+  .cat-section-banner {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+  }
+
+  .cat-section-banner img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.3;
+  }
+
+  .cat-section-banner-overlay {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+    color: #fff;
+    flex: 1;
+  }
+
+  .cat-section-banner-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .cat-section-banner-overlay h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .cat-section-banner-discount {
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .cat-section-banner-discount span {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    opacity: 0.9;
+  }
+
+  .cat-section-banner-btn {
+    position: relative;
+    z-index: 1;
+    margin: 24px;
+    margin-top: auto;
+    padding: 12px 24px;
+    background: #1a1a2e;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cat-section-banner-btn:hover {
+    background: #000;
+  }
+
+  /* Products Grid */
+  .cat-section-products {
+    position: relative;
+  }
+
+  .cat-section-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* Slider Arrows */
+  .cat-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+    color: #333;
+  }
+
+  .cat-slider-arrow:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #ccc;
+  }
+
+  .cat-slider-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .cat-slider-arrow.prev {
+    left: -18px;
+  }
+
+  .cat-slider-arrow.next {
+    right: -18px;
+  }
+
+  /* Product Card */
+  .cat-product {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  .cat-product:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-color: #e0e0e0;
+  }
+
+  .cat-product-sale {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #e31e24;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    z-index: 2;
+  }
+
+  .cat-product-img {
+    display: block;
+    padding: 12px;
+    background: #fafafa;
+  }
+
+  .cat-product-img img {
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
+    transition: transform 0.3s;
+  }
+
+  .cat-product:hover .cat-product-img img {
+    transform: scale(1.05);
+  }
+
+  .cat-product-info {
+    padding: 12px;
+  }
+
+  .cat-product-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    height: 36px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .cat-product-price {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .cat-product-price del {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .cat-product-price .cat-product-from {
+    font-size: 11px;
+    color: #666;
+  }
+
+  .cat-product-price strong {
+    font-size: 15px;
+    font-weight: 800;
+    color: #e31e24;
+  }
+
+  .cat-product-btn {
+    width: 100%;
+    padding: 10px;
+    background: #fff;
+    border: 2px solid #1a1a2e;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1a1a2e;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .cat-product-btn:hover {
+    background: #1a1a2e;
+    color: #fff;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     BRAND BANNERS - Horizontal Scroll
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .brand-banners {
+    margin-bottom: 32px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .brand-banners::-webkit-scrollbar { display: none; }
+
+  .brand-banners-scroll {
+    display: flex;
+    gap: 16px;
+  }
+
+  .brand-banner-card {
+    min-width: 240px;
+    height: 140px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    transition: transform 0.2s;
+  }
+
+  .brand-banner-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .brand-banner-img {
+    position: absolute;
+    left: 20px;
+    bottom: 10px;
+    width: 80px;
+    height: 100px;
+    object-fit: contain;
+  }
+
+  .brand-banner-content {
+    margin-left: auto;
+    text-align: right;
+    color: #fff;
+    max-width: 140px;
+  }
+
+  .brand-banner-content h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .brand-banner-content p {
+    font-size: 12px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+  }
+
+  .brand-banner-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     SHOP BY BRAND - Metro Card Style
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .shop-brand-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .shop-brand-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 16px;
+    text-decoration: none;
+    min-height: 120px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .shop-brand-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .shop-brand-card-content {
+    flex: 1;
+    color: #fff;
+    z-index: 2;
+  }
+
+  .shop-brand-card-content h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  .shop-brand-card-content p {
+    font-size: 12px;
+    opacity: 0.9;
+    line-height: 1.4;
+  }
+
+  .shop-brand-card-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+    padding: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     FLASH SALE - Yellow Section with Timer
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .flash-sale {
+    background: #FFD700;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+
+  .flash-sale-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .flash-sale-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #1a1a2e;
+  }
+
+  .flash-sale-title svg {
+    color: #e31e24;
+  }
+
+  .flash-sale-subtitle {
+    font-size: 13px;
+    color: #666;
+    margin-left: auto;
+  }
+
+  .flash-sale-timer {
+    display: flex;
+    gap: 4px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #1a1a2e;
+  }
+
+  .flash-sale-timer span {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    min-width: 36px;
+    text-align: center;
+  }
+
+  .flash-sale-products {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .flash-sale-products::-webkit-scrollbar { height: 6px; }
+  .flash-sale-products::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
+
+  .flash-sale-card {
+    min-width: 150px;
+    max-width: 150px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    position: relative;
+  }
+
+  .flash-sale-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #e31e24;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    z-index: 2;
+  }
+
+  .flash-sale-img {
+    display: block;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .flash-sale-img img {
+    max-width: 100%;
+    max-height: 90px;
+    object-fit: contain;
+  }
+
+  .flash-sale-add {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    background: #e31e24;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .flash-sale-add:hover {
+    background: #b71c1c;
+    transform: scale(1.1);
+  }
+
+  .flash-sale-info h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .flash-sale-prices {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .flash-sale-prices strong {
+    font-size: 14px;
+    font-weight: 800;
+    color: #e31e24;
+  }
+
+  .flash-sale-prices del {
+    font-size: 11px;
+    color: #999;
+  }
+
+}
+
 /* Mobile: Hide desktop elements */
 @media (max-width: 899px) {
   .desktop-shell {
@@ -1987,7 +3527,8 @@ button.radio {
     display: none;
   }
 
-  .desktop-header {
+  .desktop-header,
+  .desktop-header-2027 {
     display: none;
   }
 

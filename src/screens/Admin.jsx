@@ -32,7 +32,7 @@ import {
 } from 'lucide-react-native'
 import AdminChrome, { AdminGateLayout } from '../components/AdminChrome'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { useShell } from '../context/ShellContext'
 import { useWebLayout } from '../layout/web'
 import {

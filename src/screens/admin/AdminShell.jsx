@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Modal, Pressable, ScrollView, Text, View, useWindowDimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useI18n } from '../../context/I18nContext'
+import { useI18n } from '../../context/I18nContext.web.jsx'
 import useAdminTheme from './hooks/useAdminTheme'
 import useAdminNotifications from './hooks/useAdminNotifications'
 import AdminSidebar from './AdminSidebar'

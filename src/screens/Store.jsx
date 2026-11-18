@@ -21,7 +21,7 @@ const STORE_HERO = {
   uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80',
 }
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import {
   buyAgainIds,
   formatIQD,

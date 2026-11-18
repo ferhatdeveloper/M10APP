@@ -3,7 +3,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native'
 import { ChevronLeft, ChevronRight, ClipboardList, Clock, MapPin, User } from 'lucide-react-native'
 import { useApp } from '../../../context/AppContext'
 import { formatIQD } from '../../../data/mock'
-import { useI18n } from '../../../context/I18nContext'
+import { useI18n } from '../../../context/I18nContext.web.jsx'
 import SectionHeader from '../components/SectionHeader'
 
 const COLUMNS = [

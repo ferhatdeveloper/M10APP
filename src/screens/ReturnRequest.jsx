@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Check, PackageX } from 'lucide-react-native'
 import TopBar from '../components/TopBar'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { formatIQD, getProduct, productName } from '../data/mock'
 import { colors } from '../theme'
 

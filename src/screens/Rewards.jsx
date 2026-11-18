@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Gift, ShoppingBag, Truck, Percent, Package } from 'lucide-react-native'
 import TopBar from '../components/TopBar'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { rewards } from '../data/mock'
 import { colors, radius } from '../theme'
 

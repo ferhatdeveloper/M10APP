@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 import { Bike, CheckCircle2, Clock3, MapPin, Package } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 
 const WHEN = [
   { id: 'now', label: 'الآن' },

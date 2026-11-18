@@ -1,6 +1,6 @@
 import { LayoutDashboard, BarChart3, Layers, Package, Boxes, Users, Megaphone, ClipboardList, Store, UserCog, Sparkles, Settings as SettingsIcon, X } from 'lucide-react-native'
 import { Pressable, ScrollView, Text, View } from 'react-native'
-import { useI18n } from '../../context/I18nContext'
+import { useI18n } from '../../context/I18nContext.web.jsx'
 
 export const NAV_ITEMS = [
   { id: 'overview', icon: LayoutDashboard, group: 'core' },

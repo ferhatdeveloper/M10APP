@@ -3,7 +3,7 @@ import { Store as StoreIcon } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { categories, formatIQD, getProducts, stores, productName } from '../data/mock.js'
+import { categories, formatIQD, getProducts, stores, productName } from '../data/mock.web.js'
 
 const hasOffer = (storeId) => getProducts(storeId).some((p) => p.oldPrice)
 

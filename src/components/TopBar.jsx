@@ -1,9 +1,9 @@
 import { Pressable, StatusBar, Text, View } from 'react-native'
 import { Bell, ChevronLeft, ChevronRight, MapPin, User } from 'lucide-react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useI18n } from '../context/I18nContext'
-import { useApp } from '../context/AppContext'
-import { DEFAULT_STORE_ID, storeName } from '../data/mock'
+import { useI18n } from '../context/I18nContext.web.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
+import { DEFAULT_STORE_ID, storeName } from '../data/mock.web.js'
 import { colors } from '../theme'
 import Logo from './Logo'
 

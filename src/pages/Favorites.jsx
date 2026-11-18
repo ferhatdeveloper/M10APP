@@ -2,9 +2,9 @@ import { Link } from 'react-router'
 import { Heart } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { getStore } from '../data/mock.js'
+import { getStore } from '../data/mock.web.js'
 
 export default function Favorites() {
   const { favorites } = useApp()

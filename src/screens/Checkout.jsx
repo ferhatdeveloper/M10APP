@@ -5,7 +5,7 @@ import { Banknote, Check, CreditCard, MapPin, Smartphone, Wallet } from 'lucide-
 import TopBar from '../components/TopBar'
 import SoftPress from '../components/SoftPress'
 import { useApp } from '../context/AppContext'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { DELIVERY_SLOTS, formatIQD, generateDeliverySlots, linePrice, productName } from '../data/mock'
 import { colors, radius, shadow } from '../theme'
 

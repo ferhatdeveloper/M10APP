@@ -1,9 +1,9 @@
 import { ShoppingBag, Store as StoreIcon, Trash2 } from 'lucide-react'
 import { Link } from 'react-router'
 import TopBar from '../components/TopBar.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { formatIQD, getProduct } from '../data/mock.js'
+import { formatIQD, getProduct } from '../data/mock.web.js'
 
 export default function Cart() {
   const { cart, cartStore, cartTotal, setQty, clearCart } = useApp()

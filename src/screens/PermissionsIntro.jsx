@@ -3,7 +3,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Bell, Camera, MapPin, Wifi } from 'lucide-react-native'
 import Logo from '../components/Logo'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { requestPushPermission, pushSupported } from '../utils/push'
 import { colors, radius } from '../theme'
 

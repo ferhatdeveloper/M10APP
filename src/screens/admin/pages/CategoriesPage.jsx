@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Modal, Pressable, ScrollView, Switch, Text, TextInput, View } from 'react-native'
 import { Layers, Plus, Search, X } from 'lucide-react-native'
 import { useApp } from '../../../context/AppContext'
-import { useI18n } from '../../../context/I18nContext'
+import { useI18n } from '../../../context/I18nContext.web.jsx'
 import SectionHeader from '../components/SectionHeader'
 import EmptyState from '../components/EmptyState'
 

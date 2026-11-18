@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Store } from 'lucide-react-native'
 import Logo from './Logo'
 import { colors } from '../theme'
-import { useI18n } from '../context/I18nContext'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { ADMIN_SIDEBAR_W, useWebLayout } from '../layout/web'
 
 function NavItem({ item, on, onPress, isRTL, dense }) {

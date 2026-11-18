@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check, MapPin, Plus } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
-import { useApp } from '../context/AppContext.jsx'
+import { useApp } from '../context/AppContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
 
 const persistAddresses = (next) => {
