@@ -4,6 +4,7 @@ import { Search, ShoppingCart, User, MapPin, Heart, ChevronDown, Globe, Grid3X3,
 import { useApp } from '../context/AppContext.web.jsx'
 import { useI18n } from '../context/I18nContext.web.jsx'
 import { categories, formatIQD } from '../data/mock.web.js'
+import m10Logo from '../assets/m10-logo.png'
 
 const languages = [
   { code: 'ar', name: 'العربية', flag: '🇮🇶' },
@@ -131,7 +132,7 @@ export default function DesktopHeader() {
         <div className="mgrs-wrap">
           {/* Logo */}
           <Link to="/" className="mgrs-logo">
-            <div className="mgrs-logo-box">M10</div>
+            <img src={m10Logo} alt="M10 Market" className="mgrs-logo-img" />
           </Link>
 
           {/* Search */}
