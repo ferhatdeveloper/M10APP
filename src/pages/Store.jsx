@@ -1,17 +1,13 @@
 import { Clock3, Star, Truck, ShoppingBag, Plus, Minus } from 'lucide-react'
 import { Link, useParams } from 'react-router'
 import TopBar from '../components/TopBar.jsx'
+import WebProductCard from '../components/WebProductCard.jsx'
 import { useApp } from '../context/AppContext.web.jsx'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { formatIQD, getProducts, getStore, productName } from '../data/mock.web.js'
+import { formatIQD, getProducts, getStore, productName, storeName, tUI } from '../data/mock.web.js'
 
-const statusMap = {
-  open: { label: 'مفتوح', cls: 'badge-open' },
-  busy: { label: 'مزدحم', cls: 'badge-busy' },
-  closed: { label: 'مغلق', cls: 'badge-closed' },
-}
-
-function ProductRow({ storeId, product, closed }) {
+function ProductRow({ storeId, product, closed, lang, t }) {
   const { cart, addToCart, setQty } = useApp()
   const item = cart.find((i) => i.storeId === storeId && i.productId === product.id)
   const qty = item?.qty || 0
@@ -19,108 +15,77 @@ function ProductRow({ storeId, product, closed }) {
   return (
     <article className="product-row">
       <div>
-        {product.popular ? <span className="chip">الأكثر طلباً</span> : null}
+        {product.popular ? <span className="chip">{t.popularItems}</span> : null}
         <h3 className="h2" style={{ marginTop: product.popular ? 6 : 0 }}>
-          {product.name}
+          {productName(product, lang)}
         </h3>
         <p className="muted">{product.desc}</p>
         <div className="row" style={{ marginTop: 8, flexWrap: 'wrap' }}>
-          <span className="price">{formatIQD(product.price)}</span>
+          <span className="price">{formatIQD(product.price, lang)}</span>
           {product.oldPrice ? (
-            <span className="old-price">{formatIQD(product.oldPrice)}</span>
+            <span className="old-price">{formatIQD(product.oldPrice, lang)}</span>
           ) : null}
         </div>
         {closed ? (
-          <p className="muted" style={{ marginTop: 8 }}>
-            غير متاح — المتجر مغلق
-          </p>
+          <p className="muted" style={{ marginTop: 8 }}>{t.storeClosed}</p>
         ) : qty === 0 ? (
           <button
             type="button"
             className="btn add-btn"
             onClick={() => addToCart(storeId, product.id)}
           >
-            إضافة
+            {t.addToCart}
           </button>
         ) : (
           <div className="qty" style={{ marginTop: 8 }}>
-            <button
-              type="button"
-              onClick={() => setQty(product.id, qty - 1)}
-              aria-label="إنقاص"
-            >
-              −
-            </button>
+            <button type="button" onClick={() => setQty(product.id, qty - 1)}>−</button>
             <span>{qty}</span>
-            <button
-              type="button"
-              onClick={() => setQty(product.id, qty + 1)}
-              aria-label="زيادة"
-            >
-              +
-            </button>
+            <button type="button" onClick={() => setQty(product.id, qty + 1)}>+</button>
           </div>
         )}
       </div>
-      <img src={product.image} alt={product.name} />
+      <img src={product.image} alt={productName(product, lang)} />
     </article>
   )
 }
 
-function DesktopProductCard({ storeId, product, closed }) {
-  const { cart, addToCart, setQty } = useApp()
-  const item = cart.find((i) => i.storeId === storeId && i.productId === product.id)
-  const qty = item?.qty || 0
-
-  return (
-    <article className="desktop-product-card">
-      <div className="desktop-product-image">
-        <img src={product.image} alt={product.name} />
-        {product.oldPrice && <span className="desktop-product-badge">عرض</span>}
-        {product.popular && !product.oldPrice && <span className="desktop-product-badge popular">الأكثر طلباً</span>}
-      </div>
-      <div className="desktop-product-body">
-        <h3 className="desktop-product-title">{productName(product, 'ar')}</h3>
-        <p className="desktop-product-desc">{product.desc}</p>
-        <div className="desktop-product-footer">
-          <div className="desktop-product-price">
-            <span className="price">{formatIQD(product.price)}</span>
-            {product.oldPrice && <span className="old-price">{formatIQD(product.oldPrice)}</span>}
+function DesktopProductCard({ storeId, product, closed, lang, t }) {
+  if (closed) {
+    return (
+      <div className="cat-product" style={{ opacity: 0.65 }}>
+        <div className="cat-product-img">
+          <img src={product.image} alt={productName(product, lang)} />
+        </div>
+        <div className="cat-product-info">
+          <h3>{productName(product, lang)}</h3>
+          <div className="cat-product-price">
+            <strong>{formatIQD(product.price, lang)}</strong>
           </div>
-          {closed ? (
-            <span className="muted" style={{ fontSize: 12 }}>مغلق</span>
-          ) : qty === 0 ? (
-            <button
-              type="button"
-              className="desktop-add-btn"
-              onClick={() => addToCart(storeId, product.id)}
-            >
-              <Plus size={18} />
-            </button>
-          ) : (
-            <div className="desktop-qty-ctrl">
-              <button type="button" onClick={() => setQty(product.id, qty - 1)}>
-                <Minus size={14} />
-              </button>
-              <span>{qty}</span>
-              <button type="button" onClick={() => setQty(product.id, qty + 1)}>
-                <Plus size={14} />
-              </button>
-            </div>
-          )}
+          <button type="button" className="cat-product-btn" disabled>
+            {t.closed}
+          </button>
         </div>
       </div>
-    </article>
-  )
+    )
+  }
+
+  return <WebProductCard product={product} storeId={storeId} />
 }
 
 export default function Store() {
   const { id } = useParams()
   const isDesktop = useIsDesktop()
+  const { lang } = useI18n()
+  const t = tUI(lang)
   const { cart, cartCount, cartStore, cartTotal, favorites, toggleFavorite } = useApp()
   const store = getStore(id)
   const products = getProducts(id)
   const popular = products.filter((p) => p.popular)
+  const statusMap = {
+    open: { label: t.open, cls: 'badge-open' },
+    busy: { label: t.busy, cls: 'badge-busy' },
+    closed: { label: t.closed, cls: 'badge-closed' },
+  }
   const rest = products.filter((p) => !p.popular)
   const closed = store?.status === 'closed'
   const st = store ? statusMap[store.status] : null
@@ -133,15 +98,12 @@ export default function Store() {
   if (!store) {
     return (
       <>
-        {!isDesktop && <TopBar title="المتجر" backTo="/" />}
+        {!isDesktop && <TopBar title={t.stores} backTo="/" />}
         <div className={isDesktop ? "desktop-store-empty" : "page"}>
           <div className="empty">
-            <p className="h2">المتجر غير موجود</p>
-            <p className="muted" style={{ marginTop: 8 }}>
-              جرّب البحث من الصفحة الرئيسية
-            </p>
+            <p className="h2">{t.storeNotFound}</p>
             <Link to="/" className="btn" style={{ marginTop: 16 }}>
-              العودة للرئيسية
+              {t.backHome}
             </Link>
           </div>
         </div>
@@ -151,7 +113,7 @@ export default function Store() {
 
   if (isDesktop) {
     return (
-      <div className="desktop-store">
+      <div className="desktop-store metro-page">
         <div className="desktop-store-header">
           <div className="desktop-store-cover">
             <img src={store.cover} alt={store.name} />
@@ -165,7 +127,7 @@ export default function Store() {
           </div>
           <div className="desktop-store-info-panel">
             <div className="between" style={{ marginBottom: 8 }}>
-              <h1 className="h1" style={{ fontSize: 26 }}>{store.name}</h1>
+              <h1 className="h1" style={{ fontSize: 26 }}>{storeName(store, lang)}</h1>
               <span className={`badge ${st.cls}`} style={{ fontSize: 13 }}>{st.label}</span>
             </div>
             <p className="muted" style={{ marginBottom: 12 }}>{store.tags.join(' · ')}</p>
@@ -173,45 +135,47 @@ export default function Store() {
               <div className="desktop-store-stat">
                 <Star size={16} fill="#f5c400" color="#f5c400" />
                 <span>{store.rating}</span>
-                <span className="muted">({store.reviews.toLocaleString('ar-IQ')})</span>
+                <span className="muted">({store.reviews.toLocaleString(lang === 'tr' ? 'tr-TR' : lang === 'en' ? 'en-US' : 'ar-IQ')})</span>
               </div>
               <div className="desktop-store-stat">
                 <Clock3 size={16} />
-                <span>{store.eta} د</span>
+                <span>{store.eta} {t.min}</span>
               </div>
               <div className="desktop-store-stat">
                 <Truck size={16} />
-                <span>{store.fee === 0 ? 'مجاني' : formatIQD(store.fee)}</span>
+                <span>{store.fee === 0 ? t.free : formatIQD(store.fee, lang)}</span>
               </div>
             </div>
             <p className="muted" style={{ marginTop: 12 }}>
-              الحد الأدنى للطلب {formatIQD(store.minOrder)}
+              {t.minOrder} {formatIQD(store.minOrder, lang)}
             </p>
             {closed && (
               <div className="warn" style={{ marginTop: 12 }}>
-                هذا المتجر مغلق حالياً. يمكنك تصفّح القائمة دون إضافة طلب.
+                {t.storeClosed}
               </div>
             )}
           </div>
         </div>
 
         {products.length === 0 ? (
-          <p className="muted" style={{ padding: 24 }}>لا توجد أصناف حالياً</p>
+          <p className="muted" style={{ padding: 24 }}>{t.noProducts}</p>
         ) : (
           <div className="desktop-store-products">
             {popular.length > 0 && (
               <section style={{ marginBottom: 32 }}>
                 <div className="section-title">
-                  <h2 className="h2">🔥 الأكثر طلباً</h2>
-                  <span className="muted">{popular.length} صنف</span>
+                  <h2 className="h2">🔥 {t.popularItems}</h2>
+                  <span className="muted">{popular.length} {t.items}</span>
                 </div>
-                <div className="desktop-products-grid">
+                <div className="web-product-grid">
                   {popular.map((product) => (
                     <DesktopProductCard
                       key={product.id}
                       storeId={store.id}
                       product={product}
                       closed={closed}
+                      lang={lang}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -220,16 +184,18 @@ export default function Store() {
 
             <section>
               <div className="section-title">
-                <h2 className="h2">جميع المنتجات</h2>
-                <span className="muted">{products.length} صنف</span>
+                <h2 className="h2">{t.allProducts}</h2>
+                <span className="muted">{products.length} {t.items}</span>
               </div>
-              <div className="desktop-products-grid">
+              <div className="web-product-grid">
                 {(popular.length ? rest : products).map((product) => (
                   <DesktopProductCard
                     key={product.id}
                     storeId={store.id}
                     product={product}
                     closed={closed}
+                    lang={lang}
+                    t={t}
                   />
                 ))}
               </div>
@@ -242,13 +208,13 @@ export default function Store() {
             <div>
               <div className="row" style={{ gap: 6 }}>
                 <ShoppingBag size={16} />
-                <span>{storeItemCount} {storeItemCount === 1 ? 'صنف' : 'أصناف'}</span>
+                <span>{storeItemCount} {storeItemCount === 1 ? t.item : t.items}</span>
               </div>
               <div className="price" style={{ color: '#fff', marginTop: 2 }}>
-                {formatIQD(cartTotal)}
+                {formatIQD(cartTotal, lang)}
               </div>
             </div>
-            <span className="btn">عرض السلة</span>
+            <span className="btn">{t.viewCart}</span>
           </Link>
         )}
       </div>
@@ -257,15 +223,15 @@ export default function Store() {
 
   return (
     <>
-      <TopBar title={store.name} backTo="/" />
+      <TopBar title={storeName(store, lang)} backTo="/" />
       <div className="store-hero">
-        <img className="cover" src={store.cover} alt={store.name} />
+        <img className="cover" src={store.cover} alt={storeName(store, lang)} />
         <div className="store-hero-fade" />
         <button
           type="button"
           className={`star-btn${isFav ? ' on' : ''}`}
           onClick={() => toggleFavorite(store.id)}
-          aria-label={isFav ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}
+          aria-label={t.favorites}
         >
           <Star size={18} fill={isFav ? 'currentColor' : 'none'} />
         </button>
@@ -281,33 +247,33 @@ export default function Store() {
           <div className="store-meta">
             <span>
               <Star size={12} fill="#f5c400" color="#f5c400" /> {store.rating}{' '}
-              ({store.reviews.toLocaleString('ar-IQ')})
+              ({store.reviews.toLocaleString(lang === 'tr' ? 'tr-TR' : 'en-US')})
             </span>
             <span>
-              <Clock3 size={12} /> {store.eta} د
+              <Clock3 size={12} /> {store.eta} {t.min}
             </span>
             <span>
-              <Truck size={12} /> {formatIQD(store.fee)}
+              <Truck size={12} /> {store.fee === 0 ? t.free : formatIQD(store.fee, lang)}
             </span>
           </div>
           <p className="muted" style={{ marginTop: 8 }}>
-            الحد الأدنى للطلب {formatIQD(store.minOrder)}
+            {t.minOrder} {formatIQD(store.minOrder, lang)}
           </p>
           {closed ? (
             <div className="warn" style={{ marginTop: 12 }}>
-              هذا المتجر مغلق حالياً. يمكنك تصفّح القائمة دون إضافة طلب.
+              {t.storeClosed}
             </div>
           ) : null}
         </section>
 
         {products.length === 0 ? (
-          <p className="muted">لا توجد أصناف حالياً</p>
+          <p className="muted">{t.noResults}</p>
         ) : (
           <>
             {popular.length ? (
               <section>
                 <div className="section-title">
-                  <h2 className="h2">الأكثر طلباً</h2>
+                  <h2 className="h2">{t.popularItems}</h2>
                 </div>
                 <div className="stack">
                   {popular.map((product) => (
@@ -316,6 +282,8 @@ export default function Store() {
                       storeId={store.id}
                       product={product}
                       closed={closed}
+                      lang={lang}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -325,8 +293,8 @@ export default function Store() {
             {rest.length || !popular.length ? (
               <section>
                 <div className="section-title">
-                  <h2 className="h2">القائمة</h2>
-                  <span className="muted">{products.length} صنف</span>
+                  <h2 className="h2">{t.allProducts}</h2>
+                  <span className="muted">{products.length} {t.items}</span>
                 </div>
                 <div className="stack">
                   {(popular.length ? rest : products).map((product) => (
@@ -335,6 +303,8 @@ export default function Store() {
                       storeId={store.id}
                       product={product}
                       closed={closed}
+                      lang={lang}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -350,14 +320,14 @@ export default function Store() {
             <div className="row" style={{ gap: 6 }}>
               <ShoppingBag size={16} />
               <span>
-                {storeItemCount} {storeItemCount === 1 ? 'صنف' : 'أصناف'}
+                {storeItemCount} {storeItemCount === 1 ? t.item : t.items}
               </span>
             </div>
             <div className="price" style={{ color: '#fff', marginTop: 2 }}>
-              {formatIQD(cartTotal)}
+              {formatIQD(cartTotal, lang)}
             </div>
           </div>
-          <span className="btn">عرض السلة</span>
+          <span className="btn">{t.viewCart}</span>
         </Link>
       ) : null}
     </>

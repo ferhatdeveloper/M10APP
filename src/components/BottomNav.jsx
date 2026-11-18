@@ -1,17 +1,22 @@
 import { NavLink } from 'react-router'
 import { Home, Search, Receipt, Heart, User } from 'lucide-react'
 import { useApp } from '../context/AppContext.web.jsx'
-
-const items = [
-  { to: '/', icon: Home, label: 'الرئيسية', end: true },
-  { to: '/search', icon: Search, label: 'بحث' },
-  { to: '/orders', icon: Receipt, label: 'طلباتي' },
-  { to: '/favorites', icon: Heart, label: 'المفضلة' },
-  { to: '/profile', icon: User, label: 'حسابي' },
-]
+import { useI18n } from '../context/I18nContext.web.jsx'
+import { tUI } from '../data/mock.web.js'
 
 export default function BottomNav() {
   const { cartCount } = useApp()
+  const { lang } = useI18n()
+  const t = tUI(lang)
+
+  const items = [
+    { to: '/', icon: Home, label: t.home, end: true },
+    { to: '/search', icon: Search, label: lang === 'tr' ? 'Ara' : lang === 'en' ? 'Search' : 'بحث', end: false },
+    { to: '/orders', icon: Receipt, label: t.orders, end: false },
+    { to: '/favorites', icon: Heart, label: t.favorites, end: false },
+    { to: '/profile', icon: User, label: t.myAccount, end: false },
+  ]
+
   return (
     <nav className="bottom-nav">
       {items.map((item) => {

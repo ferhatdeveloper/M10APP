@@ -10,8 +10,11 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    // Cloudflare quick tunnel / arbitrary preview hosts
+    allowedHosts: true,
   },
   resolve: {
+    extensions: ['.web.jsx', '.web.js', '.web.tsx', '.web.ts', '.jsx', '.js', '.tsx', '.ts', '.json'],
     alias: [
       { find: /^react-native$/, replacement: 'react-native-web' },
       { find: /^react-native\/(.*)/, replacement: 'react-native-web' },

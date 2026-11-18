@@ -13,6 +13,9 @@ import Favorites from './pages/Favorites.jsx'
 import Rewards from './pages/Rewards.jsx'
 import Butler from './pages/Butler.jsx'
 import Addresses from './pages/Addresses.jsx'
+import Brands from './pages/Brands.jsx'
+import Brand from './pages/Brand.jsx'
+import Product from './pages/Product.jsx'
 
 export default function App() {
   return (
@@ -21,6 +24,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/category/:id" element={<Category />} />
+        <Route path="/brands" element={<Brands />} />
+        <Route path="/brand/:id" element={<Brand />} />
+        <Route path="/product/:id" element={<Product />} />
         <Route path="/store/:id" element={<Store />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />

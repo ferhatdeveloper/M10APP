@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
-import { Search, ShoppingCart, User, MapPin, Heart, ChevronDown, Globe, Grid3X3, ChevronLeft } from 'lucide-react'
+import { Search, ShoppingCart, User, MapPin, Heart, ChevronDown, ChevronRight, Globe, Grid3X3, ChevronLeft } from 'lucide-react'
 import { useApp } from '../context/AppContext.web.jsx'
 import { useI18n } from '../context/I18nContext.web.jsx'
 import { categories, formatIQD, ui, getCategoryName } from '../data/mock.web.js'
-import m10Logo from '../assets/m10-logo.png'
 
 const languages = [
   { code: 'ar', name: 'العربية', flag: '🇮🇶' },
@@ -70,9 +69,15 @@ export default function DesktopHeader() {
       {/* Main Header */}
       <div className="mgrs-main">
         <div className="mgrs-wrap">
-          {/* Logo */}
-          <Link to="/" className="mgrs-logo">
-            <img src={m10Logo} alt="M10 Market" className="mgrs-logo-img" />
+          <Link to="/" className="mgrs-logo" aria-label="M10">
+            <img
+              src="/m10-logo.png"
+              alt="M10"
+              className="mgrs-logo-img"
+              width={48}
+              height={48}
+              draggable={false}
+            />
           </Link>
 
           {/* Search */}
@@ -111,47 +116,49 @@ export default function DesktopHeader() {
         </div>
       </div>
 
-      {/* Nav Bar */}
       <div className="mgrs-nav">
         <div className="mgrs-wrap">
-          {/* Categories Dropdown */}
           <div className="mgrs-cats-wrap">
-            <button 
-              className="mgrs-cats-btn"
+            <button
+              type="button"
+              className={`mgrs-cats-btn${catsOpen ? ' open' : ''}`}
               onClick={() => setCatsOpen(!catsOpen)}
+              aria-expanded={catsOpen}
             >
-              <Grid3X3 size={18} />
+              <Grid3X3 size={16} />
               <span>{t.categories}</span>
-              <ChevronDown size={14} />
+              <ChevronDown size={14} className="mgrs-cats-chevron" />
             </button>
             {catsOpen && (
               <div className="mgrs-cats-dd">
                 {categories.map(cat => (
-                  <Link 
-                    key={cat.id} 
+                  <Link
+                    key={cat.id}
                     to={`/category/${cat.id}`}
+                    className={cat.id === 'offers' ? 'hot' : ''}
                     onClick={() => setCatsOpen(false)}
                   >
-                    {getCategoryName(cat, lang)}
-                    <ChevronLeft size={14} />
+                    <span className="mgrs-cats-dd-icon">{cat.icon}</span>
+                    <span className="mgrs-cats-dd-name">{getCategoryName(cat, lang)}</span>
+                    {isRTL ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
                   </Link>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Nav Links */}
           <nav className="mgrs-nav-links">
             {navCategories.map(id => {
               const cat = categories.find(c => c.id === id)
+              const active = pathname === `/category/${id}`
               return (
                 <Link
                   key={id}
                   to={`/category/${id}`}
-                  className={`${id === 'offers' ? 'hot' : ''} ${pathname === `/category/${id}` ? 'active' : ''}`}
+                  className={[id === 'offers' ? 'hot' : '', active ? 'active' : ''].filter(Boolean).join(' ')}
                 >
-                  {id === 'offers' && '🔥 '}
-                  {getCategoryName(cat, lang)}
+                  {id === 'offers' && <span className="mgrs-nav-emoji" aria-hidden="true">🔥</span>}
+                  <span>{getCategoryName(cat, lang)}</span>
                 </Link>
               )
             })}

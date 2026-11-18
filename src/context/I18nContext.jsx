@@ -9,7 +9,7 @@ const KEY_DIR = 'm10-dir' // auto | rtl | ltr
 const normalizeDir = (d) => (d === 'rtl' || d === 'ltr' ? d : 'auto')
 
 export function I18nProvider({ children }) {
-  const [lang, setLangState] = useState(null)
+  const [lang, setLangState] = useState('tr')
   const [dirMode, setDirModeState] = useState('auto')
   const [ready, setReady] = useState(false)
 
@@ -18,10 +18,11 @@ export function I18nProvider({ children }) {
       try {
         const savedLang = await AsyncStorage.getItem(KEY_LANG)
         if (savedLang && dictionaries[savedLang]) setLangState(savedLang)
+        else setLangState('tr')
         const savedDir = await AsyncStorage.getItem(KEY_DIR)
         if (savedDir) setDirModeState(normalizeDir(savedDir))
       } catch {
-        /* ignore */
+        setLangState('tr')
       }
       setReady(true)
     })()
@@ -59,7 +60,7 @@ export function I18nProvider({ children }) {
     }
   }
 
-  const dict = dictionaries[lang] || dictionaries.ar
+  const dict = dictionaries[lang] || dictionaries.tr
   const langIsRTL = lang === 'ar' || lang === 'ckb'
   const isRTL =
     dirMode === 'rtl' ? true : dirMode === 'ltr' ? false : langIsRTL

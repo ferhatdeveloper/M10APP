@@ -2,150 +2,72 @@ import { Link, Navigate, useParams } from 'react-router'
 import { Store as StoreIcon } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
+import WebProductCard from '../components/WebProductCard.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
-import { categories, formatIQD, getProducts, stores, productName } from '../data/mock.web.js'
-
-const hasOffer = (storeId) => getProducts(storeId).some((p) => p.oldPrice)
-
-const categoryLabels = {
-  offers: 'العروض',
-  meat: 'اللحوم',
-  ready: 'دجاج',
-  drinks: 'مشروبات',
-  dairy: 'ألبان',
-  produce: 'خضار وفواكه',
-  bakery: 'مخبوزات',
-  pantry: 'مؤن',
-  snacks: 'وجبات خفيفة',
-  frozen: 'مجمدات',
-  household: 'تنظيف',
-  home: 'المنزل',
-  personal: 'عناية شخصية',
-  coldcuts: 'لحوم باردة',
-}
+import { useI18n } from '../context/I18nContext.web.jsx'
+import {
+  categories,
+  formatIQD,
+  getProductsByCategory,
+  getCategoryName,
+  stores,
+  productName,
+  ui,
+} from '../data/mock.web.js'
 
 export default function Category() {
   const { id } = useParams()
   const isDesktop = useIsDesktop()
+  const { lang } = useI18n()
+  const t = ui[lang] || ui.ar
   const cat = categories.find((c) => c.id === id)
 
   if (id === 'butler') return <Navigate to="/butler" replace />
 
   const isOffers = id === 'offers'
-  const title = categoryLabels[id] || cat?.nameAr || cat?.name || 'التصنيف'
-
-  const list = isOffers
-    ? stores.filter((s) => hasOffer(s.id))
-    : stores.filter((s) => s.category === id)
-
-  const categoryProducts = !isOffers
-    ? stores
-        .filter(s => !s.comingSoon)
-        .flatMap((s) =>
-          getProducts(s.id)
-            .filter((p) => p.aisle === id)
-            .map((p) => ({ ...p, storeId: s.id, storeName: s.name }))
-        )
-        .slice(0, 24)
-    : []
-
-  const offerProducts = isOffers
-    ? stores.flatMap((s) =>
-        getProducts(s.id)
-          .filter((p) => p.oldPrice)
-          .map((p) => ({ ...p, storeId: s.id, storeName: s.name })),
-      )
-    : []
-
-  const productsToShow = isOffers ? offerProducts : categoryProducts
+  const title = getCategoryName(cat, lang) || id
+  const products = getProductsByCategory(id)
+  const list = stores.filter((s) => !s.comingSoon)
 
   if (isDesktop) {
     return (
-      <div className="desktop-category">
+      <div className="desktop-category metro-page">
         <div className="desktop-category-header">
-          <h1 className="h1" style={{ fontSize: 24, marginBottom: 8 }}>{title}</h1>
+          <h1 className="h1" style={{ fontSize: 24, marginBottom: 8 }}>
+            {cat?.icon ? `${cat.icon} ` : ''}{title}
+          </h1>
           <p className="muted">
-            {isOffers
-              ? `${offerProducts.length} منتج بأسعار مخفّضة`
-              : categoryProducts.length > 0
-                ? `${categoryProducts.length} منتج متوفر`
-                : `${list.length} متجر في هذا التصنيف`}
+            {products.length} {lang === 'tr' ? 'ürün' : lang === 'en' ? 'products' : 'منتج'}
           </p>
         </div>
 
-        {productsToShow.length > 0 && (
+        {products.length > 0 ? (
           <section style={{ marginBottom: 32 }}>
-            <div className="section-title">
-              <h2 className="h2">{isOffers ? 'العروض' : 'المنتجات'}</h2>
-              <span className="muted">{productsToShow.length} منتج</span>
-            </div>
-            <div 
-              className="stack" 
-              style={{ 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-                gap: 16 
-              }}
-            >
-              {productsToShow.map((p, i) => (
-                <Link 
-                  key={`${p.storeId}-${p.id}-${i}`} 
-                  to={`/store/${p.storeId}`} 
-                  className="product-row"
-                  style={{ padding: 14, alignItems: 'center' }}
-                >
-                  <div style={{ flex: 1 }}>
-                    {p.oldPrice && <span className="chip" style={{ marginBottom: 6 }}>عرض</span>}
-                    <div className="h2" style={{ fontSize: 14, lineHeight: 1.3 }}>
-                      {productName(p, 'ar')}
-                    </div>
-                    <p className="muted" style={{ fontSize: 12, marginTop: 4 }}>
-                      {p.storeName}
-                      {p.desc ? ` · ${p.desc}` : ''}
-                    </p>
-                    <div className="row" style={{ marginTop: 8 }}>
-                      <span className="price" style={{ fontSize: 15 }}>{formatIQD(p.price)}</span>
-                      {p.oldPrice && (
-                        <span className="old-price">{formatIQD(p.oldPrice)}</span>
-                      )}
-                    </div>
-                  </div>
-                  <img 
-                    src={p.image} 
-                    alt={p.name} 
-                    style={{ 
-                      width: 80, 
-                      height: 80, 
-                      objectFit: 'cover', 
-                      borderRadius: 12,
-                      flexShrink: 0 
-                    }} 
-                  />
-                </Link>
+            <div className="web-product-grid">
+              {products.map((p) => (
+                <WebProductCard key={p.id} product={p} storeId={stores[0]?.id} />
               ))}
             </div>
           </section>
-        )}
-
-        {list.length === 0 && productsToShow.length === 0 ? (
+        ) : (
           <div className="empty" style={{ padding: 60 }}>
             <div className="empty-icon">
               <StoreIcon size={36} />
             </div>
             <p className="h2" style={{ color: 'var(--ink)', marginTop: 12 }}>
-              ماكو منتجات بهالتصنيف حالياً
+              {lang === 'tr' ? 'Bu kategoride ürün yok' : lang === 'en' ? 'No products in this category' : 'ماكو منتجات بهالتصنيف حالياً'}
             </p>
-            <p className="muted" style={{ margin: '8px 0 18px' }}>
-              جرّب تصنيف آخر
-            </p>
-            <Link to="/" className="btn">
-              الرئيسية
+            <Link to="/" className="btn" style={{ marginTop: 16 }}>
+              {lang === 'tr' ? 'Ana Sayfa' : lang === 'en' ? 'Home' : 'الرئيسية'}
             </Link>
           </div>
-        ) : list.length > 0 && (
+        )}
+
+        {list.length > 0 && (
           <section>
             <div className="section-title">
-              <h2 className="h2">المتاجر</h2>
-              <span className="muted">{list.length} متجر</span>
+              <h2 className="h2">{lang === 'tr' ? 'Mağazalar' : lang === 'en' ? 'Stores' : 'المتاجر'}</h2>
+              <span className="muted">{list.length}</span>
             </div>
             <div className="stack">
               {list.map((store) => (
@@ -162,68 +84,39 @@ export default function Category() {
     <div>
       <TopBar title={title} backTo="/" />
       <div className="page" style={{ paddingTop: 4 }}>
-        {list.length > 0 || (isOffers && offerProducts.length > 0) ? (
-          <p className="muted" style={{ marginBottom: 4 }}>
-            {isOffers
-              ? 'أسعار مخفّضة اليوم بالدينار العراقي'
-              : `${list.length} متجر في ${title} — توصيل لبغداد`}
-          </p>
-        ) : null}
-
-        {isOffers && offerProducts.length > 0 ? (
+        {products.length > 0 ? (
           <>
             <div className="section-title">
-              <h2 className="h2">العروض</h2>
-              <span className="muted">{offerProducts.length} منتج</span>
+              <h2 className="h2">{isOffers ? (lang === 'tr' ? 'Kampanyalar' : t.flashSale) : title}</h2>
+              <span className="muted">{products.length}</span>
             </div>
             <div className="stack">
-              {offerProducts.map((p) => (
-                <Link key={`${p.storeId}-${p.id}`} to={`/store/${p.storeId}`} className="product-row">
+              {products.map((p) => (
+                <Link key={p.id} to={`/store/${stores[0]?.id}`} className="product-row">
                   <div>
-                    <div className="h2">{p.name}</div>
-                    <p className="muted">
-                      {p.storeName}
-                      {p.desc ? ` · ${p.desc}` : ''}
-                    </p>
+                    <div className="h2">{productName(p, lang)}</div>
                     <div className="row" style={{ marginTop: 6 }}>
-                      <span className="price">{formatIQD(p.price)}</span>
-                      <span className="old-price">{formatIQD(p.oldPrice)}</span>
+                      <span className="price">{formatIQD(p.price, lang)}</span>
+                      {p.oldPrice && <span className="old-price">{formatIQD(p.oldPrice, lang)}</span>}
                     </div>
                   </div>
-                  <img src={p.image} alt={p.name} />
+                  <img src={p.image} alt={productName(p, lang)} />
                 </Link>
               ))}
             </div>
           </>
-        ) : null}
-
-        {list.length === 0 ? (
+        ) : (
           <div className="empty">
             <div className="empty-icon">
               <StoreIcon size={36} />
             </div>
             <p className="h2" style={{ color: 'var(--ink)', marginTop: 12 }}>
-              ماكو متاجر بهالتصنيف حالياً
-            </p>
-            <p className="muted" style={{ margin: '8px 0 18px' }}>
-              ارجع للرئيسية وجرّب تصنيف ثاني
+              {lang === 'tr' ? 'Bu kategoride ürün yok' : lang === 'en' ? 'No stores in this category' : 'ماكو متاجر بهالتصنيف حالياً'}
             </p>
             <Link to="/" className="btn">
-              الرئيسية
+              {lang === 'tr' ? 'Ana Sayfa' : lang === 'en' ? 'Home' : 'الرئيسية'}
             </Link>
           </div>
-        ) : (
-          <>
-            <div className="section-title">
-              <h2 className="h2">{isOffers ? 'المتاجر' : title}</h2>
-              <span className="muted">{list.length}</span>
-            </div>
-            <div className="stack">
-              {list.map((store) => (
-                <StoreCard key={store.id} store={store} />
-              ))}
-            </div>
-          </>
         )}
       </div>
     </div>
