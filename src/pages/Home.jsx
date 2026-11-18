@@ -1,8 +1,9 @@
 import { Link } from 'react-router'
-import { Search, ShoppingBag, Star, ChevronLeft } from 'lucide-react'
+import { Search, ShoppingBag, Star, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import StoreCard from '../components/StoreCard.jsx'
 import { useApp } from '../context/AppContext.web.jsx'
+import { useI18n } from '../context/I18nContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
 import { banners, categories, formatIQD, stores, getProducts } from '../data/mock.web.js'
 
@@ -29,142 +30,187 @@ const itemWord = (n) => {
   return 'منتج'
 }
 
+const catIcons = {
+  offers: '🔥', meat: '🥩', ready: '🍗', drinks: '🥤', dairy: '🥛',
+  produce: '🥬', bakery: '🥖', pantry: '🫙', snacks: '🍿', frozen: '❄️',
+  household: '🧹', personal: '🧴', coldcuts: '🥓', home: '🏠'
+}
+
 export default function Home() {
-  const { favorites, cartCount, cartTotal, cartStore } = useApp()
+  const { favorites, cartCount, cartTotal, cartStore, addToCart } = useApp()
+  const { lang } = useI18n()
   const isDesktop = useIsDesktop()
 
-  const favStores = favorites
-    .map((id) => stores.find((s) => s.id === id))
-    .filter(Boolean)
-  const nearbyStores = stores.filter((s) => !favorites.includes(s.id))
-
-  const dealProducts = stores
-    .filter(s => !s.comingSoon)
-    .flatMap(s => getProducts(s.id).filter(p => p.oldPrice).slice(0, 2))
-    .slice(0, 8)
+  const allProducts = getProducts()
+  const dealProducts = allProducts.filter(p => p.oldPrice).slice(0, 8)
+  const popularProducts = allProducts.filter(p => p.popular).slice(0, 8)
+  const allProductsShow = allProducts.slice(0, 12)
 
   if (isDesktop) {
     return (
-      <div className="desktop-home-2027">
-        {/* Hero Banner Section */}
-        <section className="dh2-hero">
-          <div className="dh2-hero-main">
-            <div className="dh2-hero-content">
-              <span className="dh2-hero-badge">عروض حصرية</span>
-              <h1 className="dh2-hero-title">تسوق بذكاء، وفر أكثر</h1>
-              <p className="dh2-hero-desc">احصل على خصم يصل إلى 50% على منتجات مختارة. التوصيل خلال 30 دقيقة.</p>
-              <Link to="/category/offers" className="dh2-hero-btn">تصفح العروض</Link>
-            </div>
-            <div className="dh2-hero-image">
-              <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=600" alt="عروض" />
+      <div className="mgs-home">
+        {/* Hero Slider */}
+        <section className="mgs-slider">
+          <div className="mgs-slider-main">
+            <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1200" alt="عروض" />
+            <div className="mgs-slider-content">
+              <span className="mgs-slider-badge">عرض خاص</span>
+              <h1>خصم يصل إلى 50%</h1>
+              <p>على جميع منتجات اللحوم والدواجن</p>
+              <Link to="/category/offers" className="mgs-slider-btn">تسوق الآن</Link>
             </div>
           </div>
-          <div className="dh2-hero-cards">
-            <Link to="/category/produce" className="dh2-promo-card green">
-              <span className="dh2-promo-label">طازج يومياً</span>
-              <span className="dh2-promo-title">خضار وفواكه</span>
-              <span className="dh2-promo-link">تسوق الآن ←</span>
+          <div className="mgs-slider-side">
+            <Link to="/category/meat" className="mgs-side-card">
+              <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400" alt="لحوم" />
+              <div className="mgs-side-overlay">
+                <span>لحوم طازجة</span>
+                <small>جودة عالية</small>
+              </div>
             </Link>
-            <Link to="/category/meat" className="dh2-promo-card red">
-              <span className="dh2-promo-label">جودة عالية</span>
-              <span className="dh2-promo-title">لحوم طازجة</span>
-              <span className="dh2-promo-link">تسوق الآن ←</span>
+            <Link to="/category/produce" className="mgs-side-card">
+              <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=400" alt="خضار" />
+              <div className="mgs-side-overlay">
+                <span>خضار وفواكه</span>
+                <small>طازج يومياً</small>
+              </div>
             </Link>
           </div>
         </section>
 
-        {/* Quick Categories */}
-        <section className="dh2-categories">
-          <h2 className="dh2-section-title">تسوق حسب التصنيف</h2>
-          <div className="dh2-cat-grid">
-            {categories.slice(0, 10).map((c) => (
-              <Link key={c.id} to={categoryHref(c.id)} className="dh2-cat-card">
-                <div className={`dh2-cat-icon ${c.id === 'offers' ? 'offers' : ''}`}>
-                  {c.id === 'offers' && '🔥'}
-                  {c.id === 'meat' && '🥩'}
-                  {c.id === 'dairy' && '🥛'}
-                  {c.id === 'produce' && '🥬'}
-                  {c.id === 'bakery' && '🥖'}
-                  {c.id === 'pantry' && '🫙'}
-                  {c.id === 'drinks' && '🥤'}
-                  {c.id === 'snacks' && '🍿'}
-                  {c.id === 'frozen' && '❄️'}
-                  {c.id === 'household' && '🧹'}
-                  {c.id === 'personal' && '🧴'}
+        {/* Categories Row */}
+        <section className="mgs-cats">
+          <div className="mgs-cats-scroll">
+            {categories.map(cat => (
+              <Link key={cat.id} to={`/category/${cat.id}`} className="mgs-cat">
+                <div className={`mgs-cat-icon ${cat.id === 'offers' ? 'hot' : ''}`}>
+                  {catIcons[cat.id] || '📦'}
                 </div>
-                <span className="dh2-cat-name">{c.nameAr || c.name}</span>
+                <span>{cat.nameAr || cat.name}</span>
               </Link>
             ))}
           </div>
         </section>
 
-        {/* Deal Products */}
-        {dealProducts.length > 0 && (
-          <section className="dh2-section">
-            <div className="dh2-section-header">
-              <h2 className="dh2-section-title">
-                <span className="dh2-fire">🔥</span> عروض اليوم
-              </h2>
-              <Link to="/category/offers" className="dh2-section-link">عرض الكل ←</Link>
+        {/* Campaign Banners */}
+        <section className="mgs-campaigns">
+          <Link to="/category/offers" className="mgs-camp red">
+            <div className="mgs-camp-text">
+              <span>🔥 عروض الأسبوع</span>
+              <small>وفر حتى 40%</small>
             </div>
-            <div className="dh2-products-grid">
+          </Link>
+          <Link to="/category/drinks" className="mgs-camp blue">
+            <div className="mgs-camp-text">
+              <span>🥤 اشتر 2 واحصل على 1</span>
+              <small>على المشروبات</small>
+            </div>
+          </Link>
+          <Link to="/rewards" className="mgs-camp gold">
+            <div className="mgs-camp-text">
+              <span>⭐ نقاط M10</span>
+              <small>اجمع واستبدل</small>
+            </div>
+          </Link>
+        </section>
+
+        {/* Deals Section */}
+        {dealProducts.length > 0 && (
+          <section className="mgs-section">
+            <div className="mgs-section-head">
+              <h2>🔥 عروض اليوم</h2>
+              <Link to="/category/offers">عرض الكل <ChevronLeft size={16} /></Link>
+            </div>
+            <div className="mgs-products">
               {dealProducts.map((p, i) => (
-                <Link key={`${p.id}-${i}`} to={`/store/${p.storeId || stores[0].id}`} className="dh2-product-card">
-                  <div className="dh2-product-badge">خصم</div>
-                  <img src={p.image} alt={p.name} className="dh2-product-img" />
-                  <div className="dh2-product-info">
-                    <h3 className="dh2-product-name">{p.nameAr || p.names?.ar || p.name}</h3>
-                    <p className="dh2-product-desc">{p.desc}</p>
-                    <div className="dh2-product-prices">
-                      <span className="dh2-price-current">{formatIQD(p.price)}</span>
-                      <span className="dh2-price-old">{formatIQD(p.oldPrice)}</span>
+                <div key={p.id} className="mgs-product">
+                  {p.oldPrice && <span className="mgs-product-badge">-{Math.round((1 - p.price/p.oldPrice) * 100)}%</span>}
+                  <Link to={`/store/${stores[0].id}`}>
+                    <img src={p.image} alt={p.nameAr || p.name} />
+                  </Link>
+                  <div className="mgs-product-info">
+                    <h3>{p.nameAr || p.name}</h3>
+                    <p>{p.desc}</p>
+                    <div className="mgs-product-price">
+                      <strong>{formatIQD(p.price, lang)}</strong>
+                      {p.oldPrice && <del>{formatIQD(p.oldPrice, lang)}</del>}
                     </div>
-                    <button className="dh2-add-btn">أضف للسلة</button>
+                    <button className="mgs-add-btn" onClick={() => addToCart && addToCart(stores[0].id, p)}>
+                      <Plus size={18} /> أضف
+                    </button>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Stores Section */}
-        <section className="dh2-section">
-          <div className="dh2-section-header">
-            <h2 className="dh2-section-title">المتاجر القريبة</h2>
-            <span className="dh2-section-count">{stores.length} متجر متاح</span>
-          </div>
-          <div className="dh2-stores-grid">
-            {stores.map((store) => (
-              <Link key={store.id} to={`/store/${store.id}`} className="dh2-store-card">
-                <div className="dh2-store-img-wrap">
-                  <img src={store.cover} alt={store.name} className="dh2-store-img" />
-                  <span className="dh2-store-status open">متاح الآن</span>
-                </div>
-                <div className="dh2-store-info">
-                  <h3 className="dh2-store-name">{store.name}</h3>
-                  <div className="dh2-store-meta">
-                    <span className="dh2-store-rating">
-                      <Star size={14} fill="#f5c400" color="#f5c400" />
-                      {store.rating}
-                    </span>
-                    <span className="dh2-store-time">⏱ {store.eta} دقيقة</span>
-                    <span className="dh2-store-fee">توصيل {formatIQD(store.fee)}</span>
+        {/* Popular Products */}
+        {popularProducts.length > 0 && (
+          <section className="mgs-section">
+            <div className="mgs-section-head">
+              <h2>⭐ الأكثر مبيعاً</h2>
+              <Link to="/category/meat">عرض الكل <ChevronLeft size={16} /></Link>
+            </div>
+            <div className="mgs-products">
+              {popularProducts.map((p) => (
+                <div key={p.id} className="mgs-product">
+                  {p.popular && <span className="mgs-product-badge pop">مميز</span>}
+                  <Link to={`/store/${stores[0].id}`}>
+                    <img src={p.image} alt={p.nameAr || p.name} />
+                  </Link>
+                  <div className="mgs-product-info">
+                    <h3>{p.nameAr || p.name}</h3>
+                    <p>{p.desc}</p>
+                    <div className="mgs-product-price">
+                      <strong>{formatIQD(p.price, lang)}</strong>
+                    </div>
+                    <button className="mgs-add-btn" onClick={() => addToCart && addToCart(stores[0].id, p)}>
+                      <Plus size={18} /> أضف
+                    </button>
                   </div>
                 </div>
-              </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* All Products */}
+        <section className="mgs-section">
+          <div className="mgs-section-head">
+            <h2>🛒 تسوق المنتجات</h2>
+            <Link to="/store/m10-market">عرض الكل <ChevronLeft size={16} /></Link>
+          </div>
+          <div className="mgs-products-grid">
+            {allProductsShow.map((p) => (
+              <div key={p.id} className="mgs-product">
+                {p.oldPrice && <span className="mgs-product-badge">-{Math.round((1 - p.price/p.oldPrice) * 100)}%</span>}
+                <Link to={`/store/${stores[0].id}`}>
+                  <img src={p.image} alt={p.nameAr || p.name} />
+                </Link>
+                <div className="mgs-product-info">
+                  <h3>{p.nameAr || p.name}</h3>
+                  <p>{p.desc}</p>
+                  <div className="mgs-product-price">
+                    <strong>{formatIQD(p.price, lang)}</strong>
+                    {p.oldPrice && <del>{formatIQD(p.oldPrice, lang)}</del>}
+                  </div>
+                  <button className="mgs-add-btn" onClick={() => addToCart && addToCart(stores[0].id, p)}>
+                    <Plus size={18} /> أضف
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         </section>
 
         {/* Floating Cart */}
         {cartCount > 0 && (
-          <Link to="/cart" className="dh2-floating-cart">
-            <div className="dh2-cart-left">
-              <ShoppingBag size={20} />
-              <span className="dh2-cart-count">{cartCount}</span>
-              <span>عرض السلة</span>
-            </div>
-            <span className="dh2-cart-total">{formatIQD(cartTotal)}</span>
+          <Link to="/cart" className="mgs-float-cart">
+            <ShoppingBag size={20} />
+            <span className="mgs-float-count">{cartCount}</span>
+            <span>عرض السلة</span>
+            <strong>{formatIQD(cartTotal, lang)}</strong>
           </Link>
         )}
       </div>
