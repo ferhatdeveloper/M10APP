@@ -295,10 +295,13 @@ export const ui = {
 export const banners = [
   { id: 'produce', category: 'produce', titles: { ar: 'خضار وفواكه طازجة', en: 'Fresh Produce', tr: 'Taze Sebze & Meyve' }, subtitles: { ar: 'طازج يومياً', en: 'Farm Fresh Daily', tr: 'Her Gün Taze' }, color: '#4CAF50', image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=800' },
   { id: 'meat', category: 'meat', titles: { ar: 'اللحوم الطازجة', en: 'Fresh Meat', tr: 'Taze Et' }, subtitles: { ar: 'جودة عالية', en: 'Premium Quality', tr: 'Premium Kalite' }, color: '#B71C1C', image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800' },
+  { id: 'ready', category: 'ready', titles: { ar: 'الدجاج الطازج', en: 'Fresh Chicken', tr: 'Taze Tavuk' }, subtitles: { ar: 'لذيذ وصحي', en: 'Delicious & Healthy', tr: 'Lezzetli & Sağlıklı' }, color: '#FF9800', image: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=800' },
   { id: 'dairy', category: 'dairy', titles: { ar: 'الألبان والبيض', en: 'Dairy & Eggs', tr: 'Süt Ürünleri' }, subtitles: { ar: 'طازج دائماً', en: 'Always Fresh', tr: 'Her Zaman Taze' }, color: '#2196F3', image: 'https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=800' },
   { id: 'drinks', category: 'drinks', titles: { ar: 'المشروبات', en: 'Beverages', tr: 'İçecekler' }, subtitles: { ar: 'انتعش معنا', en: 'Stay Refreshed', tr: 'Serinle' }, color: '#E31E24', image: 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=800' },
   { id: 'snacks', category: 'snacks', titles: { ar: 'الوجبات الخفيفة', en: 'Snacks & Sweets', tr: 'Atıştırmalıklar' }, subtitles: { ar: 'تشكيلة واسعة', en: 'Wide Selection', tr: 'Geniş Seçim' }, color: '#FF5722', image: 'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=800' },
   { id: 'bakery', category: 'bakery', titles: { ar: 'المخبوزات', en: 'Bakery', tr: 'Fırın Ürünleri' }, subtitles: { ar: 'طازج من الفرن', en: 'Fresh from Oven', tr: 'Fırından Taze' }, color: '#8D6E63', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800' },
+  { id: 'frozen', category: 'frozen', titles: { ar: 'المجمدات', en: 'Frozen Foods', tr: 'Dondurulmuş Ürünler' }, subtitles: { ar: 'جاهز للطبخ', en: 'Ready to Cook', tr: 'Pişirmeye Hazır' }, color: '#00BCD4', image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800' },
+  { id: 'pantry', category: 'pantry', titles: { ar: 'مواد غذائية', en: 'Grocery', tr: 'Temel Gıda' }, subtitles: { ar: 'أساسيات المطبخ', en: 'Kitchen Essentials', tr: 'Mutfak Temelleri' }, color: '#795548', image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800' },
 ]
 
 export const rewards = []
