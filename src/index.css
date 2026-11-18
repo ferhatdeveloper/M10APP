@@ -3310,65 +3310,60 @@ button.radio {
   }
 
   /* ═══════════════════════════════════════════════════════════════════════════
-     BRAND PODIUMS - Red Podium Style
+     SHOP BY BRAND - Metro Card Style
      ═══════════════════════════════════════════════════════════════════════════ */
 
-  .brand-podiums {
-    display: flex;
+  .shop-brand-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    scrollbar-width: none;
   }
 
-  .brand-podiums::-webkit-scrollbar { display: none; }
-
-  .brand-podium {
-    min-width: 100px;
+  .shop-brand-card {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 16px;
     text-decoration: none;
-    transition: transform 0.2s;
-  }
-
-  .brand-podium:hover {
-    transform: translateY(-6px);
-  }
-
-  .brand-podium-name {
-    font-size: 12px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-
-  .brand-podium-img {
-    width: 80px;
-    height: 90px;
-    background: #fafafa;
-    border-radius: 8px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 8px;
+    min-height: 120px;
+    overflow: hidden;
     position: relative;
-    z-index: 1;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
 
-  .brand-podium-img img {
-    max-width: 100%;
-    max-height: 70px;
+  .shop-brand-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .shop-brand-card-content {
+    flex: 1;
+    color: #fff;
+    z-index: 2;
+  }
+
+  .shop-brand-card-content h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  .shop-brand-card-content p {
+    font-size: 12px;
+    opacity: 0.9;
+    line-height: 1.4;
+  }
+
+  .shop-brand-card-img {
+    width: 80px;
+    height: 80px;
     object-fit: contain;
-  }
-
-  .brand-podium-base {
-    width: 90px;
-    height: 20px;
-    background: linear-gradient(180deg, #e31e24 0%, #b71c1c 100%);
-    border-radius: 0 0 50% 50% / 0 0 100% 100%;
-    margin-top: -8px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+    padding: 8px;
+    flex-shrink: 0;
   }
 
   /* ═══════════════════════════════════════════════════════════════════════════

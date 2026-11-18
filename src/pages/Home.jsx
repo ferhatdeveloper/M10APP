@@ -6,7 +6,7 @@ import { useApp } from '../context/AppContext.web.jsx'
 import { useI18n } from '../context/I18nContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
 import { 
-  banners, categories, brands, brandBanners, formatIQD, stores, 
+  banners, categories, brands, brandBanners, shopByBrandCards, formatIQD, stores, 
   getProducts, getProductsByCategory,
   productName, getCategoryName, getBrandName, ui 
 } from '../data/mock.web.js'
@@ -39,20 +39,20 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Shop by Brand - Red Podium Style */}
+        {/* Shop by Brand - Metro Card Style */}
         <section className="metro-section">
           <div className="metro-section-head">
             <h2>{t.shopByBrand}</h2>
             <Link to="/brands">{t.viewAll} {isRTL ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}</Link>
           </div>
-          <div className="brand-podiums">
-            {brands.map(brand => (
-              <Link key={brand.id} to={`/brand/${brand.id}`} className="brand-podium">
-                <span className="brand-podium-name">{brand.name}</span>
-                <div className="brand-podium-img">
-                  <img src={brand.image} alt={brand.name} />
+          <div className="shop-brand-cards">
+            {shopByBrandCards.map(card => (
+              <Link key={card.id} to={`/brand/${card.brand}`} className="shop-brand-card" style={{ background: card.color }}>
+                <div className="shop-brand-card-content">
+                  <h3>{card.titles[lang]}</h3>
+                  <p>{card.subtitles[lang]}</p>
                 </div>
-                <div className="brand-podium-base"></div>
+                <img src={card.image} alt={card.name} className="shop-brand-card-img" />
               </Link>
             ))}
           </div>
@@ -272,7 +272,7 @@ function ProductCard({ product, lang, t, onAdd }) {
           <strong>{formatIQD(p.price, lang)}</strong>
         </div>
         <button className="cat-product-btn" onClick={onAdd}>
-          {discount > 0 ? t.addToCart : t.quickAdd}
+          {t.addToCart}
         </button>
       </div>
     </div>

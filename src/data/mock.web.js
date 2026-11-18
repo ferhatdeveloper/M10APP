@@ -63,6 +63,17 @@ export const brandBanners = [
   { id: 'eti-banner', brand: 'eti', titles: { ar: 'إيتي', en: 'ETI', tr: 'ETİ' }, subtitles: { ar: 'بسكويت لذيذ', en: 'Delicious biscuits', tr: 'Lezzetli bisküviler' }, tagline: { ar: 'بسكويت', en: 'Biscuits', tr: 'Bisküvi' }, color: '#9C27B0', image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400' },
 ]
 
+export const shopByBrandCards = [
+  { id: 'banetti', brand: 'banetti', name: 'Banetti', titles: { ar: 'بانيتي', en: 'Banetti', tr: 'Banetti' }, subtitles: { ar: 'باستا إيطالية أصلية', en: 'Authentic Italian Pasta', tr: 'Orijinal İtalyan Makarna' }, color: '#1565C0', image: 'https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=400' },
+  { id: 'nescafe', brand: 'nescafe', name: 'Nescafé', titles: { ar: 'نسكافيه', en: 'Nescafé', tr: 'Nescafé' }, subtitles: { ar: 'قهوة فورية ممتازة', en: 'Premium Instant Coffee', tr: 'Premium Hazır Kahve' }, color: '#6B3A20', image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400' },
+  { id: 'pinar', brand: 'pinar', name: 'Pınar', titles: { ar: 'بينار', en: 'Pınar', tr: 'Pınar' }, subtitles: { ar: 'منتجات ألبان طازجة', en: 'Fresh Dairy Products', tr: 'Taze Süt Ürünleri' }, color: '#00A651', image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400' },
+  { id: 'ulker', brand: 'ulker', name: 'Ülker', titles: { ar: 'أولكر', en: 'Ülker', tr: 'Ülker' }, subtitles: { ar: 'بسكويت وشوكولاتة', en: 'Biscuits & Chocolate', tr: 'Bisküvi & Çikolata' }, color: '#E31E24', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400' },
+  { id: 'coca-cola', brand: 'coca-cola', name: 'Coca-Cola', titles: { ar: 'كوكا كولا', en: 'Coca-Cola', tr: 'Coca-Cola' }, subtitles: { ar: 'المشروب الأصلي', en: 'The Original', tr: 'Orijinal Lezzet' }, color: '#E31E24', image: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=400' },
+  { id: 'maggi', brand: 'maggi', name: 'Maggi', titles: { ar: 'ماجي', en: 'Maggi', tr: 'Maggi' }, subtitles: { ar: 'نكهة المطبخ', en: 'Kitchen Flavor', tr: 'Mutfağın Lezzeti' }, color: '#FFD700', image: 'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400' },
+  { id: 'lipton', brand: 'lipton', name: 'Lipton', titles: { ar: 'ليبتون', en: 'Lipton', tr: 'Lipton' }, subtitles: { ar: 'شاي طبيعي', en: 'Natural Tea', tr: 'Doğal Çay' }, color: '#FFC107', image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400' },
+  { id: 'kinder', brand: 'kinder', name: 'Kinder', titles: { ar: 'كيندر', en: 'Kinder', tr: 'Kinder' }, subtitles: { ar: 'شوكولاتة للأطفال', en: 'Chocolate for Kids', tr: 'Çocuklar İçin Çikolata' }, color: '#FF5722', image: 'https://images.unsplash.com/photo-1548907040-4baa42d10919?w=400' },
+]
+
 const allProducts = [
   // ═══════════════════════════════════════════════════════════════
   // PRODUCE - Fresh Fruits & Vegetables (12 items)
