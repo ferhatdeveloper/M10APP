@@ -3238,6 +3238,288 @@ button.radio {
     color: #fff;
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════════
+     BRAND BANNERS - Horizontal Scroll
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .brand-banners {
+    margin-bottom: 32px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .brand-banners::-webkit-scrollbar { display: none; }
+
+  .brand-banners-scroll {
+    display: flex;
+    gap: 16px;
+  }
+
+  .brand-banner-card {
+    min-width: 240px;
+    height: 140px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    transition: transform 0.2s;
+  }
+
+  .brand-banner-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .brand-banner-img {
+    position: absolute;
+    left: 20px;
+    bottom: 10px;
+    width: 80px;
+    height: 100px;
+    object-fit: contain;
+  }
+
+  .brand-banner-content {
+    margin-left: auto;
+    text-align: right;
+    color: #fff;
+    max-width: 140px;
+  }
+
+  .brand-banner-content h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .brand-banner-content p {
+    font-size: 12px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+  }
+
+  .brand-banner-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     BRAND PODIUMS - Red Podium Style
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .brand-podiums {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+  }
+
+  .brand-podiums::-webkit-scrollbar { display: none; }
+
+  .brand-podium {
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.2s;
+  }
+
+  .brand-podium:hover {
+    transform: translateY(-6px);
+  }
+
+  .brand-podium-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .brand-podium-img {
+    width: 80px;
+    height: 90px;
+    background: #fafafa;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .brand-podium-img img {
+    max-width: 100%;
+    max-height: 70px;
+    object-fit: contain;
+  }
+
+  .brand-podium-base {
+    width: 90px;
+    height: 20px;
+    background: linear-gradient(180deg, #e31e24 0%, #b71c1c 100%);
+    border-radius: 0 0 50% 50% / 0 0 100% 100%;
+    margin-top: -8px;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     FLASH SALE - Yellow Section with Timer
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  .flash-sale {
+    background: #FFD700;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+
+  .flash-sale-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .flash-sale-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #1a1a2e;
+  }
+
+  .flash-sale-title svg {
+    color: #e31e24;
+  }
+
+  .flash-sale-subtitle {
+    font-size: 13px;
+    color: #666;
+    margin-left: auto;
+  }
+
+  .flash-sale-timer {
+    display: flex;
+    gap: 4px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #1a1a2e;
+  }
+
+  .flash-sale-timer span {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    min-width: 36px;
+    text-align: center;
+  }
+
+  .flash-sale-products {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .flash-sale-products::-webkit-scrollbar { height: 6px; }
+  .flash-sale-products::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
+
+  .flash-sale-card {
+    min-width: 150px;
+    max-width: 150px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    position: relative;
+  }
+
+  .flash-sale-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #e31e24;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    z-index: 2;
+  }
+
+  .flash-sale-img {
+    display: block;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .flash-sale-img img {
+    max-width: 100%;
+    max-height: 90px;
+    object-fit: contain;
+  }
+
+  .flash-sale-add {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    background: #e31e24;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .flash-sale-add:hover {
+    background: #b71c1c;
+    transform: scale(1.1);
+  }
+
+  .flash-sale-info h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .flash-sale-prices {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .flash-sale-prices strong {
+    font-size: 14px;
+    font-weight: 800;
+    color: #e31e24;
+  }
+
+  .flash-sale-prices del {
+    font-size: 11px;
+    color: #999;
+  }
+
 }
 
 /* Mobile: Hide desktop elements */

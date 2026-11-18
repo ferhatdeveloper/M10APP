@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
-import { Search, ShoppingBag, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, ShoppingBag, Plus, ChevronLeft, ChevronRight, Zap } from 'lucide-react'
 import TopBar from '../components/TopBar.jsx'
 import { useApp } from '../context/AppContext.web.jsx'
 import { useI18n } from '../context/I18nContext.web.jsx'
 import { useIsDesktop } from '../hooks/useIsDesktop.js'
 import { 
-  banners, categories, brands, formatIQD, stores, 
+  banners, categories, brands, brandBanners, formatIQD, stores, 
   getProducts, getProductsByCategory,
   productName, getCategoryName, getBrandName, ui 
 } from '../data/mock.web.js'
@@ -18,23 +18,48 @@ export default function Home() {
   const t = ui[lang] || ui.ar
 
   const allProducts = getProducts()
+  const saleProducts = allProducts.filter(p => p.oldPrice).slice(0, 10)
 
   if (isDesktop) {
     return (
       <div className="metro-home">
-        {/* Flash Deals Slider */}
-        <section className="metro-flash">
-          <div className="metro-flash-slide">
-            <div className="metro-flash-content">
-              <span className="metro-flash-badge">🔥 {t.sale}</span>
-              <h1>{lang === 'ar' ? 'خصم يصل إلى 30%' : lang === 'tr' ? '%30\'a Varan İndirim' : 'Up to 30% OFF'}</h1>
-              <p>{t.hugeDeals}</p>
-              <Link to="/category/offers" className="metro-flash-btn">
-                {lang === 'ar' ? 'تسوق الآن' : lang === 'tr' ? 'Alışverişe Başla' : 'Shop Now'}
+        {/* Brand Banners Slider */}
+        <section className="brand-banners">
+          <div className="brand-banners-scroll">
+            {brandBanners.map(bb => (
+              <Link key={bb.id} to={`/brand/${bb.brand}`} className="brand-banner-card" style={{ background: bb.color }}>
+                <img src={bb.image} alt="" className="brand-banner-img" />
+                <div className="brand-banner-content">
+                  <h3>{bb.titles[lang]}</h3>
+                  <p>{bb.subtitles[lang]}</p>
+                  <span className="brand-banner-tag">{bb.tagline[lang]}</span>
+                </div>
               </Link>
-            </div>
+            ))}
           </div>
         </section>
+
+        {/* Shop by Brand - Red Podium Style */}
+        <section className="metro-section">
+          <div className="metro-section-head">
+            <h2>{t.shopByBrand}</h2>
+            <Link to="/brands">{t.viewAll} {isRTL ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}</Link>
+          </div>
+          <div className="brand-podiums">
+            {brands.map(brand => (
+              <Link key={brand.id} to={`/brand/${brand.id}`} className="brand-podium">
+                <span className="brand-podium-name">{brand.name}</span>
+                <div className="brand-podium-img">
+                  <img src={brand.image} alt={brand.name} />
+                </div>
+                <div className="brand-podium-base"></div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Flash Sale - Yellow */}
+        <FlashSale products={saleProducts} lang={lang} t={t} onAdd={(p) => addToCart && addToCart(stores[0].id, p)} />
 
         {/* Categories Row */}
         <section className="metro-cats">
@@ -68,24 +93,6 @@ export default function Home() {
             />
           )
         })}
-
-        {/* Shop by Brand */}
-        <section className="metro-section">
-          <div className="metro-section-head">
-            <h2>{t.shopByBrand}</h2>
-            <Link to="/brands">{t.viewAll} {isRTL ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}</Link>
-          </div>
-          <div className="metro-brands">
-            {brands.map(brand => (
-              <Link key={brand.id} to={`/brand/${brand.id}`} className="metro-brand">
-                <div className="metro-brand-logo" style={{ background: brand.color + '15', borderColor: brand.color }}>
-                  <span style={{ color: brand.color }}>{brand.name}</span>
-                </div>
-                <span>{getBrandName(brand, lang)}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
 
         {/* Floating Cart */}
         {cartCount > 0 && (
@@ -269,5 +276,63 @@ function ProductCard({ product, lang, t, onAdd }) {
         </button>
       </div>
     </div>
+  )
+}
+
+function FlashSale({ products, lang, t, onAdd }) {
+  const [time, setTime] = useState({ hours: 2, minutes: 0, seconds: 47 })
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(prev => {
+        let { hours, minutes, seconds } = prev
+        seconds--
+        if (seconds < 0) { seconds = 59; minutes-- }
+        if (minutes < 0) { minutes = 59; hours-- }
+        if (hours < 0) { hours = 23; minutes = 59; seconds = 59 }
+        return { hours, minutes, seconds }
+      })
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const pad = n => String(n).padStart(2, '0')
+
+  return (
+    <section className="flash-sale">
+      <div className="flash-sale-header">
+        <div className="flash-sale-title">
+          <Zap size={20} />
+          <span>{t.flashSale}</span>
+        </div>
+        <span className="flash-sale-subtitle">{t.endsIn}</span>
+        <div className="flash-sale-timer">
+          <span>{pad(time.hours)}</span>:<span>{pad(time.minutes)}</span>:<span>{pad(time.seconds)}</span>
+        </div>
+      </div>
+      <div className="flash-sale-products">
+        {products.map(p => {
+          const discount = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0
+          return (
+            <div key={p.id} className="flash-sale-card">
+              <span className="flash-sale-badge">{t.save} {discount}%</span>
+              <Link to={`/product/${p.id}`} className="flash-sale-img">
+                <img src={p.image} alt={productName(p, lang)} />
+              </Link>
+              <button className="flash-sale-add" onClick={() => onAdd(p)}>
+                <Plus size={16} />
+              </button>
+              <div className="flash-sale-info">
+                <h4>{productName(p, lang)}</h4>
+                <div className="flash-sale-prices">
+                  <strong>{formatIQD(p.price, lang)}</strong>
+                  <del>{formatIQD(p.oldPrice, lang)}</del>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </section>
   )
 }

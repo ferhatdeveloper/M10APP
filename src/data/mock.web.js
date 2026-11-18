@@ -43,14 +43,24 @@ export const stores = [
 ]
 
 export const brands = [
-  { id: 'nescafe', name: 'Nescafe', nameAr: 'نسكافيه', nameTr: 'Nescafe', color: '#6B3A20' },
-  { id: 'coca-cola', name: 'Coca-Cola', nameAr: 'كوكا كولا', nameTr: 'Coca-Cola', color: '#E31E24' },
-  { id: 'pinar', name: 'Pınar', nameAr: 'بينار', nameTr: 'Pınar', color: '#00A651' },
-  { id: 'ulker', name: 'Ülker', nameAr: 'أولكر', nameTr: 'Ülker', color: '#E31E24' },
-  { id: 'eti', name: 'Eti', nameAr: 'إيتي', nameTr: 'Eti', color: '#E31E24' },
-  { id: 'maggi', name: 'Maggi', nameAr: 'ماجي', nameTr: 'Maggi', color: '#FFD700' },
-  { id: 'lipton', name: 'Lipton', nameAr: 'ليبتون', nameTr: 'Lipton', color: '#FFD700' },
-  { id: 'knorr', name: 'Knorr', nameAr: 'كنور', nameTr: 'Knorr', color: '#00A651' },
+  { id: 'nescafe', name: 'Nescafe', nameAr: 'نسكافيه', nameTr: 'Nescafe', color: '#6B3A20', image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=200' },
+  { id: 'pinar', name: 'Pınar', nameAr: 'بينار', nameTr: 'Pınar', color: '#00A651', image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=200' },
+  { id: 'ulker', name: 'Ülker', nameAr: 'أولكر', nameTr: 'Ülker', color: '#E31E24', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=200' },
+  { id: 'nada', name: 'Nada', nameAr: 'ندى', nameTr: 'Nada', color: '#FF9800', image: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=200' },
+  { id: 'puck', name: 'Puck', nameAr: 'بوك', nameTr: 'Puck', color: '#1976D2', image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=200' },
+  { id: 'eti', name: 'Eti', nameAr: 'إيتي', nameTr: 'Eti', color: '#E31E24', image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=200' },
+  { id: 'maggi', name: 'Maggi', nameAr: 'ماجي', nameTr: 'Maggi', color: '#FFD700', image: 'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=200' },
+  { id: 'kinder', name: 'Kinder', nameAr: 'كيندر', nameTr: 'Kinder', color: '#FF5722', image: 'https://images.unsplash.com/photo-1548907040-4baa42d10919?w=200' },
+  { id: 'coca-cola', name: 'Coca-Cola', nameAr: 'كوكا كولا', nameTr: 'Coca-Cola', color: '#E31E24', image: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=200' },
+  { id: 'lipton', name: 'Lipton', nameAr: 'ليبتون', nameTr: 'Lipton', color: '#FFD700', image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=200' },
+]
+
+export const brandBanners = [
+  { id: 'coca-banner', brand: 'coca-cola', titles: { ar: 'كوكا كولا', en: 'Coca-Cola', tr: 'Coca-Cola' }, subtitles: { ar: 'طريقة أفضل للانتعاش', en: 'A cooler way to enjoy', tr: 'Serinlemenin en güzel yolu' }, tagline: { ar: 'انتعاش', en: 'Refreshment', tr: 'Serinlik' }, color: '#E31E24', image: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=400' },
+  { id: 'pinar-banner', brand: 'pinar', titles: { ar: 'بينار', en: 'PINAR', tr: 'PINAR' }, subtitles: { ar: 'طعم حقيقي', en: 'Gerçek Yaşam', tr: 'Gerçek Yaşam' }, tagline: { ar: 'لذة حقيقية', en: 'Gerçek Lezzet', tr: 'Gerçek Lezzet' }, color: '#00A651', image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400' },
+  { id: 'nescafe-banner', brand: 'nescafe', titles: { ar: 'نسكافيه', en: 'NESCAFÉ', tr: 'NESCAFÉ' }, subtitles: { ar: 'استمتع بقهوتك', en: 'Enjoy your coffee', tr: 'Kahvenin tadını çıkar' }, tagline: { ar: 'قهوة', en: 'Coffee', tr: 'Kahve' }, color: '#6B3A20', image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400' },
+  { id: 'ulker-banner', brand: 'ulker', titles: { ar: 'أولكر', en: 'Ülker', tr: 'Ülker' }, subtitles: { ar: 'حلاوة الحياة', en: 'Sweetness of life', tr: 'Hayatın tatlısı' }, tagline: { ar: 'حلويات', en: 'Sweets', tr: 'Tatlılar' }, color: '#1976D2', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400' },
+  { id: 'eti-banner', brand: 'eti', titles: { ar: 'إيتي', en: 'ETI', tr: 'ETİ' }, subtitles: { ar: 'بسكويت لذيذ', en: 'Delicious biscuits', tr: 'Lezzetli bisküviler' }, tagline: { ar: 'بسكويت', en: 'Biscuits', tr: 'Bisküvi' }, color: '#9C27B0', image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400' },
 ]
 
 const allProducts = [
@@ -220,9 +230,11 @@ export const getBrandName = (brand, lang = 'ar') => {
 export const ui = {
   ar: {
     flashDeals: '🔥 عروض سريعة',
+    flashSale: 'تخفيضات سريعة',
     popular: '⭐ الأكثر مبيعاً',
     shopByCategory: 'تسوق حسب التصنيف',
     shopByBrand: 'تسوق حسب العلامة التجارية',
+    buyAgain: 'اشتر مجدداً',
     viewAll: 'عرض الكل',
     addToCart: 'أضف للسلة',
     quickAdd: 'إضافة سريعة',
@@ -241,12 +253,19 @@ export const ui = {
     off: 'خصم',
     from: 'من',
     hugeDeals: 'عروض ضخمة',
+    save: 'وفر',
+    endsIn: 'ينتهي في',
+    hours: 'ساعة',
+    minutes: 'دقيقة',
+    seconds: 'ثانية',
   },
   tr: {
     flashDeals: '🔥 Fırsat Ürünleri',
+    flashSale: 'FLASH SALE',
     popular: '⭐ Çok Satanlar',
     shopByCategory: 'Kategorilere Göre',
-    shopByBrand: 'Markalara Göre',
+    shopByBrand: 'Markalara Göre Alışveriş',
+    buyAgain: 'Tekrar Al',
     viewAll: 'Tümünü Gör',
     addToCart: 'Sepete Ekle',
     quickAdd: 'Hızlı Ekle',
@@ -265,12 +284,19 @@ export const ui = {
     off: 'İndirim',
     from: 'den',
     hugeDeals: 'Büyük Fırsatlar',
+    save: 'Save',
+    endsIn: 'Bitiş',
+    hours: 'saat',
+    minutes: 'dk',
+    seconds: 'sn',
   },
   en: {
     flashDeals: '🔥 Flash Deals',
+    flashSale: 'FLASH SALE',
     popular: '⭐ Best Sellers',
     shopByCategory: 'Shop by Category',
     shopByBrand: 'Shop by Brand',
+    buyAgain: 'Buy Again',
     viewAll: 'View All',
     addToCart: 'Add to Cart',
     quickAdd: 'Quick Add',
@@ -289,6 +315,11 @@ export const ui = {
     off: 'OFF',
     from: 'From',
     hugeDeals: 'Huge Savings',
+    save: 'Save',
+    endsIn: 'Ends in',
+    hours: 'hrs',
+    minutes: 'min',
+    seconds: 'sec',
   },
 }
 
